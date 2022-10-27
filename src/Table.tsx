@@ -1,6 +1,6 @@
-import styled from '@emotion/styled'
-import ClearIcon from '@mui/icons-material/Clear'
-import SearchIcon from '@mui/icons-material/Search'
+import styled from '@emotion/styled';
+import ClearIcon from '@mui/icons-material/Clear';
+import SearchIcon from '@mui/icons-material/Search';
 import {
   IconButton,
   InputAdornment,
@@ -10,18 +10,18 @@ import {
   TableSortLabel,
   TextField,
   Tooltip,
-} from '@mui/material'
-import MaUTable from '@mui/material/Table'
-import TableCell from '@mui/material/TableCell'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import useTranslation from 'next-translate/useTranslation'
-import React, { CSSProperties, FC, useMemo } from 'react'
-import { Column, Row, useGlobalFilter, useSortBy, useTable } from 'react-table'
+} from '@mui/material';
+import MaUTable from '@mui/material/Table';
+import TableCell from '@mui/material/TableCell';
+import TableHead from '@mui/material/TableHead';
+import TableRow from '@mui/material/TableRow';
+import { CSSProperties, FC, useMemo } from 'react';
+import { Column, Row, useGlobalFilter, useSortBy, useTable } from 'react-table';
+import { useLocale } from './AppWrapper';
 
 const StyledRow = styled(TableRow)<{ hover: boolean }>`
   cursor: ${({ hover }) => hover && 'pointer'};
-`
+`;
 
 const NoRecords = styled.tr`
   font-size: 18px;
@@ -31,7 +31,7 @@ const NoRecords = styled.tr`
   left: 0;
   right: 0;
   width: 100%;
-`
+`;
 
 const StyledTableBody = styled(TableBody)`
   @media (max-width: 1023px) {
@@ -42,18 +42,18 @@ const StyledTableBody = styled(TableBody)`
       }
     }
   }
-`
+`;
 
 const StyledCell = styled(TableCell)`
   font-weight: bold !important;
   background-color: ${({ theme }) =>
     theme?.['palette']?.background.paper} !important;
-`
+`;
 
 const StyledContainer = styled(TableContainer)`
   overflow: auto;
   width: 100%;
-`
+`;
 
 const Table: FC<Props> = ({
   columns,
@@ -66,7 +66,7 @@ const Table: FC<Props> = ({
   style,
   labelledBy,
 }) => {
-  const { t } = useTranslation()
+  const { locales } = useLocale();
   const {
     getTableProps,
     getTableBodyProps,
@@ -86,18 +86,18 @@ const Table: FC<Props> = ({
       hooks.allColumns.push((columns) => [
         ...columns,
         ...(actions ? actions : []),
-      ])
+      ]);
     }
-  )
+  );
 
-  const array = useMemo(() => new Array(10).fill('blah'), [])
+  const array = useMemo(() => new Array(10).fill('blah'), []);
 
   return (
     <>
       {withSearch && (
         <TextField
           style={{ width: '100%', margin: '15px 0' }}
-          label={t('common:search')}
+          label={locales.search}
           value={state.globalFilter ?? ''}
           onChange={(e) => setGlobalFilter(e.target.value)}
           InputProps={{
@@ -105,7 +105,7 @@ const Table: FC<Props> = ({
               <>
                 {state.globalFilter && (
                   <InputAdornment position="end">
-                    <Tooltip title={t('common:clear')}>
+                    <Tooltip title={locales.clear}>
                       <IconButton
                         onClick={() => setGlobalFilter('')}
                         size="large"
@@ -162,7 +162,7 @@ const Table: FC<Props> = ({
           ) : rows.length > 0 ? (
             <StyledTableBody {...getTableBodyProps()}>
               {rows.map((row) => {
-                prepareRow(row)
+                prepareRow(row);
 
                 return (
                   <StyledRow
@@ -177,17 +177,17 @@ const Table: FC<Props> = ({
                         <TableCell key={ind} {...cell.getCellProps()}>
                           {cell.render('Cell')}
                         </TableCell>
-                      )
+                      );
                     })}
                   </StyledRow>
-                )
+                );
               })}
             </StyledTableBody>
           ) : (
             <tbody style={{ position: 'relative', height: 60 }}>
               <NoRecords>
                 <span className="absolute left-0 right-0 text-center">
-                  {t('table:noRecords')}
+                  {locales.noRecords}
                 </span>
               </NoRecords>
             </tbody>
@@ -195,19 +195,19 @@ const Table: FC<Props> = ({
         </MaUTable>
       </StyledContainer>
     </>
-  )
-}
+  );
+};
 
-export default Table
+export default Table;
 
 export interface Props {
-  columns: Column<any>[]
-  data: {}[]
-  actions?: any
-  onRowClick?: (row: Row) => void
-  selected?: string
-  withSearch?: boolean
-  maxHeight?: number
-  style?: CSSProperties
-  labelledBy?: string
+  columns: Column<any>[];
+  data: {}[];
+  actions?: any;
+  onRowClick?: (row: Row) => void;
+  selected?: string;
+  withSearch?: boolean;
+  maxHeight?: number;
+  style?: CSSProperties;
+  labelledBy?: string;
 }

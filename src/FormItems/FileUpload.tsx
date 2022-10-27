@@ -1,8 +1,8 @@
-import styled from '@emotion/styled'
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC, useCallback } from 'react'
-import { useDropzone } from 'react-dropzone'
+import styled from '@emotion/styled';
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { FC, useCallback } from 'react';
+import { useDropzone } from 'react-dropzone';
+import { useLocale } from '../AppWrapper';
 
 const Dropzone = styled.div`
   border: 2px dashed;
@@ -18,7 +18,7 @@ const Dropzone = styled.div`
   @media (max-width: 767px) {
     padding: 20px;
   }
-`
+`;
 
 const UploadDescription = styled.div`
   display: flex;
@@ -27,22 +27,22 @@ const UploadDescription = styled.div`
   width: 100%;
   height: 100%;
   flex-direction: column;
-`
+`;
 
 const SupportedFormats = styled.span`
   color: gray;
   font-size: 14px;
   width: 50%;
-`
+`;
 
 const StyledIcon = styled(CloudUploadIcon)`
   font-size: 80px !important;
   margin-top: 20px;
-`
+`;
 
 const UploadText = styled.span`
   font-size: 20px;
-`
+`;
 
 const FileUpload: FC<Props> = ({
   onUpload,
@@ -50,16 +50,16 @@ const FileUpload: FC<Props> = ({
   multiple = false,
   id,
 }) => {
-  const { t } = useTranslation()
+  const { locales } = useLocale();
 
   const onDrop = useCallback((acceptedFiles) => {
-    onUpload(acceptedFiles)
-  }, [])
+    onUpload(acceptedFiles);
+  }, []);
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple,
-  })
+  });
 
   return (
     <>
@@ -67,27 +67,25 @@ const FileUpload: FC<Props> = ({
         <input {...getInputProps()} />
         <UploadDescription>
           <UploadText>
-            {isDragActive
-              ? t('forms:importUploadDrop')
-              : t('forms:importUploadInfo')}
+            {isDragActive ? locales.importUploadDrop : locales.importUploadInfo}
           </UploadText>
           <StyledIcon />
         </UploadDescription>
       </Dropzone>
       {supportedFormats && (
         <SupportedFormats>
-          {t('forms:supportedFormats') + supportedFormats}
+          {locales.supportedFormats + supportedFormats}
         </SupportedFormats>
       )}
     </>
-  )
-}
+  );
+};
 
-export default FileUpload
+export default FileUpload;
 
 export interface Props {
-  supportedFormats?: string
-  onUpload: (files: File[]) => void
-  multiple?: boolean
-  id?: string
+  supportedFormats?: string;
+  onUpload: (files: File[]) => void;
+  multiple?: boolean;
+  id?: string;
 }

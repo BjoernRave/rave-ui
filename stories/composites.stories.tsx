@@ -1,13 +1,12 @@
 import { withA11y } from '@storybook/addon-a11y';
 import { boolean, withKnobs } from '@storybook/addon-knobs';
 import React, { useState } from 'react';
-import withFormik from 'storybook-formik';
 import StorybookWrapper from '../.storybook/wrapper';
 import { DocumentViewer, ImageViewer, Table } from '../src';
 import Footer from '../src/Footer';
 export default {
   title: 'Composites',
-  decorators: [StorybookWrapper, withKnobs, withA11y, withFormik],
+  decorators: [StorybookWrapper, withKnobs, withA11y],
 };
 
 export const FooterStory = (props) => <Footer />;

@@ -1,16 +1,17 @@
-import styled from '@emotion/styled'
-import { generateSlug } from '@inventhora/utils'
-import { FormControl, FormLabel } from '@mui/material'
-import { useField } from 'formik'
-import React, { FC } from 'react'
-import DocumentViewer from '../DocumentViewer'
-import ImageViewer from '../ImageViewer'
-import FileUpload from './FileUpload'
+import styled from '@emotion/styled';
+import { generateSlug } from '@inventhora/utils';
+import { FormControl, FormLabel } from '@mui/material';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import DocumentViewer from '../DocumentViewer';
+import ImageViewer from '../ImageViewer';
+import { InputProps } from '../lib/types';
+import FileUpload from './FileUpload';
 
 const UploadWrapper = styled(FormControl)`
   width: 100%;
   margin: 10px 0 !important;
-`
+`;
 
 const FileInput: FC<Props> = ({
   name,
@@ -23,92 +24,102 @@ const FileInput: FC<Props> = ({
   required,
   onReOrder,
   getImageUrl,
+  control,
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const [, meta, helpers] = useField(formName)
+  const { field, fieldState } = useController({ control, name: formName });
 
   const handleDelete = async (file: { name?: string; id?: string }) => {
     if (file?.name) {
       if (multiple) {
-        const newFiles = Array.from(meta.value)
-        helpers.setValue(
-          newFiles.filter((innerFile: any) => innerFile.name !== file.name)
-        )
+        const newFiles = Array.from(field.value);
+        field.onChange({
+          target: {
+            value: newFiles.filter(
+              (innerFile: any) => innerFile.name !== file.name
+            ),
+          },
+        });
       } else {
-        helpers.setValue(undefined)
+        field.onChange({ target: { value: undefined } });
       }
     } else {
-      await onDelete(file.id)
+      await onDelete(file.id);
 
       if (multiple) {
-        const newFiles = Array.from(meta.value)
+        const newFiles = Array.from(field.value);
 
-        helpers.setValue(
-          newFiles.filter((innerFile: any) => innerFile.id !== file?.id)
-        )
+        field.onChange({
+          target: {
+            value: newFiles.filter(
+              (innerFile: any) => innerFile.id !== file?.id
+            ),
+          },
+        });
       } else {
-        helpers.setValue(undefined)
+        field.onChange({ target: { value: undefined } });
       }
     }
-  }
+  };
 
   const handleOrderChange = async (files: any) => {
-    helpers.setValue(files)
+    field.onChange({ target: { value: files } });
 
     if (!files.every((file) => file.name)) {
-      await onReOrder(files.map(({ order, id }) => ({ order, id })))
+      await onReOrder(files.map(({ order, id }) => ({ order, id })));
     }
-  }
+  };
 
   return (
     <UploadWrapper required={required}>
       <FormLabel htmlFor={generateSlug(formName)}>{label}</FormLabel>
-      {(multiple || !meta.value) && (
+      {(multiple || !field.value) && (
         <FileUpload
           id={generateSlug(formName)}
           multiple={multiple}
           onUpload={(files) => {
-            helpers.setValue(
-              multiple ? [...Array.from(files), ...meta.value] : files[0]
-            )
+            field.onChange({
+              target: {
+                value: multiple
+                  ? [...Array.from(files), ...field.value]
+                  : files[0],
+              },
+            });
           }}
         />
       )}
-      {((multiple && meta?.value?.length > 0) || meta.value) && (
+      {((multiple && field?.value?.length > 0) || field.value) && (
         <>
           {isImages ? (
             <ImageViewer
               getImageUrl={getImageUrl}
               onOrderChange={multiple && onReOrder && handleOrderChange}
-              images={multiple ? meta.value : [meta.value]}
+              images={multiple ? field.value : [field.value]}
               onDelete={onDelete && handleDelete}
             />
           ) : (
             <DocumentViewer
               canDownload={false}
               onDelete={onDelete && handleDelete}
-              documents={multiple ? meta.value : [meta.value]}
+              documents={multiple ? field.value : [field.value]}
             />
           )}
         </>
       )}
     </UploadWrapper>
-  )
-}
+  );
+};
 
-export default FileInput
+export default FileInput;
 
-interface Props {
-  name: string
-  index?: number
-  subName?: string
-  multiple?: boolean
-  label: string
-  isImages?: boolean
-  required?: boolean
-  onDelete?: (id: string) => any
-  onReOrder?: (items: { order: number; id: string }[]) => any
-  getImageUrl: (file: any) => string
+interface Props extends InputProps {
+  multiple?: boolean;
+  isImages?: boolean;
+  onDelete?: (id: string) => any;
+  onReOrder?: (items: { order: number; id: string }[]) => any;
+  getImageUrl: (file: any) => string;
 }

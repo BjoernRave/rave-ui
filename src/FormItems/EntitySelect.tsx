@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import { removeFromArray } from '@inventhora/utils'
+import styled from '@emotion/styled';
+import { removeFromArray } from '@inventhora/utils';
 import {
   Checkbox,
   FormControl,
@@ -7,16 +7,16 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
-} from '@mui/material'
-import { useField } from 'formik'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC } from 'react'
-import { Option } from '../lib/types'
+} from '@mui/material';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { useLocale } from '../AppWrapper';
+import { InputProps, Option } from '../lib/types';
 
 const EntityField = styled.div`
   display: flex;
   flex-direction: column;
-`
+`;
 
 const Wrapper = styled(FormControl)`
   margin: 20px !important;
@@ -24,12 +24,12 @@ const Wrapper = styled(FormControl)`
   @media (max-width: 767px) {
     width: 100% !important;
   }
-`
+`;
 
 const LabelWrapper = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
 const StyledLabel = styled(FormLabel)`
   && {
@@ -45,41 +45,54 @@ const StyledLabel = styled(FormLabel)`
   .Mui-focused {
     color: #3c9f80;
   }
-`
+`;
 
 const EntitySelect: FC<Props> = ({
   label,
   helperText,
-  values,
+  options,
   name,
   disabled,
+  control,
+  subName,
+  index,
 }) => {
-  const { t } = useTranslation()
-  const [field, meta, helper] = useField(name)
+  const formName =
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
+  const { locales } = useLocale();
+  const { field, fieldState } = useController({ control, name: formName });
 
   const handleSelect = (value: string) => {
-    if (meta.value.includes(value)) {
-      helper.setValue(removeFromArray([value], meta.value))
+    if (field.value.includes(value)) {
+      field.onChange({
+        target: { value: removeFromArray([value], field.value) },
+      });
     } else {
-      helper.setValue([...meta.value, value])
+      field.onChange({ target: { value: [...field.value, value] } });
     }
-  }
+  };
 
   const handleSelectAll = () => {
-    if (values.every((val) => meta.value.includes(val.value))) {
-      helper.setValue(
-        removeFromArray(
-          values.map((val) => val.value),
-          meta.value
-        )
-      )
+    if (options.every((val) => field.value.includes(val.value))) {
+      field.onChange({
+        target: {
+          value: removeFromArray(
+            options.map((val) => val.value),
+            field.value
+          ),
+        },
+      });
     } else {
-      const missingValues = values
-        .filter((val) => !meta.value.includes(val.value))
-        .map((val) => val.value)
-      helper.setValue([...meta.value, ...missingValues])
+      const missingOptions = options
+        .filter((val) => !field.value.includes(val.value))
+        .map((val) => val.value);
+      field.onChange({
+        target: { value: [...field.value, ...missingOptions] },
+      });
     }
-  }
+  };
 
   return (
     <Wrapper disabled={disabled}>
@@ -88,20 +101,20 @@ const EntitySelect: FC<Props> = ({
         <FormControlLabel
           style={{ marginLeft: '10px' }}
           label={
-            values.every((val) => meta.value.includes(val.value))
-              ? t('forms:unselectAll')
-              : t('forms:selectAll')
+            options.every((val) => field.value.includes(val.value))
+              ? locales.unselectAll
+              : locales.selectAll
           }
           control={
             <Checkbox
               onChange={handleSelectAll}
-              checked={values.every((val) => meta.value.includes(val.value))}
+              checked={options.every((val) => field.value.includes(val.value))}
             />
           }
         />
       </LabelWrapper>
       <FormGroup>
-        {values.map((innerValue) => (
+        {options.map((innerValue) => (
           <EntityField
             style={innerValue.helperText ? { margin: '10px 0' } : {}}
             key={innerValue.label}
@@ -118,7 +131,7 @@ const EntitySelect: FC<Props> = ({
               control={
                 <Checkbox
                   onChange={() => handleSelect(innerValue.value)}
-                  checked={meta.value.includes(innerValue.value)}
+                  checked={field.value.includes(innerValue.value)}
                 />
               }
             />
@@ -127,15 +140,12 @@ const EntitySelect: FC<Props> = ({
       </FormGroup>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </Wrapper>
-  )
-}
+  );
+};
 
-export default EntitySelect
+export default EntitySelect;
 
-export interface Props {
-  name: string
-  label: string
-  helperText?: string
-  values: Option[]
-  disabled?: boolean
+export interface Props extends InputProps {
+  options: Option[];
+  disabled?: boolean;
 }

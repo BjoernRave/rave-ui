@@ -3,7 +3,8 @@
   "extends": "@tsconfig/create-react-app/tsconfig.json",
   "compilerOptions": {
     "strict": false,
-    "jsx": "react-jsx"
+    "jsx": "react-jsx",
+    "resolveJsonModule": true
   },
   "include": ["src", "types"]
 }

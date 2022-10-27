@@ -1,12 +1,12 @@
-import styled from '@emotion/styled'
+import styled from '@emotion/styled';
 import {
   generateSlug,
   getErrorMessage,
   getObjectKeyByString,
   isServer,
   removeFromObjectArray,
-} from '@inventhora/utils'
-import CancelIcon from '@mui/icons-material/Cancel'
+} from '@inventhora/utils';
+import CancelIcon from '@mui/icons-material/Cancel';
 import {
   CircularProgress,
   FormControl,
@@ -15,12 +15,13 @@ import {
   IconButton,
   Paper,
   Tooltip,
-} from '@mui/material'
-import { useField } from 'formik'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC, useEffect, useMemo } from 'react'
-import Infos from '../Infos'
-import Table from '../Table'
+} from '@mui/material';
+import { FC, useEffect, useMemo } from 'react';
+import { useController } from 'react-hook-form';
+import { useLocale } from '../AppWrapper';
+import Infos from '../Infos';
+import { InputProps } from '../lib/types';
+import Table from '../Table';
 
 const SelectedWrapper = styled(Paper)`
   display: flex;
@@ -29,7 +30,7 @@ const SelectedWrapper = styled(Paper)`
   width: 100%;
   margin: 10px 0;
   padding: 5px;
-`
+`;
 
 const SelectedText = styled.span`
   margin: 0 10px;
@@ -38,7 +39,7 @@ const SelectedText = styled.span`
   flex-direction: column;
   align-items: center;
   text-align: center;
-`
+`;
 
 const MobileSelectedWrapper = styled(Paper)`
   margin: 10px 0;
@@ -51,20 +52,20 @@ const MobileSelectedWrapper = styled(Paper)`
     align-self: flex-end;
     margin: 10px 10px 0 0;
   }
-`
+`;
 
 const Selection = ({ columns, onDelete, value }) => {
-  const { t } = useTranslation()
+  const { locales } = useLocale();
 
   const isMobile =
     !isServer &&
     window.matchMedia &&
-    window.matchMedia('(max-width: 767px)').matches
+    window.matchMedia('(max-width: 767px)').matches;
 
   if (isMobile) {
     return (
       <MobileSelectedWrapper>
-        <Tooltip title={t('common:remove')}>
+        <Tooltip title={locales.remove}>
           <IconButton
             style={{ marginLeft: 20 }}
             onClick={() => onDelete(value)}
@@ -83,7 +84,7 @@ const Selection = ({ columns, onDelete, value }) => {
           }))}
         />
       </MobileSelectedWrapper>
-    )
+    );
   }
 
   return (
@@ -98,7 +99,7 @@ const Selection = ({ columns, onDelete, value }) => {
             : column.accessor(value)}
         </SelectedText>
       ))}
-      <Tooltip title={t('common:remove')}>
+      <Tooltip title={locales.remove}>
         <IconButton
           style={{ marginLeft: 20 }}
           onClick={() => onDelete(value)}
@@ -108,8 +109,8 @@ const Selection = ({ columns, onDelete, value }) => {
         </IconButton>
       </Tooltip>
     </SelectedWrapper>
-  )
-}
+  );
+};
 
 const TableInput: FC<Props> = ({
   name,
@@ -123,58 +124,65 @@ const TableInput: FC<Props> = ({
   multiple,
   filterWith,
   withSearch,
+  control,
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const [, meta, helpers] = useField(formName)
+  const { field, fieldState } = useController({ control, name: formName });
 
   useEffect(() => {
     if (options?.length === 1) {
-      helpers.setValue(options[1])
+      field.onChange({ target: { value: options[1] } });
     }
-  }, [options])
+  }, [options]);
 
   const data = useMemo(() => {
-    // if (!meta.value) return []
+    // if (!field.value) return []
 
     return multiple
       ? options?.filter((option) => {
           if (
             filterWith &&
-            meta.value.length > 0 &&
+            field.value.length > 0 &&
             getObjectKeyByString(option, filterWith) !==
-              getObjectKeyByString(meta.value[0], filterWith)
+              getObjectKeyByString(field.value[0], filterWith)
           ) {
-            return false
+            return false;
           }
 
-          return !Boolean(meta.value.find((val) => val.id === option.id))
+          return !Boolean(field.value.find((val) => val.id === option.id));
         })
-      : options
-  }, [multiple, options, meta.value])
+      : options;
+  }, [multiple, options, field.value]);
 
   return (
     <FormControl
       style={{ width: '100%', display: 'grid' }}
-      error={Boolean(meta.error)}
+      error={Boolean(fieldState.error)}
       required={required}
     >
       <FormLabel id={`${generateSlug(name)}-input`}>{label}</FormLabel>
-      {!multiple && meta.value && (
+      {!multiple && field.value && (
         <Selection
-          onDelete={() => helpers.setValue(null)}
-          value={meta.value}
+          onDelete={() => field.onChange({ target: { value: null } })}
+          value={field.value}
           columns={columns}
         />
       )}
       {multiple &&
-        meta.value?.length > 0 &&
-        meta.value.map((value, ind) => (
+        field.value?.length > 0 &&
+        field.value.map((value, ind) => (
           <Selection
             value={value}
             onDelete={(v) =>
-              helpers.setValue(removeFromObjectArray(meta.value, 'id', v.id))
+              field.onChange({
+                target: {
+                  value: removeFromObjectArray(field.value, 'id', v.id),
+                },
+              })
             }
             key={ind}
             columns={columns}
@@ -192,16 +200,20 @@ const TableInput: FC<Props> = ({
           <CircularProgress />
         </div>
       ) : (
-        (multiple || !meta.value) && (
+        (multiple || !field.value) && (
           <Table
             labelledBy={`${generateSlug(name)}-input`}
             withSearch={withSearch}
             style={{ margin: '10px 0' }}
             maxHeight={400}
             onRowClick={(row: any) =>
-              helpers.setValue(
-                multiple ? [...meta.value, row.original] : row.original
-              )
+              field.onChange({
+                target: {
+                  value: multiple
+                    ? [...field.value, row.original]
+                    : row.original,
+                },
+              })
             }
             data={data}
             columns={columns}
@@ -210,25 +222,19 @@ const TableInput: FC<Props> = ({
       )}
       {helperText && (
         <FormHelperText>
-          {meta.error ? getErrorMessage(meta.error) : helperText}
+          {fieldState.error ? getErrorMessage(fieldState.error) : helperText}
         </FormHelperText>
       )}
     </FormControl>
-  )
-}
+  );
+};
 
-export default TableInput
+export default TableInput;
 
-interface Props {
-  name: string
-  subName?: string
-  index?: number
-  required?: boolean
-  label: string
-  helperText?: string
-  columns: { accessor: any; Header: string }[]
-  options: any[]
-  multiple?: boolean
-  filterWith?: string
-  withSearch?: boolean
+interface Props extends InputProps {
+  columns: { accessor: any; Header: string }[];
+  options: any[];
+  multiple?: boolean;
+  filterWith?: string;
+  withSearch?: boolean;
 }

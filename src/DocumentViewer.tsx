@@ -1,3 +1,7 @@
+import DownloadIcon from '@mui/icons-material/CloudDownload';
+import DeleteIcon from '@mui/icons-material/Delete';
+import DocumentIcon from '@mui/icons-material/Description';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import {
   Divider,
   IconButton,
@@ -7,13 +11,9 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Tooltip,
-} from '@mui/material'
-import DownloadIcon from '@mui/icons-material/CloudDownload'
-import DeleteIcon from '@mui/icons-material/Delete'
-import DocumentIcon from '@mui/icons-material/Description'
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC } from 'react'
+} from '@mui/material';
+import { FC } from 'react';
+import { useLocale } from './AppWrapper';
 
 const DocumentViewer: FC<Props> = ({
   documents,
@@ -21,7 +21,7 @@ const DocumentViewer: FC<Props> = ({
   canDownload = true,
   canView,
 }) => {
-  const { t } = useTranslation()
+  const { locales } = useLocale();
 
   return (
     <List>
@@ -35,11 +35,8 @@ const DocumentViewer: FC<Props> = ({
 
             <ListItemSecondaryAction>
               {canView && (
-                <Tooltip
-                  title={t('common:viewTitle', {
-                    name: t('common:document'),
-                  })}>
-                  <a href={document.url} target='_blank'>
+                <Tooltip title={locales.showDocument}>
+                  <a href={document.url} target="_blank">
                     <IconButton size="large">
                       <VisibilityIcon />
                     </IconButton>
@@ -47,10 +44,7 @@ const DocumentViewer: FC<Props> = ({
                 </Tooltip>
               )}
               {canDownload && (
-                <Tooltip
-                  title={t('common:downloadTitle', {
-                    name: t('common:document'),
-                  })}>
+                <Tooltip title={locales.downloadDocument}>
                   <a href={document.url} download>
                     <IconButton size="large">
                       <DownloadIcon />
@@ -59,10 +53,7 @@ const DocumentViewer: FC<Props> = ({
                 </Tooltip>
               )}
               {onDelete && (
-                <Tooltip
-                  title={t('common:deletionTitle', {
-                    name: t('common:document'),
-                  })}>
+                <Tooltip title={locales.deleteDocument}>
                   <IconButton onClick={() => onDelete(document)} size="large">
                     <DeleteIcon />
                   </IconButton>
@@ -75,13 +66,13 @@ const DocumentViewer: FC<Props> = ({
       ))}
     </List>
   );
-}
+};
 
-export default DocumentViewer
+export default DocumentViewer;
 
 interface Props {
-  documents: { url: string; name?: string; description?: string }[]
-  onDelete?: (document: any) => void
-  canDownload?: boolean
-  canView?: boolean
+  documents: { url: string; name?: string; description?: string }[];
+  onDelete?: (document: any) => void;
+  canDownload?: boolean;
+  canView?: boolean;
 }

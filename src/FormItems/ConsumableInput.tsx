@@ -9,8 +9,9 @@ import {
   FormHelperText,
   FormLabel,
 } from '@mui/material';
-import { useField } from 'formik';
 import { FC, useState } from 'react';
+import { useController } from 'react-hook-form';
+import { InputProps } from '../lib/types';
 import Table from '../Table';
 
 const AccordionsWrapper = styled.div`
@@ -42,23 +43,31 @@ const ConsumableInput: FC<Props> = ({
   options,
   label,
   name,
+  subName,
+  index,
   helperText,
   required,
   columns,
+  control,
 }) => {
+  const formName =
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
+
   const [expanded, setExpanded] = useState(options.map((v, ind) => ind === 0));
-  const [, meta, helpers] = useField(name);
+  const { field, fieldState } = useController({ control, name: formName });
 
   return (
     <FormControl
-      error={Boolean(meta.error)}
+      error={Boolean(fieldState.error)}
       required={required}
       style={{ width: '100%' }}
     >
       <FormLabel htmlFor={generateSlug(name)}>{label}</FormLabel>
       <AccordionsWrapper id={generateSlug(name)}>
         {options.map((option, ind) => {
-          const currentValue = meta.value.find((value) =>
+          const currentValue = field.value.find((value) =>
             option.options.some((o) => o.id === value.inventoryId)
           );
           return (
@@ -75,7 +84,9 @@ const ConsumableInput: FC<Props> = ({
             >
               <StyledContent expandIcon={<ExpandMoreIcon />}>
                 <OptionTitle
-                  error={Boolean(meta.error) && Boolean(meta.error[ind])}
+                  error={
+                    Boolean(fieldState.error) && Boolean(fieldState.error[ind])
+                  }
                 >
                   {option.title}
                 </OptionTitle>
@@ -92,9 +103,12 @@ const ConsumableInput: FC<Props> = ({
                       </SelectedValue>
                     ))}
                 </div>
-                {Boolean(meta.error) && Boolean(meta.error[ind]) && (
-                  <span style={{ color: '#f44336' }}>{meta.error[ind]}</span>
-                )}
+                {Boolean(fieldState.error) &&
+                  Boolean(fieldState.error[ind]) && (
+                    <span style={{ color: '#f44336' }}>
+                      {fieldState.error[ind]}
+                    </span>
+                  )}
                 <div />
               </StyledContent>
               <AccordionDetails>
@@ -103,7 +117,7 @@ const ConsumableInput: FC<Props> = ({
                   maxHeight={400}
                   onRowClick={(row: any) => {
                     if (Boolean(currentValue)) {
-                      const newValueArray = Array.from(meta.value);
+                      const newValueArray = Array.from(field.value);
 
                       newValueArray.splice(
                         newValueArray.findIndex((val) =>
@@ -116,23 +130,31 @@ const ConsumableInput: FC<Props> = ({
                         1
                       );
 
-                      helpers.setValue([
-                        ...newValueArray,
-                        {
-                          inventoryId: row.original.id,
-                          amount: option.amount,
-                          product: row.original.product,
+                      field.onChange({
+                        target: {
+                          value: [
+                            ...newValueArray,
+                            {
+                              inventoryId: row.original.id,
+                              amount: option.amount,
+                              product: row.original.product,
+                            },
+                          ],
                         },
-                      ]);
+                      });
                     } else {
-                      helpers.setValue([
-                        ...meta.value,
-                        {
-                          inventoryId: row.original.id,
-                          amount: option.amount,
-                          product: row.original.product,
+                      field.onChange({
+                        target: {
+                          value: [
+                            ...field.value,
+                            {
+                              inventoryId: row.original.id,
+                              amount: option.amount,
+                              product: row.original.product,
+                            },
+                          ],
                         },
-                      ]);
+                      });
                     }
 
                     const newArray = Array.from(expanded);
@@ -159,11 +181,7 @@ const ConsumableInput: FC<Props> = ({
 
 export default ConsumableInput;
 
-interface Props {
-  name: string;
-  label: string;
-  helperText?: string;
-  required?: boolean;
+interface Props extends InputProps {
   columns: { accessor: any; Header: string }[];
   options: {
     title: string;

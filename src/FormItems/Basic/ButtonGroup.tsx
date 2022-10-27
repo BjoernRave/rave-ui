@@ -1,15 +1,15 @@
-import styled from '@emotion/styled'
-import { generateSlug } from '@inventhora/utils'
+import styled from '@emotion/styled';
+import { generateSlug } from '@inventhora/utils';
 import {
   Button,
   ButtonGroup as MuiButtonGroup,
   FormControl,
   FormHelperText,
   FormLabel,
-} from '@mui/material'
-import { useField } from 'formik'
-import React, { FC } from 'react'
-import { Option } from '../../lib/types'
+} from '@mui/material';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { InputProps, Option } from '../../lib/types';
 
 const ButtonWrapper = styled(MuiButtonGroup)`
   margin: 10px 0;
@@ -18,7 +18,7 @@ const ButtonWrapper = styled(MuiButtonGroup)`
     flex: 1;
     padding: 20px 0;
   }
-`
+`;
 
 const ButtonGroup: FC<Props> = ({
   options,
@@ -31,13 +31,16 @@ const ButtonGroup: FC<Props> = ({
   helperText,
   required,
   size = 'large',
+  control,
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const [, meta, helper] = useField(formName)
+  const { field } = useController({ name: formName, control });
 
-  const id = name ? generateSlug(name) : generateSlug(label)
+  const id = name ? generateSlug(name) : generateSlug(label);
 
   return (
     <FormControl required={required} fullWidth>
@@ -54,35 +57,29 @@ const ButtonGroup: FC<Props> = ({
             <Button
               disabled={
                 (value && value === option.value) ||
-                (formName && option.value === meta.value)
+                (formName && option.value === field.value)
               }
               key={ind}
               onClick={() => {
-                onClick && onClick(option.value)
-                formName && helper.setValue(option.value)
+                onClick && onClick(option.value);
+                formName && field.onChange({ target: { value: option.value } });
               }}
             >
               {option.label}
             </Button>
-          )
+          );
         })}
       </ButtonWrapper>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </FormControl>
-  )
-}
+  );
+};
 
-export default ButtonGroup
+export default ButtonGroup;
 
-interface Props {
-  options: Option[]
-  name?: string
-  onClick?: (value: string) => void
-  value?: string
-  label: string
-  helperText?: string
-  required?: boolean
-  size?: 'small' | 'medium' | 'large'
-  index?: number
-  subName?: string
+interface Props extends InputProps {
+  options: Option[];
+  onClick?: (value: string) => void;
+  value?: string;
+  size?: 'small' | 'medium' | 'large';
 }

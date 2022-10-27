@@ -2,9 +2,7 @@ import { formatDate } from '@inventhora/utils';
 import { withA11y } from '@storybook/addon-a11y';
 import { action } from '@storybook/addon-actions';
 import { boolean, withKnobs } from '@storybook/addon-knobs';
-import { useField } from 'formik';
 import React from 'react';
-import withFormik from 'storybook-formik';
 import * as Yup from 'yup';
 import StorybookWrapper from '../.storybook/wrapper';
 import {
@@ -33,18 +31,18 @@ import {
 
 export default {
   title: 'Inputs',
-  decorators: [StorybookWrapper, withKnobs, withA11y, withFormik],
+  decorators: [StorybookWrapper, withKnobs, withA11y],
   parameters: {
-    formik: {
-      initialValues: {
-        MultiCreateStory: [],
-        DimensionsInput: {},
-        FileInputStory: boolean('Multiple Files?', true) ? [] : null,
-        consumables: [],
-        TableInputStory: [],
-        MultiComboboxStory: [],
-      },
-    },
+    // formik: {
+    //   initialValues: {
+    //     MultiCreateStory: [],
+    //     DimensionsInput: {},
+    //     FileInputStory: boolean('Multiple Files?', true) ? [] : null,
+    //     consumables: [],
+    //     TableInputStory: [],
+    //     MultiComboboxStory: [],
+    //   },
+    // },
   },
 };
 
@@ -277,7 +275,7 @@ const MultiCrateForm = () => {
       <TextInput
         autoFocus
         name={'MultiCreateStory'}
-        index={meta.value.length - 1}
+        index={field.value.length - 1}
         subName="name"
         required
         label={'unitName'}
@@ -285,7 +283,7 @@ const MultiCrateForm = () => {
       />
       <NumberInput
         name={'MultiCreateStory'}
-        index={meta.value.length - 1}
+        index={field.value.length - 1}
         subName="baseAmount"
         required
         label={'baseAmount'}

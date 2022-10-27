@@ -1,11 +1,11 @@
-import { dateFormat, generateSlug } from '@inventhora/utils'
-import { TextField } from '@mui/material'
-import { DatePicker } from '@mui/x-date-pickers-pro'
-import { useField } from 'formik'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC, ReactNode } from 'react'
-import { Language } from '../../lib/types'
-import DateTimeProvider from './DateTimeProvider'
+import { dateFormat, generateSlug } from '@inventhora/utils';
+import { TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers-pro';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { useLocale } from '../../AppWrapper';
+import { InputProps, Language } from '../../lib/types';
+import DateTimeProvider from './DateTimeProvider';
 
 const DateInput: FC<Props> = ({
   name,
@@ -15,30 +15,33 @@ const DateInput: FC<Props> = ({
   helperText,
   required,
   disabled,
+  control,
 }) => {
-  const { lang } = useTranslation()
+  const { lang } = useLocale();
 
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const [, meta, helper] = useField(formName)
+  const { field, fieldState } = useController({ control, name: formName });
 
   return (
     <DateTimeProvider lang={lang as Language}>
       <DatePicker
         disabled={disabled}
-        value={meta.value ?? null}
+        value={field.value ?? null}
         onChange={(date: any) => {
           if (!date) {
-            return helper.setValue(null)
+            return field.onChange({ target: { value: null } });
           }
 
-          date.setHours(0)
-          date.setMinutes(0)
-          date.setSeconds(0)
-          date.setMilliseconds(0)
+          date.setHours(0);
+          date.setMinutes(0);
+          date.setSeconds(0);
+          date.setMilliseconds(0);
 
-          helper.setValue(date)
+          field.onChange({ target: { value: date } });
         }}
         mask="__.__.____"
         inputFormat={dateFormat}
@@ -48,8 +51,8 @@ const DateInput: FC<Props> = ({
             margin="dense"
             size="small"
             {...props}
-            error={Boolean(meta.error)}
-            helperText={meta.error ?? helperText}
+            error={Boolean(fieldState.error)}
+            helperText={fieldState.error ?? helperText}
             required={required}
             style={{ width: '100%' }}
             id={generateSlug(formName)}
@@ -57,17 +60,11 @@ const DateInput: FC<Props> = ({
         )}
       />
     </DateTimeProvider>
-  )
-}
+  );
+};
 
-export default DateInput
+export default DateInput;
 
-export interface Props {
-  name?: string
-  index?: number
-  subName?: string
-  label: ReactNode
-  helperText?: ReactNode
-  required?: boolean
-  disabled?: boolean
+export interface Props extends InputProps {
+  disabled?: boolean;
 }

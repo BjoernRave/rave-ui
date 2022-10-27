@@ -1,13 +1,11 @@
-import styled from '@emotion/styled'
-import { isDev } from '@inventhora/utils'
-import { Button, Paper } from '@mui/material'
-import { Formik, FormikHelpers } from 'formik'
-import useTranslation from 'next-translate/useTranslation'
-import Link from 'next/link'
-import React, { FC, ReactNode } from 'react'
-import Form from './FormItems/Basic/Form'
-import SubmitButton from './FormItems/Basic/SubmitButton'
-import { Title } from './lib/styles'
+import styled from '@emotion/styled';
+import { Button, Paper } from '@mui/material';
+import Link from 'next/link';
+import { FC, ReactNode } from 'react';
+import { useLocale } from './AppWrapper';
+import Form from './FormItems/Basic/Form';
+import SubmitButton from './FormItems/Basic/SubmitButton';
+import { Title } from './lib/styles';
 
 // const leftAlignedStyles = css`
 //   width: calc(100% / 3 * 2);
@@ -25,30 +23,30 @@ import { Title } from './lib/styles'
 //   padding-bottom: 10px;
 // `
 
-const StyledPaper = styled(Paper)<{ isleftaligned: number }>`
+const StyledPaper = styled(Paper)`
   padding: 10px 20px;
   margin: 10px;
   max-width: 960px;
   width: 100%;
-`
+`;
 
 const Header = styled.div`
   display: flex;
   justify-content: space-between;
-`
+`;
 
 const PageWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-`
+`;
 
 const StyledSubmit = styled(SubmitButton)`
   @media (max-width: 767px) {
     padding: 20px 0;
     width: 100%;
   }
-`
+`;
 
 const FormPage: FC<Props> = ({
   title,
@@ -58,112 +56,73 @@ const FormPage: FC<Props> = ({
   children,
   onSubmit,
   edit,
-  multiCreationLink,
-  singleCreationLink,
-  isLeftAligned,
   style,
-  enableReinitialize,
   hideSubmit,
   submitText,
-  withRequiredNotice = true,
   withCancel,
 }) => {
-  const { t } = useTranslation()
+  const { locales } = useLocale();
 
   return (
     <PageWrapper style={style}>
-      <StyledPaper isleftaligned={isLeftAligned ? 1 : 0} elevation={2}>
+      <StyledPaper elevation={2}>
         <Header>
           <Title>{title}</Title>
-          {multiCreationLink && (
-            <Link passHref href={multiCreationLink}>
-              <Button color="primary">{t('common:multiCreation')}</Button>
-            </Link>
-          )}
-          {singleCreationLink && (
-            <Link passHref href={singleCreationLink}>
-              <Button color="primary">{t('common:singleCreation')}</Button>
-            </Link>
-          )}
         </Header>
-        {withRequiredNotice && (
-          <span style={{ display: 'block', padding: '10px 0' }}>
-            {t('forms:requiredNotice')}
-          </span>
-        )}
-        <Formik
-          enableReinitialize={enableReinitialize}
-          validateOnChange={false}
-          validateOnBlur={false}
-          initialValues={initialValues}
-          validationSchema={validationSchema}
-          validate={validate}
+        <Form
+          defaultValues={initialValues}
+          schema={validationSchema}
           onSubmit={onSubmit}
         >
-          {({ isSubmitting, errors, values }) => {
-            if (Object.keys(errors).length > 0) {
-              console.log(errors)
-            }
-            isDev && console.log(values)
-            return (
-              <Form>
-                {children}
-                {!hideSubmit && (
-                  <div
-                    style={{
-                      display: 'flex',
-                      width: '100%',
-                      justifyContent: 'center',
-                    }}
-                  >
-                    <StyledSubmit
-                      type="submit"
-                      loading={isSubmitting}
-                      size="large"
-                    >
-                      {Boolean(submitText)
-                        ? submitText
-                        : edit
-                        ? t('common:update')
-                        : t('common:create')}
-                    </StyledSubmit>
-                    {withCancel && (
-                      <Link href={withCancel}>
-                        <a>
-                          {' '}
-                          <Button sx={{ ml: 5 }}>{t('common:cancel')}</Button>
-                        </a>
-                      </Link>
-                    )}
-                  </div>
+          <>
+            {children}
+            {!hideSubmit && (
+              <div
+                style={{
+                  display: 'flex',
+                  width: '100%',
+                  justifyContent: 'center',
+                }}
+              >
+                <StyledSubmit type="submit" size="large">
+                  {Boolean(submitText)
+                    ? submitText
+                    : edit
+                    ? locales.update
+                    : locales.create}
+                </StyledSubmit>
+                {withCancel && (
+                  <Link href={withCancel}>
+                    <a>
+                      {' '}
+                      <Button sx={{ ml: 5 }}>{locales.cancel}</Button>
+                    </a>
+                  </Link>
                 )}
-              </Form>
-            )
-          }}
-        </Formik>
+              </div>
+            )}
+          </>
+        </Form>
       </StyledPaper>
     </PageWrapper>
-  )
-}
+  );
+};
 
-export default FormPage
+export default FormPage;
 
 interface Props {
-  title: string
-  description?: string
-  initialValues: object
-  validationSchema: any
-  onSubmit: (values: any, helpers: FormikHelpers<any>) => void
-  validate?: (values: any) => void
-  edit?: boolean
-  children: any
-  multiCreationLink?: string
-  singleCreationLink?: string
-  isLeftAligned?: boolean
-  style?: any
-  enableReinitialize?: boolean
-  hideSubmit?: boolean
-  submitText?: ReactNode
-  withRequiredNotice?: boolean
-  withCancel?: string
+  title: string;
+  description?: string;
+  initialValues: object;
+  validationSchema: any;
+  onSubmit: (values: any) => void;
+  validate?: (values: any) => void;
+  edit?: boolean;
+  children: any;
+  style?: any;
+  enableReinitialize?: boolean;
+  hideSubmit?: boolean;
+  submitText?: ReactNode;
+  withRequiredNotice?: boolean;
+  withCancel?: string;
 }

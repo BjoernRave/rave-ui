@@ -1,11 +1,11 @@
-import { dateTimeFormat, generateSlug } from '@inventhora/utils'
-import { TextField } from '@mui/material'
-import { DateTimePicker } from '@mui/x-date-pickers-pro'
-import { useField } from 'formik'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC, ReactNode } from 'react'
-import { Language } from '../../lib/types'
-import DateTimeProvider from './DateTimeProvider'
+import { dateTimeFormat, generateSlug } from '@inventhora/utils';
+import { TextField } from '@mui/material';
+import { DateTimePicker } from '@mui/x-date-pickers-pro';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { useLocale } from '../../AppWrapper';
+import { InputProps, Language } from '../../lib/types';
+import DateTimeProvider from './DateTimeProvider';
 
 const DateTimeInput: FC<Props> = ({
   name,
@@ -15,19 +15,22 @@ const DateTimeInput: FC<Props> = ({
   helperText,
   required,
   disabled,
+  control,
 }) => {
-  const { lang } = useTranslation()
+  const { lang } = useLocale();
 
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const [, meta, helper] = useField(formName)
+  const { field, fieldState } = useController({ control, name: formName });
 
   return (
     <DateTimeProvider lang={lang as Language}>
       <DateTimePicker
-        value={meta.value ?? null}
-        onChange={(date) => helper.setValue(date || null)}
+        value={field.value ?? null}
+        onChange={(date) => field.onChange({ target: { value: date || null } })}
         disabled={disabled}
         ampm={false}
         mask="__.__.____ __:__"
@@ -39,27 +42,21 @@ const DateTimeInput: FC<Props> = ({
               margin="dense"
               size="small"
               {...props}
-              error={Boolean(meta.error)}
-              helperText={meta.error ?? helperText}
+              error={Boolean(fieldState.error)}
+              helperText={fieldState.error ?? helperText}
               required={required}
               style={{ width: '100%' }}
               id={generateSlug(formName)}
             />
-          )
+          );
         }}
       />
     </DateTimeProvider>
-  )
-}
+  );
+};
 
-export default DateTimeInput
+export default DateTimeInput;
 
-export interface Props {
-  name: string
-  index?: number
-  subName?: string
-  label: ReactNode
-  helperText?: ReactNode
-  required?: boolean
-  disabled?: boolean
+export interface Props extends InputProps {
+  disabled?: boolean;
 }

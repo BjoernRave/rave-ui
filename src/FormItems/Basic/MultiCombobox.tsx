@@ -1,21 +1,22 @@
-import styled from '@emotion/styled'
-import { generateSlug, getErrorMessage } from '@inventhora/utils'
-import PlusIcon from '@mui/icons-material/AddCircle'
+import styled from '@emotion/styled';
+import { generateSlug, getErrorMessage } from '@inventhora/utils';
+import PlusIcon from '@mui/icons-material/AddCircle';
 import {
   Autocomplete,
   CircularProgress,
   IconButton,
   Tooltip,
-} from '@mui/material'
-import TextField from '@mui/material/TextField'
-import { useField } from 'formik'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC, ReactNode, useState } from 'react'
+} from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { FC, useState } from 'react';
+import { useController } from 'react-hook-form';
+import { useLocale } from '../../AppWrapper';
+import { InputProps } from '../../lib/types';
 
 const StyledButton = styled(IconButton)<{ hasInput: number }>`
   ${({ hasInput }) =>
     hasInput === 1 ? 'color: #3c9f80 !important' : undefined};
-`
+`;
 
 const MultiCombobox: FC<Props> = ({
   options,
@@ -29,18 +30,23 @@ const MultiCombobox: FC<Props> = ({
   disabled,
   autoFocus,
   loading,
+  control,
   canCreate = true,
   ...rest
 }) => {
-  const { t } = useTranslation()
+  const { locales } = useLocale();
 
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
-  const [, meta, helper] = useField(formName)
-  const [input, setInput] = useState('')
-  const isLoading = !disabled && (loading || !Array.isArray(options))
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const value = meta.value ?? []
+  const { field, fieldState } = useController({ name: formName, control });
+
+  const [input, setInput] = useState('');
+  const isLoading = !disabled && (loading || !Array.isArray(options));
+
+  const value = field.value ?? [];
 
   return (
     <Autocomplete
@@ -48,18 +54,20 @@ const MultiCombobox: FC<Props> = ({
       id={generateSlug(formName)}
       style={{ width: '100%' }}
       {...rest}
-      value={meta.value || []}
+      value={field.value || []}
       selectOnFocus
       disabled={disabled}
       freeSolo={canCreate}
-      onChange={(_, value) => helper.setValue(value || [])}
+      onChange={(_, value) =>
+        field.onChange({ target: { value: value || [] } })
+      }
       options={
         isLoading || !options
           ? []
           : options.filter(
               (val) =>
                 !Boolean(
-                  meta?.value?.find(
+                  field?.value?.find(
                     (metaVal) => getOptionLabel(val) === getOptionLabel(metaVal)
                   )
                 )
@@ -75,13 +83,15 @@ const MultiCombobox: FC<Props> = ({
           autoFocus={autoFocus}
           label={label}
           disabled={disabled}
-          helperText={meta.error ? getErrorMessage(meta.error) : helperText}
+          helperText={
+            fieldState.error ? getErrorMessage(fieldState.error) : helperText
+          }
           fullWidth
           onChange={(e) => {
-            setInput(e.target.value)
+            setInput(e.target.value);
           }}
           required={required}
-          error={Boolean(meta.error)}
+          error={Boolean(fieldState.error)}
           InputProps={{
             ...params.InputProps,
             endAdornment: (
@@ -90,13 +100,15 @@ const MultiCombobox: FC<Props> = ({
                 {isLoading ? (
                   <CircularProgress color="inherit" size={20} />
                 ) : canCreate ? (
-                  <Tooltip open={Boolean(input)} arrow title={t('forms:add')}>
+                  <Tooltip open={Boolean(input)} arrow title={locales.add}>
                     <StyledButton
                       hasInput={Boolean(input) ? 1 : 0}
                       onClick={() => {
                         if (input) {
-                          helper.setValue([...value, input])
-                          setInput('')
+                          field.onChange({
+                            target: { value: [...value, input] },
+                          });
+                          setInput('');
                         }
                       }}
                     >
@@ -110,22 +122,16 @@ const MultiCombobox: FC<Props> = ({
         />
       )}
     />
-  )
-}
+  );
+};
 
-export default MultiCombobox
+export default MultiCombobox;
 
-export interface Props {
-  getOptionLabel?: (option: any) => string
-  options: any[]
-  name: string
-  label: ReactNode
-  helperText?: ReactNode
-  required?: boolean
-  index?: number
-  subName?: string
-  disabled?: boolean
-  autoFocus?: boolean
-  loading?: boolean
-  canCreate?: boolean
+export interface Props extends InputProps {
+  getOptionLabel?: (option: any) => string;
+  options: any[];
+  disabled?: boolean;
+  autoFocus?: boolean;
+  loading?: boolean;
+  canCreate?: boolean;
 }

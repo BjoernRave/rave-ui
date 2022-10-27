@@ -1,16 +1,17 @@
-import styled from '@emotion/styled'
-import { generateSlug } from '@inventhora/utils'
-import { InputAdornment } from '@mui/material'
-import TextField from '@mui/material/TextField'
-import { useField } from 'formik'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC } from 'react'
+import styled from '@emotion/styled';
+import { generateSlug } from '@inventhora/utils';
+import { InputAdornment } from '@mui/material';
+import TextField from '@mui/material/TextField';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { useLocale } from '../AppWrapper';
+import { InputProps } from '../lib/types';
 
 const PhoneWrapper = styled.div`
   display: inline-flex !important;
   width: 100% !important;
   flex-direction: row !important;
-`
+`;
 
 const PhoneInput: FC<Props> = ({
   name,
@@ -21,34 +22,37 @@ const PhoneInput: FC<Props> = ({
   subName,
   prefixName,
   prefixSubName,
+  control,
 }) => {
-  const { t } = useTranslation()
+  const { locales } = useLocale();
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
   const prefixFormName =
     typeof index === 'number' && prefixSubName
       ? `${prefixName}[${index}].${prefixSubName}`
-      : prefixName
+      : prefixName;
 
-  const [, meta, helper] = useField(formName)
+  const { field, fieldState } = useController({ control, name: formName });
 
-  const [, prefixMeta, prefixHelper] = useField(prefixFormName)
+  const prefixField = useController({ control, name: prefixFormName });
 
   return (
     <PhoneWrapper id={`${generateSlug(formName)}-group`}>
       <TextField
         style={{ width: '170px', alignSelf: 'flex-end', marginRight: '20px' }}
         required={required}
-        value={prefixMeta.value}
-        onChange={(e) => prefixHelper.setValue(e.target.value)}
+        value={prefixField.field.value}
+        onChange={(e) => prefixField.field.onChange(e)}
         fullWidth
         id={generateSlug(prefixFormName)}
-        label={t('forms:prefix')}
+        label={locales.prefix}
         InputProps={{
           startAdornment: <InputAdornment position="start">+</InputAdornment>,
         }}
-        error={Boolean(meta.error)}
+        error={Boolean(fieldState.error)}
         inputMode="numeric"
         type="text"
         margin="dense"
@@ -56,20 +60,20 @@ const PhoneInput: FC<Props> = ({
         onKeyDown={(e) => {
           //delete, tab, etc
           if ([8, 9, 37, 39].includes(e.keyCode)) {
-            return
+            return;
           }
 
           //number keys
           if (e.keyCode >= 48 && e.keyCode <= 57) {
-            return
+            return;
           }
 
           //numpad
           if (e.keyCode >= 96 && e.keyCode <= 105) {
-            return
+            return;
           }
 
-          e.preventDefault()
+          e.preventDefault();
         }}
       />
       <TextField
@@ -81,49 +85,38 @@ const PhoneInput: FC<Props> = ({
         onKeyDown={(e) => {
           //delete, tab, etc
           if ([8, 9, 37, 39].includes(e.keyCode)) {
-            return
+            return;
           }
 
           //number keys
           if (e.keyCode >= 48 && e.keyCode <= 57) {
-            return
+            return;
           }
 
           //numpad
           if (e.keyCode >= 96 && e.keyCode <= 105) {
-            return
+            return;
           }
 
-          e.preventDefault()
+          e.preventDefault();
         }}
         label={label}
-        value={meta.value}
+        value={field.value}
         onChange={(e) => {
-          helper.setValue(e.target.value)
+          field.onChange(e);
         }}
-        helperText={meta.error ?? helperText}
-        error={Boolean(meta.error)}
+        helperText={fieldState.error ?? helperText}
+        error={Boolean(fieldState.error)}
         style={{ width: '100%' }}
         required={required}
       />
     </PhoneWrapper>
-  )
-}
+  );
+};
 
-export default PhoneInput
+export default PhoneInput;
 
-export interface Props {
-  name: string
-  subName?: string
-  helperText?: string
-  label: string
-  required?: boolean
-  index?: number
-  prefixName: string
-  prefixSubName?: string
-}
-
-interface Prefix {
-  translations: { [name: string]: string }
-  phonePrefix: string
+export interface Props extends InputProps {
+  prefixName: string;
+  prefixSubName?: string;
 }

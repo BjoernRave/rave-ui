@@ -1,12 +1,13 @@
-import { generateSlug } from '@inventhora/utils'
+import { generateSlug } from '@inventhora/utils';
 import {
   Checkbox as MuiCheckbox,
   CheckboxProps,
   FormControlLabel,
   FormHelperText,
-} from '@mui/material'
-import { useField } from 'formik'
-import React, { FC, ReactNode } from 'react'
+} from '@mui/material';
+import { FC } from 'react';
+import { Controller } from 'react-hook-form';
+import { InputProps } from '../../lib/types';
 
 const Checkbox: FC<Props> = ({
   name,
@@ -15,38 +16,42 @@ const Checkbox: FC<Props> = ({
   required,
   index,
   subName,
+  control,
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
-  const [field, meta] = useField(formName)
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
   return (
-    <FormControlLabel
-      id={generateSlug(name)}
-      style={{ alignSelf: 'start', margin: '10px 0' }}
-      control={<MuiCheckbox {...rest} checked={field.value} {...field} />}
-      label={
-        <>
-          {label}
-          {required ? ' *' : ''}
-          {(helperText || meta.error) && (
-            <FormHelperText error={Boolean(meta.error)}>
-              {meta.error ?? helperText}
-            </FormHelperText>
-          )}
-        </>
-      }
+    <Controller
+      control={control}
+      name={formName}
+      render={({ field, fieldState }) => (
+        <FormControlLabel
+          id={generateSlug(name)}
+          style={{ alignSelf: 'start', margin: '10px 0' }}
+          control={<MuiCheckbox {...rest} checked={field.value} {...field} />}
+          label={
+            <>
+              {label}
+              {required ? ' *' : ''}
+              {(helperText || fieldState.error) && (
+                <FormHelperText error={Boolean(fieldState.error)}>
+                  {fieldState.error ?? helperText}
+                </FormHelperText>
+              )}
+            </>
+          }
+        />
+      )}
     />
-  )
-}
+  );
+};
 
-export default Checkbox
+export default Checkbox;
 
-export interface Props extends CheckboxProps {
-  name: string
-  index?: number
-  subName?: string
-  label: ReactNode
-  helperText?: string
-}
+export interface Props
+  extends InputProps,
+    Omit<CheckboxProps, 'name' | 'label'> {}

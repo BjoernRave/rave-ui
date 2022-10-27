@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import { removeFromArray } from '@inventhora/utils'
+import styled from '@emotion/styled';
+import { removeFromArray } from '@inventhora/utils';
 import {
   Checkbox,
   Divider,
@@ -7,26 +7,26 @@ import {
   FormControlLabel,
   FormGroup,
   FormLabel,
-} from '@mui/material'
-import { useField } from 'formik'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC } from 'react'
+} from '@mui/material';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { useLocale } from '../AppWrapper';
 
 const PermissionsWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   width: 100%;
-`
+`;
 
 const LabelWrapper = styled.div`
   display: flex;
   align-items: center;
-`
+`;
 
 const StyledDivider = styled(Divider)`
   align-self: normal;
-`
+`;
 
 const StyledLabel = styled(FormLabel)`
   && {
@@ -42,63 +42,62 @@ const StyledLabel = styled(FormLabel)`
   .Mui-focused {
     color: #3c9f80;
   }
-`
+`;
 
-const PermissionSelect: FC<Props> = ({ permissions, name }) => {
-  const { t } = useTranslation()
-  const [field, meta, helper] = useField(name)
+const PermissionSelect: FC<Props> = ({ permissions, name, control }) => {
+  const { locales } = useLocale();
+  const { field, fieldState } = useController({ control, name });
 
   const sortedPermissions = permissions?.reduce((prev, next) => {
-    const splitted = next.name.split(':')
+    const splitted = next.name.split(':');
 
     return {
       ...prev,
       [splitted[1]]: prev[splitted[1]]
         ? [...prev[splitted[1]], splitted[0]]
         : [splitted[0]],
-    }
-  }, {})
+    };
+  }, {});
 
   const handleSelect = (permission: string) => {
-    if (!meta.value.includes(permission)) {
-      const splitted = permission.split(':')
+    if (!field.value.includes(permission)) {
+      const splitted = permission.split(':');
       if (
         splitted[0] !== 'read' &&
-        !meta.value.includes(`read:${splitted[1]}`)
+        !field.value.includes(`read:${splitted[1]}`)
       ) {
-        helper.setValue([...meta.value, `read:${splitted[1]}`, permission])
+        field.onChange({
+          target: {
+            value: [...field.value, `read:${splitted[1]}`, permission],
+          },
+        });
       } else {
-        helper.setValue([...meta.value, permission])
+        field.onChange({ target: { value: [...field.value, permission] } });
       }
     } else {
-      helper.setValue(removeFromArray([permission], meta.value))
+      field.onChange({
+        target: { value: removeFromArray([permission], field.value) },
+      });
     }
-  }
+  };
 
   const handleSelectAll = (values: any[], group: string) => {
-    if (values.every((val) => meta.value.includes(`${val}:${group}`))) {
-      helper.setValue(
-        removeFromArray(
-          values.map((val) => `${val}:${group}`),
-          meta.value
-        )
-      )
+    if (values.every((val) => field.value.includes(`${val}:${group}`))) {
+      field.onChange({
+        target: {
+          value: removeFromArray(
+            values.map((val) => `${val}:${group}`),
+            field.value
+          ),
+        },
+      });
     } else {
       const missingValues = values
-        .filter((val) => !meta.value.includes(`${val}:${group}`))
-        .map((val) => `${val}:${group}`)
-      helper.setValue([...meta.value, ...missingValues])
+        .filter((val) => !field.value.includes(`${val}:${group}`))
+        .map((val) => `${val}:${group}`);
+      field.onChange({ target: { value: [...field.value, ...missingValues] } });
     }
-  }
-
-  const strings = [
-    t('forms:create'),
-    t('forms:read'),
-    t('forms:update'),
-    t('forms:import'),
-    t('forms:export'),
-    t('forms:delete'),
-  ]
+  };
 
   return (
     <PermissionsWrapper>
@@ -106,15 +105,15 @@ const PermissionSelect: FC<Props> = ({ permissions, name }) => {
         <div key={pName} style={{ width: '100%' }}>
           <FormControl style={{ margin: '20px 40px' }}>
             <LabelWrapper>
-              <StyledLabel> {t(`common:${pName}`)}</StyledLabel>
+              <StyledLabel> {pName}</StyledLabel>
               <FormControlLabel
                 style={{ marginLeft: '10px' }}
                 label={
                   sortedPermissions[pName].every((val) =>
-                    meta.value.includes(val.value)
+                    field.value.includes(val.value)
                   )
-                    ? t('forms:unselectAll')
-                    : t('forms:selectAll')
+                    ? locales.unselectAll
+                    : locales.selectAll
                 }
                 control={
                   <Checkbox
@@ -122,7 +121,7 @@ const PermissionSelect: FC<Props> = ({ permissions, name }) => {
                       handleSelectAll(sortedPermissions[pName], pName)
                     }
                     checked={sortedPermissions[pName].every((val) =>
-                      meta.value.includes(`${val}:${pName}`)
+                      field.value.includes(`${val}:${pName}`)
                     )}
                   />
                 }
@@ -132,11 +131,11 @@ const PermissionSelect: FC<Props> = ({ permissions, name }) => {
               {sortedPermissions[pName].map((permission) => (
                 <FormControlLabel
                   key={`${permission}:${pName}`}
-                  label={t(`forms:${permission}`)}
+                  label={permission}
                   control={
                     <Checkbox
                       onChange={() => handleSelect(`${permission}:${pName}`)}
-                      checked={meta.value.includes(`${permission}:${pName}`)}
+                      checked={field.value.includes(`${permission}:${pName}`)}
                     />
                   }
                 />
@@ -147,12 +146,13 @@ const PermissionSelect: FC<Props> = ({ permissions, name }) => {
         </div>
       ))}
     </PermissionsWrapper>
-  )
-}
+  );
+};
 
-export default PermissionSelect
+export default PermissionSelect;
 
 export interface Props {
-  permissions: any[]
-  name: string
+  permissions: any[];
+  name: string;
+  control?: any;
 }

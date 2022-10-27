@@ -1,13 +1,13 @@
-import styled from '@emotion/styled'
-import { countries as countryJSON } from '@inventhora/json-data'
-import { Tab, Tabs } from '@mui/material'
-import useTranslation from 'next-translate/useTranslation'
-import React, { FC, useState } from 'react'
-import { SameLine } from '../lib/styles'
-import ComboBox from './Basic/ComboBox'
-import TextInput from './Basic/TextInput'
+import styled from '@emotion/styled';
+import { countries as countryJSON } from '@inventhora/json-data';
+import { Tab, Tabs } from '@mui/material';
+import { FC, useState } from 'react';
+import { useLocale } from '../AppWrapper';
+import { SameLine } from '../lib/styles';
+import ComboBox from './Basic/ComboBox';
+import TextInput from './Basic/TextInput';
 
-const countries = countryJSON.countries
+const countries = countryJSON.countries;
 
 const Wrapper = styled.div`
   margin-bottom: 10px;
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   > *:not(label) {
     margin: 8px 0;
   }
-`
+`;
 
 const ZipInput = styled(TextInput)`
   width: 30% !important;
@@ -24,25 +24,25 @@ const ZipInput = styled(TextInput)`
   @media (max-width: 767px) {
     width: 100% !important;
   }
-`
+`;
 
 const AddressInput: FC<Props> = ({ withBilling = true }) => {
-  const { t, lang } = useTranslation()
-  const [currentPage, setCurrentPage] = useState(0)
+  const { locales } = useLocale();
+  const [currentPage, setCurrentPage] = useState(0);
 
   if (!withBilling) {
     return (
       <Wrapper>
-        <TextInput name="address1" label={t('forms:address1')} />
-        <TextInput name="address2" label={t('forms:address2')} />
+        <TextInput name="address1" label={locales.address1} />
+        <TextInput name="address2" label={locales.address2} />
         <SameLine>
-          <TextInput name="city" label={t('forms:city')} />
-          <ZipInput name="zip" label={t('forms:zip')} />
+          <TextInput name="city" label={locales.city} />
+          <ZipInput name="zip" label={locales.zip} />
         </SameLine>
         <SameLine>
-          <TextInput name="state" label={t('forms:state')} />
+          <TextInput name="state" label={locales.state} />
           <ComboBox
-            label={t('forms:country')}
+            label={locales.country}
             options={countries.map((c) => c[1])}
             getOptionLabel={(c) =>
               countries.find(
@@ -53,7 +53,7 @@ const AddressInput: FC<Props> = ({ withBilling = true }) => {
           />
         </SameLine>
       </Wrapper>
-    )
+    );
   }
 
   return (
@@ -64,21 +64,21 @@ const AddressInput: FC<Props> = ({ withBilling = true }) => {
         value={currentPage}
         onChange={(_, value) => setCurrentPage(value)}
       >
-        <Tab label={t('forms:address')} value={0} />
-        <Tab label={t('forms:billingAddress')} value={1} />
+        <Tab label={locales.address} value={0} />
+        <Tab label={locales.billingAddress} value={1} />
       </Tabs>
       {currentPage === 0 && (
         <>
-          <TextInput name="address1" label={t('forms:address1')} />
-          <TextInput name="address2" label={t('forms:address2')} />
+          <TextInput name="address1" label={locales.address1} />
+          <TextInput name="address2" label={locales.address2} />
           <SameLine>
-            <TextInput name="city" label={t('forms:city')} />
-            <ZipInput name="zip" label={t('forms:zip')} />
+            <TextInput name="city" label={locales.city} />
+            <ZipInput name="zip" label={locales.zip} />
           </SameLine>
           <SameLine>
-            <TextInput name="state" label={t('forms:state')} />
+            <TextInput name="state" label={locales.state} />
             <ComboBox
-              label={t('forms:country')}
+              label={locales.country}
               options={countries.map((c) => c[1])}
               getOptionLabel={(c) =>
                 countries.find(
@@ -92,17 +92,17 @@ const AddressInput: FC<Props> = ({ withBilling = true }) => {
       )}
       {currentPage === 1 && (
         <>
-          <TextInput name="billingAddressLine1" label={t('forms:address1')} />
-          <TextInput name="billingAddressLine2" label={t('forms:address2')} />
+          <TextInput name="billingAddressLine1" label={locales.address1} />
+          <TextInput name="billingAddressLine2" label={locales.address2} />
           <SameLine>
-            <TextInput name="billingCity" label={t('forms:city')} />
-            <ZipInput name="billingZip" label={t('forms:zip')} />
+            <TextInput name="billingCity" label={locales.city} />
+            <ZipInput name="billingZip" label={locales.zip} />
           </SameLine>
           <SameLine>
-            <TextInput name="billingState" label={t('forms:state')} />
+            <TextInput name="billingState" label={locales.state} />
             <ComboBox
               name="billingCountryCode"
-              label={t('forms:country')}
+              label={locales.country}
               options={countries.map((c) => c[1])}
               getOptionLabel={(c) =>
                 countries.find(
@@ -114,11 +114,11 @@ const AddressInput: FC<Props> = ({ withBilling = true }) => {
         </>
       )}
     </Wrapper>
-  )
-}
+  );
+};
 
-export default AddressInput
+export default AddressInput;
 
 export interface Props {
-  withBilling?: boolean
+  withBilling?: boolean;
 }

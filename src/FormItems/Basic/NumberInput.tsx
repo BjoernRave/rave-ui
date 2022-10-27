@@ -1,7 +1,8 @@
-import { generateSlug } from '@inventhora/utils'
-import { BaseTextFieldProps, TextField } from '@mui/material'
-import { useField } from 'formik'
-import React, { ChangeEvent, FC } from 'react'
+import { generateSlug } from '@inventhora/utils';
+import { BaseTextFieldProps, TextField } from '@mui/material';
+import { ChangeEvent, FC } from 'react';
+import { useController } from 'react-hook-form';
+import { InputProps } from '../../lib/types';
 
 const NumberInput: FC<Props> = ({
   name,
@@ -13,72 +14,75 @@ const NumberInput: FC<Props> = ({
   onChange,
   error,
   max,
+  control,
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const [, meta, helper] = useField(formName)
+  const { field, fieldState } = useController({ control, name: formName });
+
   return (
     <TextField
       margin="dense"
       size="small"
       id={generateSlug(formName)}
       {...rest}
-      value={meta.value || ''}
+      value={field.value || ''}
       onChange={(e) => {
-        onChange && onChange(e as any)
+        onChange && onChange(e as any);
         if (max && Number(e.target.value) > max) {
-          return helper.setValue(max)
+          return field.onChange({ target: { value: max } });
         }
 
-        helper.setValue(e.target.value)
+        field.onChange(e);
       }}
       onKeyDown={(e) => {
         //delete, tab, etc
         if ([8, 9, 37, 39].includes(e.keyCode)) {
-          return
+          return;
         }
 
         //number keys
         if (e.keyCode >= 48 && e.keyCode <= 57) {
-          return
+          return;
         }
 
         //numpad
         if (e.keyCode >= 96 && e.keyCode <= 105) {
-          return
+          return;
         }
 
         if (
           allowDecimals &&
           (e.keyCode === 190 || e.keyCode === 188) &&
-          meta?.value?.split &&
-          meta?.value?.split('.')?.length < 2 &&
-          meta?.value?.split(',')?.length < 2
+          field?.value?.split &&
+          field?.value?.split('.')?.length < 2 &&
+          field?.value?.split(',')?.length < 2
         ) {
-          return
+          return;
         }
-        e.preventDefault()
+        e.preventDefault();
       }}
       inputMode="numeric"
       type="text"
       style={{ width: '100%' }}
       variant={variant as any}
-      helperText={meta.error ?? helperText}
-      error={Boolean(meta.error) || error}
+      helperText={fieldState.error ?? helperText}
+      error={Boolean(fieldState.error) || error}
     />
-  )
-}
+  );
+};
 
-export default NumberInput
+export default NumberInput;
 
-export interface Props extends BaseTextFieldProps {
-  name: string
-  index?: number
-  subName?: string
-  InputProps?: any
-  allowDecimals?: boolean
-  max?: number
-  onChange?: (e: ChangeEvent<HTMLInputElement>) => void
+export interface Props
+  extends InputProps,
+    Omit<BaseTextFieldProps, 'name' | 'label'> {
+  InputProps?: any;
+  allowDecimals?: boolean;
+  max?: number;
+  onChange?: (e: ChangeEvent<HTMLInputElement>) => void;
 }
