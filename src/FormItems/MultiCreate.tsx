@@ -15,6 +15,7 @@ import {
   IconButton,
   Tooltip,
 } from '@mui/material';
+import { createColumnHelper } from '@tanstack/react-table';
 import { FC, useMemo, useState } from 'react';
 import { useController, useForm } from 'react-hook-form';
 import { useLocale } from '../AppWrapper';
@@ -145,6 +146,19 @@ const MultiCreate: FC<Props> = ({
       });
   };
 
+  const columnHelper = createColumnHelper<Field>();
+
+  const columns = useMemo(
+    () =>
+      fields.map((field) =>
+        columnHelper.accessor('label', {
+          cell: (info) => info.getValue(),
+          header: field.label,
+        })
+      ),
+    [fields, columnHelper]
+  );
+
   return (
     <div style={{ width: '100%' }}>
       <FormControl
@@ -155,10 +169,7 @@ const MultiCreate: FC<Props> = ({
         {tableData.length > 0 && (
           <>
             <Table
-              columns={fields.map((field) => ({
-                accessor: field.name,
-                Header: field.label,
-              }))}
+              columns={columns}
               data={formatFunction ? formatFunction(tableData) : tableData}
               actions={[
                 {
@@ -278,8 +289,13 @@ const MultiCreate: FC<Props> = ({
 
 export default MultiCreate;
 
+interface Field {
+  name: string;
+  label: string;
+}
+
 export interface Props {
-  fields: { name: string; label: string }[];
+  fields: Field[];
   title: string;
   name: string;
   control?: any;

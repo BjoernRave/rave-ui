@@ -54,4 +54,5 @@ interface Props {
   emotionCache?: EmotionCache;
   theme?: any;
   locale?: 'en' | 'de';
+  children: any;
 }

@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import React, { FC } from 'react';
 import { useForm } from 'react-hook-form';
 import { ZodSchema } from 'zod';
+
 const StyledForm = styled.form`
   > *:not(label) {
     margin: 8px 0;
@@ -16,12 +17,18 @@ const StyledForm = styled.form`
   align-items: center;
 `;
 
-const Form: FC<Props> = ({ defaultValues, children, onSubmit, schema }) => {
+const Form: FC<Props> = ({
+  defaultValues,
+  children,
+  onSubmit,
+  schema,
+  className,
+}) => {
   const methods = useForm({ defaultValues, resolver: zodResolver(schema) });
   const { handleSubmit } = methods;
 
   return (
-    <StyledForm onSubmit={handleSubmit(onSubmit)}>
+    <StyledForm className={className} onSubmit={handleSubmit(onSubmit)}>
       {React.Children.map(children, (child) => {
         return child.props.name
           ? React.createElement(child.type, {
@@ -45,4 +52,5 @@ interface Props {
   defaultValues: Record<string, any>;
   onSubmit: (data: Record<string, any>) => void;
   children: any;
+  className?: string;
 }

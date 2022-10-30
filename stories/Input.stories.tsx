@@ -1,27 +1,25 @@
-import { formatDate } from '@inventhora/utils';
 import { withA11y } from '@storybook/addon-a11y';
-import { action } from '@storybook/addon-actions';
 import { boolean, withKnobs } from '@storybook/addon-knobs';
 import React from 'react';
-import * as Yup from 'yup';
+import { useController } from 'react-hook-form';
+import { withRHF } from '../.storybook/withRHF';
+
 import StorybookWrapper from '../.storybook/wrapper';
 import {
   ButtonGroup,
   Checkbox,
   ComboBox,
-  ConsumableInput,
   DateInput,
   DateTimeInput,
   EmailInput,
   FileInput,
   MultiCombobox,
-  MultiCreate,
   NumberInput,
   Option,
   PasswordInput,
   PhoneInput,
   SelectInput,
-  TableInput,
+  SubmitButton,
   TextAreaInput,
   TextInput,
   TextListInput,
@@ -31,19 +29,19 @@ import {
 
 export default {
   title: 'Inputs',
-  decorators: [StorybookWrapper, withKnobs, withA11y],
-  parameters: {
-    // formik: {
-    //   initialValues: {
-    //     MultiCreateStory: [],
-    //     DimensionsInput: {},
-    //     FileInputStory: boolean('Multiple Files?', true) ? [] : null,
-    //     consumables: [],
-    //     TableInputStory: [],
-    //     MultiComboboxStory: [],
-    //   },
-    // },
-  },
+  decorators: [
+    StorybookWrapper,
+    withKnobs,
+    withA11y,
+    withRHF(true, {
+      MultiCreateStory: [],
+      DimensionsInput: {},
+      FileInputStory: boolean('Multiple Files?', true) ? [] : null,
+      consumables: [],
+      TableInputStory: [],
+      MultiComboboxStory: [],
+    }),
+  ],
 };
 
 const exampleOptions2: Option[] = [
@@ -228,6 +226,7 @@ export const PhoneInputStory = (props) => (
 
 export const FileInputStory = (props) => (
   <FileInput
+    getImageUrl={(url) => 'https://test.com'}
     label="FileInputStory"
     onDelete={() => {}}
     onReOrder={() => {}}
@@ -268,7 +267,7 @@ export const MultiComboboxStory = (props) => (
 );
 
 const MultiCrateForm = () => {
-  const [_, meta] = useField('MultiCreateStory');
+  const { field } = useController({ name: 'MultiCreateStory' });
 
   return (
     <>
@@ -293,320 +292,147 @@ const MultiCrateForm = () => {
   );
 };
 
-export const MultiCreateStory = (props) => {
-  return (
-    <>
-      <MultiCreate
-        label="MultiCreate"
-        schema={Yup.object({
-          name: Yup.string(),
-          baseAmount: Yup.string().required(),
-        })}
-        name={'MultiCreateStory'}
-        fields={[
-          {
-            name: 'name',
-            label: 'unitName',
-          },
-          {
-            name: 'baseAmount',
-            label: 'baseAmount',
-          },
-        ]}
-        title={'Create a Unit'}
-        onDelete={action}
-        helperText={
-          'unitExplanation super duper long so long wow is this long who even reads this'
-        }
-      >
-        <MultiCrateForm />
-      </MultiCreate>
-    </>
-  );
-};
+// export const MultiCreateStory = (props) => {
+//   return (
+//     <>
+//       <MultiCreate
+//         label="MultiCreate"
+//         schema={z.object({
+//           name: z.string(),
+//           baseAmount: z.string(),
+//         })}
+//         name={'MultiCreateStory'}
+//         fields={[
+//           {
+//             name: 'name',
+//             label: 'unitName',
+//           },
+//           {
+//             name: 'baseAmount',
+//             label: 'baseAmount',
+//           },
+//         ]}
+//         title={'Create a Unit'}
+//         onDelete={action}
+//         helperText={
+//           'unitExplanation super duper long so long wow is this long who even reads this'
+//         }
+//       >
+//         <MultiCrateForm />
+//       </MultiCreate>
+//     </>
+//   );
+// };
 
-export const TableInputStory = (props) => {
-  return (
-    <TableInput
-      label="TableInput"
-      withSearch={boolean('With Search', true)}
-      multiple={boolean('Multiple?', false)}
-      helperText="This is a helper text"
-      name="TableInputStory"
-      filterWith={boolean('With Filter', false) && 'supplier.id'}
-      columns={[
-        {
-          accessor: (val) => val.product.fullName,
-          Header: 'product',
-        },
-        { accessor: 'amount', Header: 'amount' },
-        {
-          accessor: (val: any) => val?.batch?.batchNumber ?? 'N/A',
-          Header: 'batchNumberShort',
-        },
-        {
-          accessor: (val: any) =>
-            val?.batch?.bestBefore
-              ? formatDate(val?.batch?.bestBefore, 'day')
-              : 'N/A',
-          Header: 'bestBeforeShort',
-        },
-        {
-          accessor: 'supplier.name',
-          Header: 'supplier',
-        },
-        {
-          accessor: 'warehouse.name',
-          Header: 'warehouse',
-        },
-      ]}
-      options={[
-        {
-          id: '1',
-          amount: 167,
-          supplier: {
-            id: 'ckdilk78c0108f3c9a1km2ex2',
-            name: 'Supplier1',
-          },
-          batch: {
-            id: 'ckdilk79z0185f3c9urbbyapl',
-            batchNumber: '1',
-            bestBefore: null,
-          },
-          product: {
-            id: 'ckdilk7800088f3c9hpvagjhu',
-            fullName: 'Teller',
+// export const TableInputStory = (props) => {
 
-            consumables: [],
-          },
-          warehouse: {
-            id: 'ckdilk78c0108f3c9a1km2ex2',
-            name: 'Warehouse2',
-          },
-        },
-        {
-          id: '2',
-          amount: 100,
-          supplier: {
-            id: 'ckdilk76u0037f3c9k6jy0ghm',
-            name: 'Supplier2',
-          },
-          batch: {
-            id: 'ckdilk79z0185f3c9urbbyapl',
-            batchNumber: null,
-            bestBefore: null,
-          },
-          product: {
-            id: 'ckdilk7800088f3c9hpvagjhu',
-            fullName: 'Glas',
+//   const columnHelper = createCol
 
-            consumables: [],
-          },
-          warehouse: {
-            id: 'ckdilk78c0108f3c9a1km2ex2',
-            name: 'Warehouse1',
-          },
-        },
-        {
-          id: '3',
-          amount: 37,
-          supplier: {
-            id: 'ckdilk78c0108f3c9a1km2ex2',
-            name: 'Supplier1',
-          },
-          batch: {
-            id: 'ckdilk79z0185f3c9urbbyapl',
-            batchNumber: '12',
-            bestBefore: null,
-          },
-          product: {
-            id: 'ckdilk7800088f3c9hpvagjhu',
-            fullName: 'Tisch',
+//   const columns =
 
-            consumables: [],
-          },
-        },
-      ]}
-    />
-  );
-};
+//   return (
+//     <TableInput
+//       label="TableInput"
+//       withSearch={boolean('With Search', true)}
+//       multiple={boolean('Multiple?', false)}
+//       helperText="This is a helper text"
+//       name="TableInputStory"
+//       filterWith={boolean('With Filter', false) && 'supplier.id'}
+//       columns={[
+//         {
+//           accessor: (val) => val.product.fullName,
+//           Header: 'product',
+//         },
+//         { accessor: 'amount', Header: 'amount' },
+//         {
+//           accessor: (val: any) => val?.batch?.batchNumber ?? 'N/A',
+//           Header: 'batchNumberShort',
+//         },
+//         {
+//           accessor: (val: any) =>
+//             val?.batch?.bestBefore
+//               ? formatDate(val?.batch?.bestBefore, 'day')
+//               : 'N/A',
+//           Header: 'bestBeforeShort',
+//         },
+//         {
+//           accessor: 'supplier.name',
+//           Header: 'supplier',
+//         },
+//         {
+//           accessor: 'warehouse.name',
+//           Header: 'warehouse',
+//         },
+//       ]}
+//       options={[
+//         {
+//           id: '1',
+//           amount: 167,
+//           supplier: {
+//             id: 'ckdilk78c0108f3c9a1km2ex2',
+//             name: 'Supplier1',
+//           },
+//           batch: {
+//             id: 'ckdilk79z0185f3c9urbbyapl',
+//             batchNumber: '1',
+//             bestBefore: null,
+//           },
+//           product: {
+//             id: 'ckdilk7800088f3c9hpvagjhu',
+//             fullName: 'Teller',
 
-export const ConsumableInputStory = (props) => {
-  return (
-    <ConsumableInput
-      name="consumables"
-      label="Consumables"
-      helperText="Consumables Helper"
-      columns={[
-        {
-          accessor: (val) => val.product.fullName,
-          Header: 'product',
-        },
-        { accessor: 'amount', Header: 'amount' },
-        {
-          accessor: (val: any) => val?.batch?.batchNumber ?? 'N/A',
-          Header: 'batchNumberShort',
-        },
-        {
-          accessor: (val: any) =>
-            val?.batch?.bestBefore
-              ? formatDate(val?.batch?.bestBefore, 'day')
-              : 'N/A',
-          Header: 'bestBeforeShort',
-        },
-        {
-          accessor: 'supplier.name',
-          Header: 'supplier',
-        },
-        {
-          accessor: 'warehouse.name',
-          Header: 'warehouse',
-        },
-      ]}
-      options={[
-        {
-          title: 'Holz',
-          amount: 1,
-          options: [
-            {
-              id: '1',
-              amount: 167,
-              supplier: {
-                id: 'ckdilk76u0037f3c9k6jy0ghm',
-                name: 'Magaña, Montañez and Valdez',
-              },
-              batch: {
-                id: '2',
-                batchNumber: '1',
-                bestBefore: null,
-              },
-              product: {
-                id: 'ckdilk7800088f3c9hpvagjhu',
-                fullName: 'Teller',
+//             consumables: [],
+//           },
+//           warehouse: {
+//             id: 'ckdilk78c0108f3c9a1km2ex2',
+//             name: 'Warehouse2',
+//           },
+//         },
+//         {
+//           id: '2',
+//           amount: 100,
+//           supplier: {
+//             id: 'ckdilk76u0037f3c9k6jy0ghm',
+//             name: 'Supplier2',
+//           },
+//           batch: {
+//             id: 'ckdilk79z0185f3c9urbbyapl',
+//             batchNumber: null,
+//             bestBefore: null,
+//           },
+//           product: {
+//             id: 'ckdilk7800088f3c9hpvagjhu',
+//             fullName: 'Glas',
 
-                consumables: [],
-              },
-              warehouse: {
-                id: 'ckdilk78c0108f3c9a1km2ex2',
-                name: 'Warehouse2',
-              },
-            },
-            {
-              id: '2',
-              amount: 100,
-              supplier: {
-                id: 'ckdilk76u0037f3c9k6jy0ghm',
-                name: 'Supplier2',
-              },
-              batch: {
-                id: 'ckdilk79z0185f3c9urbbyapl',
-                batchNumber: null,
-                bestBefore: null,
-              },
-              product: {
-                id: 'ckdilk7800088f3c9hpvagjhu',
-                fullName: 'Glas',
+//             consumables: [],
+//           },
+//           warehouse: {
+//             id: 'ckdilk78c0108f3c9a1km2ex2',
+//             name: 'Warehouse1',
+//           },
+//         },
+//         {
+//           id: '3',
+//           amount: 37,
+//           supplier: {
+//             id: 'ckdilk78c0108f3c9a1km2ex2',
+//             name: 'Supplier1',
+//           },
+//           batch: {
+//             id: 'ckdilk79z0185f3c9urbbyapl',
+//             batchNumber: '12',
+//             bestBefore: null,
+//           },
+//           product: {
+//             id: 'ckdilk7800088f3c9hpvagjhu',
+//             fullName: 'Tisch',
 
-                consumables: [],
-              },
-              warehouse: {
-                id: 'ckdilk78c0108f3c9a1km2ex2',
-                name: 'Warehouse1',
-              },
-            },
-            {
-              id: '3',
-              amount: 37,
-              supplier: {
-                id: 'ckdilk76u0037f3c9k6jy0ghm',
-                name: 'Supplier1',
-              },
-              batch: {
-                id: 'ckdilk79z0185f3c9urbbyapl',
-                batchNumber: '12',
-                bestBefore: null,
-              },
-              product: {
-                id: 'ckdilk7800088f3c9hpvagjhu',
-                fullName: 'Tisch',
+//             consumables: [],
+//           },
+//         },
+//       ]}
+//     />
+//   );
+// };
 
-                consumables: [],
-              },
-            },
-          ],
-        },
-        {
-          title: 'Nägel',
-          amount: 10,
-          options: [
-            {
-              id: '4',
-              amount: 167,
-              supplier: {
-                id: 'ckdilk76u0037f3c9k6jy0ghm',
-                name: 'Magaña, Montañez and Valdez',
-              },
-              batch: {
-                id: 'ckdilk79z0185f3c9urbbyapl',
-                batchNumber: '1',
-                bestBefore: null,
-              },
-              product: {
-                id: 'ckdilk7800088f3c9hpvagjhu',
-                fullName: 'Teller',
-
-                consumables: [],
-              },
-              warehouse: {
-                id: 'ckdilk78c0108f3c9a1km2ex2',
-                name: 'Warehouse2',
-              },
-            },
-            {
-              id: '5',
-              amount: 100,
-              supplier: {
-                id: 'ckdilk76u0037f3c9k6jy0ghm',
-                name: 'Supplier2',
-              },
-              batch: {
-                id: 'ckdilk79z0185f3c9urbbyapl',
-                batchNumber: null,
-                bestBefore: null,
-              },
-              product: {
-                id: 'ckdilk7800088f3c9hpvagjhu',
-                fullName: 'Glas',
-
-                consumables: [],
-              },
-              warehouse: {
-                id: 'ckdilk78c0108f3c9a1km2ex2',
-                name: 'Warehouse1',
-              },
-            },
-            {
-              id: '6',
-              amount: 37,
-              supplier: {
-                id: 'ckdilk76u0037f3c9k6jy0ghm',
-                name: 'Supplier1',
-              },
-              batch: {
-                id: 'ckdilk79z0185f3c9urbbyapl',
-                batchNumber: '12',
-                bestBefore: null,
-              },
-              product: {
-                id: 'ckdilk7800088f3c9hpvagjhu',
-                fullName: 'Tisch',
-
-                consumables: [],
-              },
-            },
-          ],
-        },
-      ]}
-    />
-  );
-};
+export const SubmitButtonStory = (props) => <SubmitButton>Submit</SubmitButton>;

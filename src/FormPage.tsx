@@ -93,10 +93,7 @@ const FormPage: FC<Props> = ({
                 </StyledSubmit>
                 {withCancel && (
                   <Link href={withCancel}>
-                    <a>
-                      {' '}
-                      <Button sx={{ ml: 5 }}>{locales.cancel}</Button>
-                    </a>
+                    <Button sx={{ ml: 5 }}>{locales.cancel}</Button>
                   </Link>
                 )}
               </div>

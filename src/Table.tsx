@@ -15,9 +15,23 @@ import MaUTable from '@mui/material/Table';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { CSSProperties, FC, useMemo } from 'react';
-import { Column, Row, useGlobalFilter, useSortBy, useTable } from 'react-table';
+import {
+  ColumnDef,
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFacetedMinMaxValues,
+  getFacetedRowModel,
+  getFacetedUniqueValues,
+  getFilteredRowModel,
+  getPaginationRowModel,
+  getSortedRowModel,
+  Row,
+  useReactTable,
+} from '@tanstack/react-table';
+import { CSSProperties, FC, useMemo, useState } from 'react';
 import { useLocale } from './AppWrapper';
+import { fuzzyFilter } from './lib/tableUtils';
 
 const StyledRow = styled(TableRow)<{ hover: boolean }>`
   cursor: ${({ hover }) => hover && 'pointer'};
@@ -66,29 +80,34 @@ const Table: FC<Props> = ({
   style,
   labelledBy,
 }) => {
+  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
+  const [globalFilter, setGlobalFilter] = useState('');
+
   const { locales } = useLocale();
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    state,
-    setGlobalFilter,
-  } = useTable(
-    {
-      columns,
-      data: data ?? [],
+  const table = useReactTable({
+    data,
+    columns,
+    filterFns: {
+      fuzzy: fuzzyFilter,
     },
-    useGlobalFilter,
-    useSortBy,
-    (hooks) => {
-      hooks.allColumns.push((columns) => [
-        ...columns,
-        ...(actions ? actions : []),
-      ]);
-    }
-  );
+    state: {
+      columnFilters,
+      globalFilter,
+    },
+    onColumnFiltersChange: setColumnFilters,
+    onGlobalFilterChange: setGlobalFilter,
+    globalFilterFn: fuzzyFilter,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+    getFacetedRowModel: getFacetedRowModel(),
+    getFacetedUniqueValues: getFacetedUniqueValues(),
+    getFacetedMinMaxValues: getFacetedMinMaxValues(),
+    debugTable: true,
+    debugHeaders: true,
+    debugColumns: false,
+  });
 
   const array = useMemo(() => new Array(10).fill('blah'), []);
 
@@ -98,12 +117,12 @@ const Table: FC<Props> = ({
         <TextField
           style={{ width: '100%', margin: '15px 0' }}
           label={locales.search}
-          value={state.globalFilter ?? ''}
+          value={globalFilter ?? ''}
           onChange={(e) => setGlobalFilter(e.target.value)}
           InputProps={{
             endAdornment: (
               <>
-                {state.globalFilter && (
+                {globalFilter && (
                   <InputAdornment position="end">
                     <Tooltip title={locales.clear}>
                       <IconButton
@@ -124,23 +143,27 @@ const Table: FC<Props> = ({
         />
       )}
       <StyledContainer style={{ maxHeight, ...style }}>
-        <MaUTable
-          aria-labelledby={labelledBy}
-          stickyHeader
-          {...getTableProps()}
-        >
+        <MaUTable aria-labelledby={labelledBy} stickyHeader>
           <TableHead>
-            {headerGroups.map((headerGroup, ind) => (
-              <TableRow key={ind} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <StyledCell key={column.id} {...column.getHeaderProps()}>
+            {table.getHeaderGroups().map((headerGroup, ind) => (
+              <TableRow key={headerGroup.id}>
+                {headerGroup.headers.map((header) => (
+                  <StyledCell key={header.id} colSpan={header.colSpan}>
                     <TableSortLabel
                       hideSortIcon
-                      active={column.isSorted}
-                      direction={column.isSortedDesc ? 'desc' : 'asc'}
-                      {...column.getSortByToggleProps()}
+                      active={Boolean(header.column.getIsSorted())}
+                      direction={
+                        header.column.getIsSorted() === 'desc'
+                          ? 'desc'
+                          : header.column.getIsSorted() === 'asc'
+                          ? 'asc'
+                          : null
+                      }
                     >
-                      {column.render('Header')}
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext()
+                      )}
                     </TableSortLabel>
                   </StyledCell>
                 ))}
@@ -148,7 +171,7 @@ const Table: FC<Props> = ({
             ))}
           </TableHead>
           {!Boolean(data) ? (
-            <StyledTableBody {...getTableBodyProps()}>
+            <StyledTableBody>
               {array.map((row) => (
                 <TableRow key={row.id}>
                   {columns.map((col, ind) => (
@@ -159,23 +182,23 @@ const Table: FC<Props> = ({
                 </TableRow>
               ))}
             </StyledTableBody>
-          ) : rows.length > 0 ? (
-            <StyledTableBody {...getTableBodyProps()}>
-              {rows.map((row) => {
-                prepareRow(row);
-
+          ) : table.getRowModel().rows.length > 0 ? (
+            <StyledTableBody>
+              {table.getRowModel().rows.map((row) => {
                 return (
                   <StyledRow
                     selected={selected === row.id}
                     hover={Boolean(onRowClick)}
                     onClick={() => onRowClick && onRowClick(row)}
                     key={row.id}
-                    {...row.getRowProps()}
                   >
-                    {row.cells.map((cell, ind) => {
+                    {row.getVisibleCells().map((cell) => {
                       return (
-                        <TableCell key={ind} {...cell.getCellProps()}>
-                          {cell.render('Cell')}
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
                         </TableCell>
                       );
                     })}
@@ -201,10 +224,10 @@ const Table: FC<Props> = ({
 export default Table;
 
 export interface Props {
-  columns: Column<any>[];
-  data: {}[];
+  columns: ColumnDef<any>[];
+  data: any[];
   actions?: any;
-  onRowClick?: (row: Row) => void;
+  onRowClick?: (row: Row<any>) => void;
   selected?: string;
   withSearch?: boolean;
   maxHeight?: number;

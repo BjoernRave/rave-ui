@@ -1,3 +1,4 @@
+export { default as AppWrapper } from './AppWrapper';
 export { getBaseTheme } from './BaseTheme';
 export { default as BooleanIcon } from './BooleanIcon';
 export { default as DarkmodeSwitch } from './DarkmodeSwitch';
@@ -20,7 +21,6 @@ export { default as TextAreaInput } from './FormItems/Basic/TextAreaInput';
 export { default as TextInput } from './FormItems/Basic/TextInput';
 export { default as TextListInput } from './FormItems/Basic/TextListInput';
 export { default as TimeInput } from './FormItems/Basic/TimeInput';
-export { default as ConsumableInput } from './FormItems/ConsumableInput';
 export { default as EntitySelect } from './FormItems/EntitySelect';
 export { default as FileInput } from './FormItems/FileInput';
 export { default as FileUpload } from './FormItems/FileUpload';
@@ -36,5 +36,4 @@ export { default as ImageViewer } from './ImageViewer';
 export * from './lib/styles';
 export * from './lib/types';
 export * from './lib/utils';
-export { default as Link } from './Link';
 export { default as Table } from './Table';

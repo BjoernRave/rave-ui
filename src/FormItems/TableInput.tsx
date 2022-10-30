@@ -16,6 +16,7 @@ import {
   Paper,
   Tooltip,
 } from '@mui/material';
+import { ColumnDef } from '@tanstack/react-table';
 import { FC, useEffect, useMemo } from 'react';
 import { useController } from 'react-hook-form';
 import { useLocale } from '../AppWrapper';
@@ -232,7 +233,7 @@ const TableInput: FC<Props> = ({
 export default TableInput;
 
 interface Props extends InputProps {
-  columns: { accessor: any; Header: string }[];
+  columns: ColumnDef<any>[];
   options: any[];
   multiple?: boolean;
   filterWith?: string;
