@@ -1,4 +1,6 @@
-import { TableContainer } from "@mui/material"
+import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
+import { IconButton, TableContainer, Tooltip } from "@mui/material"
 import MaUTable from "@mui/material/Table"
 import TableBody from "components/Table/TableBody"
 import TableHead from "components/Table/TableHead"
@@ -62,6 +64,9 @@ const Table: FC<Props> = ({
   onRowClick,
   getStats,
   toSum,
+  onCreate,
+  onEdit,
+  onDelete,
   emptyScreen,
 }) => {
   const { query } = useRouter()
@@ -76,20 +81,48 @@ const Table: FC<Props> = ({
             ]
           : []),
         ...columns,
-        ...(rowActions
+        ...(rowActions || onEdit || onDelete
           ? [
               {
                 id: "actions",
                 Header: "Actions",
                 Cell: (cell) => (
-                  <div className="flex items-center">{rowActions(cell)}</div>
+                  <div className="flex items-center">
+                    {rowActions && rowActions(cell)}
+                    {onEdit && (
+                      <Tooltip key="edit" title="Bearbeiten">
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onEdit(cell.row)
+                          }}
+                          size="large"
+                        >
+                          <EditIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                    {onDelete && (
+                      <Tooltip key="edit" title="Löschen">
+                        <IconButton
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            onEdit(cell.row)
+                          }}
+                          size="large"
+                        >
+                          <DeleteIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  </div>
                 ),
               },
             ]
           : []),
       ])
     },
-    [rowActions, renderExpandable]
+    [rowActions, renderExpandable, onEdit, onDelete]
   )
 
   const {
@@ -169,6 +202,7 @@ const Table: FC<Props> = ({
         {getStats && <TableStats getStats={getStats} flatRows={flatRows} />}
         {!hideToolbar && (
           <TableToolbar
+            onCreate={onCreate}
             onResetFilters={onResetFilter}
             globalFilter={globalFilter}
             setGlobalFilter={setGlobalFilter}
@@ -244,4 +278,7 @@ interface Props {
   }
   getStats?: (data: any[]) => TableStat[]
   emptyScreen?: ReactNode
+  onCreate?: () => void
+  onEdit?: (row: Row<any>) => void
+  onDelete?: (row: Row<any>) => void
 }

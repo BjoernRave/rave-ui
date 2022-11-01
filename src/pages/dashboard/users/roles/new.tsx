@@ -8,13 +8,13 @@ import Router from "next/router"
 
 const CreateRole: NextPage<Props> = ({}) => {
   const { data } = trpc.auth.getPermissions.useQuery()
-  const { mutateAsync } = trpc.auth.createRole.useMutation()
+  const { mutateAsync } = trpc.role.create.useMutation()
 
   const handleSubmit = async ({ name, description, permissions }) => {
     handleMutation({
       mutateAsync,
       successMessage: "Rolle erfolgreich erstellt",
-      onSuccess: () => Router.push("/dashboard/user/roles"),
+      onSuccess: () => Router.push("/dashboard/users/roles"),
       variables: {
         name,
         description,

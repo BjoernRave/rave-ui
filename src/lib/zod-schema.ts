@@ -16,3 +16,10 @@ export const RoleCreationSchema = z.object({
   description: z.string().optional(),
   permissions: z.array(z.any()),
 })
+
+export const RoleUpdateSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  description: z.string().optional(),
+  permissions: z.array(z.any()),
+})

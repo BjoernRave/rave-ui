@@ -4,11 +4,10 @@ import SelectFilter from "components/Table/Filter/SelectFilter"
 import { trpc } from "lib/trpc"
 import { formatDate, formatDateRelative } from "lib/utils"
 import { NextPage } from "next"
-import { useMemo, useState } from "react"
+import { useMemo } from "react"
 
 const Nutzerverwaltung: NextPage<Props> = ({}) => {
-  const { data, isFetching } = trpc.auth.getUsers.useQuery()
-  const [isCreatingUser, setIsCreatingUser] = useState(false)
+  const { data, isFetching } = trpc.auth.getAll.useQuery()
 
   const columns = useMemo(
     () => [

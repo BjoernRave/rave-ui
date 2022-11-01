@@ -1,8 +1,10 @@
 import styled from "@emotion/styled"
+import AddIcon from "@mui/icons-material/Add"
 import ChevronRightIcon from "@mui/icons-material/ChevronRight"
 import ClearIcon from "@mui/icons-material/Clear"
 import SearchIcon from "@mui/icons-material/Search"
 import {
+  Button,
   IconButton,
   InputAdornment,
   Popover,
@@ -32,6 +34,7 @@ const TableToolbar: FC<Props> = ({
   filteredData,
   onResetFilters,
   additionalFilterCount,
+  onCreate,
 }) => {
   const router = useRouter()
   const { allColumns, hiddenColumns } = useContext(TableContext)
@@ -80,12 +83,38 @@ const TableToolbar: FC<Props> = ({
                 horizontal: "center",
               }}
             >
-              <div className="p-4">{toolbarContent}</div>
+              <div className="p-4">
+                {onCreate && (
+                  <Button
+                    type="button"
+                    onClick={onCreate}
+                    color="primary"
+                    variant="contained"
+                    endIcon={<AddIcon />}
+                  >
+                    Erstellen
+                  </Button>
+                )}{" "}
+                {toolbarContent}
+              </div>
             </Popover>
           </>
         )}
         <div className="flex w-full items-center justify-between ">
-          <div className="hidden lg:flex">{toolbarContent}</div>
+          <div className="hidden lg:flex">
+            {onCreate && (
+              <Button
+                type="button"
+                onClick={onCreate}
+                color="primary"
+                variant="contained"
+                endIcon={<AddIcon />}
+              >
+                Erstellen
+              </Button>
+            )}
+            {toolbarContent}
+          </div>
           <TextField
             margin="dense"
             size="small"
@@ -195,4 +224,5 @@ interface Props {
   filteredData: any[]
   onResetFilters: () => void
   additionalFilterCount?: number
+  onCreate?: () => void
 }

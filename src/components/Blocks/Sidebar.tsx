@@ -10,9 +10,43 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(" ")
 }
 
+const TopBar = ({}) => {
+  const { data } = useSession()
+
+  return (
+    <div className="mt-2 flex w-full  items-center justify-between px-2">
+      <p className="text-center text-white">{data?.user?.email}</p>
+      <div className="flex justify-between py-2">
+        <div>
+          <Tooltip title="Logout">
+            <IconButton
+              onClick={() => signOut({ callbackUrl: "/" })}
+              size="large"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6 text-white"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth={2}
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                />
+              </svg>
+            </IconButton>
+          </Tooltip>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 const Sidebar: FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
   const router = useRouter()
-  const { data } = useSession()
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -26,39 +60,6 @@ const Sidebar: FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
   }
 
   const allNavItems = useMemo(() => getEligibleRoutes({ roles: [] }), [])
-
-  const TopBar = () => {
-    return (
-      <div className="mt-2 flex w-full  items-center justify-between px-2">
-        <p className="text-center text-white">{data.user.email}</p>
-        <div className="flex justify-between py-2">
-          <div>
-            <Tooltip title="Logout">
-              <IconButton
-                onClick={() => signOut({ callbackUrl: "/" })}
-                size="large"
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6 text-white"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth={2}
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
-                  />
-                </svg>
-              </IconButton>
-            </Tooltip>
-          </div>
-        </div>
-      </div>
-    )
-  }
 
   return (
     <>

@@ -10,7 +10,6 @@ export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
     session(stuff) {
-      console.log("stuff", stuff)
       // if (session.user && user) {
       //   session.user.id = user.id
       // }
