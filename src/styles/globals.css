@@ -1,0 +1,89 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+.MuiTableCell-head span {
+  justify-content: center;
+}
+
+.MuiChip-root .MuiChip-avatarColorPrimary {
+  background-color: transparent !important;
+}
+
+.MuiAutocomplete-popper {
+  min-width: 330px !important;
+}
+
+.MuiGridList-root.li:first-child {
+  width: 100% !important;
+}
+
+.reset-zoom {
+  position: absolute;
+  top: 20px;
+  right: 20px;
+}
+
+.MuiDialog-paper {
+  margin: 10px !important;
+
+  @media (max-width: 767px) {
+    width: 100% !important;
+  }
+}
+
+body {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+@media (min-width: 767px) {
+  [data-rbd-droppable-id='columnOrder'] {
+    max-height: 540px;
+    overflow-y: auto;
+  }
+}
+
+td.MuiCheckbox-root {
+  padding: 0 !important;
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+    visibility: hidden !important;
+  }
+  .MuiTableRow-root {
+    page-break-before: always !important;
+  }
+}
+
+@media (min-width: 1023px) {
+  .header {
+    width: calc(100% - 250px) !important;
+  }
+}
+
+@media (min-width: 600px) {
+  .table-container {
+    height: calc((var(--vh, 1vh) * 100) - 56px - 148px ) !important;
+  }
+}
+
+.table-container {
+  height: calc((var(--vh, 1vh) * 100) - 56px - 70px ) !important;
+}
+
+.slots-table-container {
+  height: calc((var(--vh, 1vh) * 100) - 210px) !important;
+}
+
+.header {
+  width: 100%;
+}
+
+input:focus,
+textarea:focus {
+  box-shadow: none !important;
+}

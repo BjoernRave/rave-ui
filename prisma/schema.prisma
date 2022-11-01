@@ -1,0 +1,131 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+// Necessary for Next auth
+model Account {
+  id                Int     @id @default(autoincrement())
+  userId            Int
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           Int      @id @default(autoincrement())
+  sessionToken String   @unique
+  userId       Int
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model User {
+  id            Int       @id @default(autoincrement())
+  firstName     String?
+  lastName      String?
+  email         String?   @unique
+  password      String?
+  emailVerified DateTime?
+  image         String?
+  accounts      Account[]
+  sessions      Session[]
+  role          Role?     @relation(fields: [roleId], references: [id])
+  roleId        Int?
+}
+
+model Role {
+  id          Int          @id @default(autoincrement())
+  name        String
+  description String?
+  permissions Permission[]
+  users       User[]
+}
+
+model Permission {
+  id    Int    @id @default(autoincrement())
+  name  String @unique
+  roles Role[]
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+model WindFarm {
+  id       Int           @id @default(autoincrement())
+  farmId   Int           @unique
+  name     String        @unique
+  turbines WindTurbine[]
+  devices  FarmDevice[]
+  group    String?
+}
+
+model WindTurbine {
+  id         Int          @id @default(autoincrement())
+  name       String       @unique
+  devices    FarmDevice[]
+  windFarm   WindFarm?    @relation(fields: [windFarmId], references: [id])
+  windFarmId Int?
+}
+
+model FarmDevice {
+  id              Int              @id @default(autoincrement())
+  windFarm        WindFarm?        @relation(fields: [windFarmId], references: [id])
+  windFarmId      Int?
+  name            String           @unique
+  attributeValues AttributeValue[]
+  windTurbine     WindTurbine?     @relation(fields: [windTurbineId], references: [id])
+  windTurbineId   Int?
+}
+
+model Attribute {
+  id               Int               @id @default(autoincrement())
+  name             String            @unique
+  description      String?
+  dataType         String
+  attributeChoices AttributeChoice[]
+  attributeValues  AttributeValue[]
+}
+
+model AttributeChoice {
+  id          Int       @id @default(autoincrement())
+  name        String
+  attributeId Int
+  attribute   Attribute @relation(fields: [attributeId], references: [id])
+
+  @@unique([attributeId, name])
+}
+
+model AttributeValue {
+  id           Int         @id @default(autoincrement())
+  value        String
+  isVerified   Boolean?
+  attributeId  Int
+  attribute    Attribute   @relation(fields: [attributeId], references: [id])
+  farmDevice   FarmDevice? @relation(fields: [farmDeviceId], references: [id])
+  farmDeviceId Int?
+
+  @@unique([attributeId, farmDeviceId])
+}

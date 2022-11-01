@@ -1,0 +1,173 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "./.client"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("OLD_DATABASE_URL")
+}
+
+model tbl_registry {
+  id    Int    @id @default(autoincrement())
+  name  String @db.VarChar(150)
+  value Float?
+}
+
+model wes_att {
+  id      Int     @id @default(autoincrement()) @db.UnsignedInt
+  attname String? @db.VarChar(60)
+  cat_id  Int
+  sort    String? @default("1") @db.VarChar(20)
+}
+
+model wes_bewegungsdaten_cat {
+  id      Int      @id @default(autoincrement()) @db.UnsignedInt
+  value   String?  @db.VarChar(250)
+  att_id  Int
+  park_id Int
+  remarks String?  @db.MediumText
+  logtime DateTime
+  loguser Int
+}
+
+model wes_bewegungsdaten_date {
+  id               Int       @id @default(autoincrement()) @db.UnsignedInt
+  type             Int
+  user             Int
+  date_created     DateTime? @db.Timestamp(0)
+  user_created     Int
+  park_id          Int
+  frist            DateTime
+  start_date       DateTime?
+  start_user       Int
+  end_date         DateTime?
+  end_user         Int
+  reminder_sent    DateTime?
+  reminder_II_sent DateTime?
+  status           Int       @default(1)
+  bemerkungen      String?   @db.MediumText
+  final            Int?      @default(0)
+  steps            String?   @db.VarChar(45)
+  partner          String?   @db.VarChar(45)
+}
+
+model wes_bewegungsdaten_date_audit {
+  id       Int       @id @default(autoincrement()) @db.UnsignedInt
+  text     String    @db.VarChar(255)
+  reg_date DateTime? @db.Timestamp(0)
+  user     Int?
+  date     Int?
+}
+
+model wes_cat {
+  id      Int     @id @default(autoincrement()) @db.UnsignedInt
+  catname String? @db.VarChar(60)
+  type_id Int?
+  sort    String? @default("1") @db.VarChar(20)
+}
+
+model wes_dates_template {
+  id            Int     @id @default(autoincrement()) @db.UnsignedInt
+  datename      String? @db.VarChar(255)
+  date_type     Int     @default(1)
+  reminder      Int     @default(0)
+  reminderII    Int     @default(0)
+  partner       String? @db.VarChar(255)
+  steps         String? @db.VarChar(45)
+  wiedervorlage Int     @default(1)
+  status        String? @db.VarChar(45)
+  bemerkungen   String? @db.MediumText
+}
+
+model wes_dv {
+  id Int    @id @default(autoincrement()) @db.UnsignedInt
+  dv String @db.VarChar(30)
+}
+
+model wes_eis {
+  id             Int     @id @default(autoincrement()) @db.UnsignedInt
+  park_id        Int
+  monat          Int?
+  jahr           Int?
+  einsatz        Int     @default(0)
+  lastgang       Int     @default(0)
+  minute         Int     @default(0)
+  enwg           Int     @default(0)
+  dvred          Int     @default(0)
+  durchremark    String? @db.MediumText
+  rechnung       Int     @default(0)
+  rechnungnummer String? @db.VarChar(255)
+  rechnungremark String? @db.MediumText
+}
+
+model wes_ka {
+  id   Int     @id @default(autoincrement())
+  ka   String  @db.VarChar(255)
+  sort String? @db.VarChar(255)
+}
+
+model wes_ka_kontakt {
+  ka    Int
+  kid   Int
+  value String @db.VarChar(255)
+
+  @@id([ka, kid])
+}
+
+model wes_kf {
+  id       Int     @id @default(autoincrement())
+  funktion String? @db.VarChar(255)
+}
+
+model wes_kontakt {
+  id   Int    @id @default(autoincrement())
+  name String @db.VarChar(255)
+}
+
+model wes_kontakt_park {
+  parkid Int
+  kid    Int
+  kfid   Int
+
+  @@id([parkid, kid, kfid])
+}
+
+model wes_park {
+  id       Int     @id @default(autoincrement()) @db.UnsignedInt
+  parkname String? @db.VarChar(250)
+  ischild  Int?
+  istype   Int
+  isuser   Int?
+}
+
+model wes_status {
+  id     Int    @id @default(autoincrement()) @db.UnsignedInt
+  status String @db.VarChar(255)
+  sort   String @db.VarChar(30)
+  prio   Float  @default(10)
+}
+
+model wes_steps {
+  id       Int    @id @default(autoincrement()) @db.UnsignedInt
+  stepname String @db.VarChar(100)
+}
+
+model wes_type {
+  id       Int     @id @default(autoincrement()) @db.UnsignedInt
+  typename String? @db.VarChar(250)
+}
+
+model wes_user {
+  id         Int       @id @default(autoincrement()) @db.UnsignedInt
+  username   String    @db.VarChar(30)
+  firstname  String    @db.VarChar(45)
+  lastname   String    @db.VarChar(45)
+  email      String?   @db.VarChar(45)
+  last_login DateTime?
+  heartbeat  DateTime?
+  password   String    @db.VarChar(45)
+  level      Int
+
+  @@index([id], map: "id")
+}
