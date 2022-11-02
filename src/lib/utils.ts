@@ -29,7 +29,7 @@ export const handleMutation = async ({
     response = await mutateAsync(variables)
 
     toast.success(successMessage)
-    onSuccess(response)
+    onSuccess && onSuccess(response)
   } catch (error) {
     toast.error(error.message)
   }

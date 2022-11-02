@@ -48,7 +48,7 @@ export const routes: Category[] = [
     name: "General",
     routes: [
       {
-        href: "/park",
+        href: "/windfarms",
         name: "Windparks",
         permissions: ["READ:FARM"],
       },

@@ -74,23 +74,26 @@ model VerificationToken {
 }
 
 model WindFarm {
-  id       Int           @id @default(autoincrement())
-  farmId   Int           @unique
-  name     String        @unique
-  turbines WindTurbine[]
-  devices  FarmDevice[]
-  group    String?
+  id              Int              @id @default(autoincrement())
+  farmId          Int              @unique
+  oldId           Int?
+  name            String           @unique
+  turbines        WindTurbine[]
+  devices         Device[]
+  group           String?
+  attributeValues AttributeValue[]
 }
 
 model WindTurbine {
-  id         Int          @id @default(autoincrement())
-  name       String       @unique
-  devices    FarmDevice[]
-  windFarm   WindFarm?    @relation(fields: [windFarmId], references: [id])
-  windFarmId Int?
+  id              Int              @id @default(autoincrement())
+  name            String           @unique
+  devices         Device[]
+  windFarm        WindFarm?        @relation(fields: [windFarmId], references: [id])
+  windFarmId      Int?
+  attributeValues AttributeValue[]
 }
 
-model FarmDevice {
+model Device {
   id              Int              @id @default(autoincrement())
   windFarm        WindFarm?        @relation(fields: [windFarmId], references: [id])
   windFarmId      Int?
@@ -98,15 +101,33 @@ model FarmDevice {
   attributeValues AttributeValue[]
   windTurbine     WindTurbine?     @relation(fields: [windTurbineId], references: [id])
   windTurbineId   Int?
+  type            String
+}
+
+model AttributeCategory {
+  id         Int         @id @default(autoincrement())
+  name       String      @unique
+  attributes Attribute[]
+  type       String
+  sort       Int
+
+  @@unique([name, type])
+  @@unique([sort, type])
 }
 
 model Attribute {
-  id               Int               @id @default(autoincrement())
-  name             String            @unique
-  description      String?
-  dataType         String
-  attributeChoices AttributeChoice[]
-  attributeValues  AttributeValue[]
+  id                  Int                @id @default(autoincrement())
+  name                String
+  description         String?
+  dataType            String
+  attributeChoices    AttributeChoice[]
+  attributeValues     AttributeValue[]
+  sort                Int
+  attributeCategory   AttributeCategory? @relation(fields: [attributeCategoryId], references: [id])
+  attributeCategoryId Int?
+
+  @@unique([attributeCategoryId, name])
+  @@unique([attributeCategoryId, sort])
 }
 
 model AttributeChoice {
@@ -119,13 +140,19 @@ model AttributeChoice {
 }
 
 model AttributeValue {
-  id           Int         @id @default(autoincrement())
-  value        String
-  isVerified   Boolean?
-  attributeId  Int
-  attribute    Attribute   @relation(fields: [attributeId], references: [id])
-  farmDevice   FarmDevice? @relation(fields: [farmDeviceId], references: [id])
-  farmDeviceId Int?
+  id            Int          @id @default(autoincrement())
+  value         String
+  isVerified    Boolean?
+  attributeId   Int
+  attribute     Attribute    @relation(fields: [attributeId], references: [id])
+  device        Device?      @relation(fields: [deviceId], references: [id])
+  deviceId      Int?
+  windTurbine   WindTurbine? @relation(fields: [windTurbineId], references: [id])
+  windTurbineId Int?
+  windFarm      WindFarm?    @relation(fields: [windFarmId], references: [id])
+  windFarmId    Int?
 
-  @@unique([attributeId, farmDeviceId])
+  @@unique([attributeId, deviceId])
+  @@unique([attributeId, windTurbineId])
+  @@unique([attributeId, windFarmId])
 }

@@ -11,7 +11,7 @@ const Header: FC<Props> = ({ title, titleComponent }) => {
       className={`header no-print fixed top-0 z-10 flex flex-shrink-0 border-b border-gray-200 bg-white lg:border-none`}
     >
       <button
-        className=" border-r border-gray-200 bg-transparent text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden"
+        className="cursor-pointer border-r border-gray-200 bg-transparent text-gray-400 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-cyan-500 lg:hidden"
         onClick={() => setSidebarOpen(true)}
       >
         <span className="sr-only">Open sidebar</span>

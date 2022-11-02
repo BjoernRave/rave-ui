@@ -1,0 +1,97 @@
+{
+  "failed": [
+    { "value": "TenneT", "error": "{}" },
+    { "value": "Tennet", "error": "{}" },
+    { "value": "Schleswig-Holstein Netz AG", "error": "{}" },
+    { "value": "Schleswig-Holstein Netz AG", "error": "{}" },
+    { "value": "3248", "error": "{}" },
+    { "value": "58429", "error": "{}" },
+    {
+      "value": "LLUR des Landes Schleswig Holstein - Regionaldezernat Itzehoe",
+      "error": "{}"
+    },
+    { "value": "G10/2020/096", "error": "{}" },
+    { "value": "28.12.2020", "error": "{}" },
+    { "value": "28.12.2022", "error": "{}" },
+    { "value": "Schleswig-Holstein", "error": "{}" },
+    { "value": "Dithmarschen", "error": "{}" },
+    { "value": "25709", "error": "{}" },
+    { "value": "WEA 1", "error": "{}" },
+    { "value": "In Planung", "error": "{}" },
+    { "value": "In Betrieb", "error": "{}" },
+    { "value": "In Planung", "error": "{}" },
+    { "value": "Enercon GmbH", "error": "{}" },
+    { "value": "Enercon GmbH", "error": "{}" },
+    { "value": "Enercon GmbH", "error": "{}" },
+    { "value": "E-115 EP3", "error": "{}" },
+    { "value": "E-115", "error": "{}" },
+    { "value": "1161002 (VORLÄUFIG)", "error": "{}" },
+    { "value": "4200", "error": "{}" },
+    { "value": "92", "error": "{}" },
+    { "value": "115,7", "error": "{}" },
+    { "value": "08.10.2009", "error": "{}" },
+    { "value": "CS82", "error": "{}" },
+    { "value": "WES", "error": "{}" },
+    { "value": "WES", "error": "{}" },
+    { "value": "WES", "error": "{}" },
+    {
+      "value": "https://www.marktstammdatenregister.de/MaStR/Einheit/Detail/IndexOeffentlich/3000855",
+      "error": "{}"
+    },
+    {
+      "value": "https://www.marktstammdatenregister.de/MaStR/Einheit/Detail/IndexOeffentlich/2443795",
+      "error": "{}"
+    },
+    {
+      "value": "https://www.marktstammdatenregister.de/MaStR/Einheit/Detail/IndexOeffentlich/4979711",
+      "error": "{}"
+    },
+    { "value": "SEE902411476248", "error": "{}" },
+    { "value": "SEE936958277099", "error": "{}" },
+    { "value": "SEE978124828957", "error": "{}" },
+    { "value": "In Planung", "error": "{}" },
+    { "value": "GEPRÜFT", "error": "{}" },
+    { "value": "In Planung", "error": "{}" },
+    { "value": "Meldung IBN offen", "error": "{}" },
+    { "value": "NEIN", "error": "{}" },
+    { "value": "Meldung IBN offen", "error": "{}" },
+    { "value": "MaStR-Meldung", "error": "{}" },
+    { "value": "https://goo.gl/maps/2wJKs4oA9BY4fcXm8", "error": "{}" },
+    { "value": "WP-Einwahl", "error": "{}" },
+    {
+      "value": "WEA-Tarif",
+      "error": "{\"code\":\"P2002\",\"clientVersion\":\"4.5.0\",\"meta\":{\"target\":\"AttributeValue_attributeId_DeviceId_key\"}}"
+    },
+    { "value": "WES", "error": "{}" },
+    {
+      "value": "mdex SIM National 5 GB / mdex public IP",
+      "error": "{\"code\":\"P2002\",\"clientVersion\":\"4.5.0\",\"meta\":{\"target\":\"AttributeValue_attributeId_DeviceId_key\"}}"
+    },
+    {
+      "value": "Vertrag 2 - SIM-Karte: mdex SIM National (Vodafone) 5GB ohne feste IP",
+      "error": "{\"code\":\"P2002\",\"clientVersion\":\"4.5.0\",\"meta\":{\"target\":\"AttributeValue_attributeId_DeviceId_key\"}}"
+    },
+    {
+      "value": "2. SIM-Karte: 0152 5812 9630",
+      "error": "{\"code\":\"P2002\",\"clientVersion\":\"4.5.0\",\"meta\":{\"target\":\"AttributeValue_attributeId_DeviceId_key\"}}"
+    },
+    {
+      "value": "Zugangsnr.: 5503 1904 0509; Kennwort: 54513599; Anschlusskennung: 0024 9190 6268",
+      "error": "{}"
+    },
+    { "value": "https://goo.gl/maps/hMo5bU84fJbegdVa7", "error": "{}" },
+    {
+      "value": "SaM",
+      "error": "{\"code\":\"P2002\",\"clientVersion\":\"4.5.0\",\"meta\":{\"target\":\"AttributeValue_attributeId_DeviceId_key\"}}"
+    },
+    {
+      "value": "VPN Enercon",
+      "error": "{\"code\":\"P2002\",\"clientVersion\":\"4.5.0\",\"meta\":{\"target\":\"AttributeValue_attributeId_DeviceId_key\"}}"
+    },
+    {
+      "value": "172.17.182.122",
+      "error": "{\"code\":\"P2002\",\"clientVersion\":\"4.5.0\",\"meta\":{\"target\":\"AttributeValue_attributeId_DeviceId_key\"}}"
+    },
+    { "value": "981666", "error": "{}" }
+  ]
+}

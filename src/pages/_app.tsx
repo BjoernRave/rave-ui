@@ -1,6 +1,6 @@
 // src/pages/_app.tsx
 import Sidebar from "components/Blocks/Sidebar"
-import { useGeneral } from "lib/GeneralContext"
+import { GeneralContextProvider, useGeneral } from "lib/GeneralContext"
 import { trpc } from "lib/trpc"
 import { muiTheme } from "lib/utils"
 import { SessionProvider } from "next-auth/react"
@@ -34,14 +34,16 @@ const MyApp = ({
   emotionCache,
 }) => {
   return (
-    <AppWrapper emotionCache={emotionCache} theme={muiTheme}>
-      <SessionProvider session={session}>
-        <Toaster />
-        <OuterLayout>
-          <Component {...pageProps} />
-        </OuterLayout>
-      </SessionProvider>
-    </AppWrapper>
+    <GeneralContextProvider>
+      <AppWrapper emotionCache={emotionCache} theme={muiTheme}>
+        <SessionProvider session={session}>
+          <Toaster />
+          <OuterLayout>
+            <Component {...pageProps} />
+          </OuterLayout>
+        </SessionProvider>
+      </AppWrapper>
+    </GeneralContextProvider>
   )
 }
 

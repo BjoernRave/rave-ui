@@ -34,6 +34,7 @@ CREATE TABLE `User` (
     `firstName` VARCHAR(191) NULL,
     `lastName` VARCHAR(191) NULL,
     `email` VARCHAR(191) NULL,
+    `password` VARCHAR(191) NULL,
     `emailVerified` DATETIME(3) NULL,
     `image` VARCHAR(191) NULL,
     `roleId` INTEGER NULL,
@@ -45,6 +46,8 @@ CREATE TABLE `User` (
 -- CreateTable
 CREATE TABLE `Role` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `description` VARCHAR(191) NULL,
 
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -54,6 +57,7 @@ CREATE TABLE `Permission` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
     `name` VARCHAR(191) NOT NULL,
 
+    UNIQUE INDEX `Permission_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -70,16 +74,48 @@ CREATE TABLE `VerificationToken` (
 -- CreateTable
 CREATE TABLE `WindFarm` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `farmId` INTEGER NOT NULL,
+    `oldId` INTEGER NULL,
     `name` VARCHAR(191) NOT NULL,
+    `group` VARCHAR(191) NULL,
 
+    UNIQUE INDEX `WindFarm_farmId_key`(`farmId`),
+    UNIQUE INDEX `WindFarm_name_key`(`name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
 -- CreateTable
-CREATE TABLE `FarmDevice` (
+CREATE TABLE `WindTurbine` (
     `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
     `windFarmId` INTEGER NULL,
 
+    UNIQUE INDEX `WindTurbine_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `Device` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `windFarmId` INTEGER NULL,
+    `name` VARCHAR(191) NOT NULL,
+    `windTurbineId` INTEGER NULL,
+    `type` VARCHAR(191) NOT NULL,
+
+    UNIQUE INDEX `Device_name_key`(`name`),
+    PRIMARY KEY (`id`)
+) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+
+-- CreateTable
+CREATE TABLE `AttributeCategory` (
+    `id` INTEGER NOT NULL AUTO_INCREMENT,
+    `name` VARCHAR(191) NOT NULL,
+    `type` VARCHAR(191) NOT NULL,
+    `sort` INTEGER NOT NULL,
+
+    UNIQUE INDEX `AttributeCategory_name_key`(`name`),
+    UNIQUE INDEX `AttributeCategory_name_type_key`(`name`, `type`),
+    UNIQUE INDEX `AttributeCategory_sort_type_key`(`sort`, `type`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -89,8 +125,11 @@ CREATE TABLE `Attribute` (
     `name` VARCHAR(191) NOT NULL,
     `description` VARCHAR(191) NULL,
     `dataType` VARCHAR(191) NOT NULL,
+    `sort` INTEGER NOT NULL,
+    `attributeCategoryId` INTEGER NULL,
 
-    UNIQUE INDEX `Attribute_name_key`(`name`),
+    UNIQUE INDEX `Attribute_attributeCategoryId_name_key`(`attributeCategoryId`, `name`),
+    UNIQUE INDEX `Attribute_attributeCategoryId_sort_key`(`attributeCategoryId`, `sort`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -100,6 +139,7 @@ CREATE TABLE `AttributeChoice` (
     `name` VARCHAR(191) NOT NULL,
     `attributeId` INTEGER NOT NULL,
 
+    UNIQUE INDEX `AttributeChoice_attributeId_name_key`(`attributeId`, `name`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -109,9 +149,11 @@ CREATE TABLE `AttributeValue` (
     `value` VARCHAR(191) NOT NULL,
     `isVerified` BOOLEAN NULL,
     `attributeId` INTEGER NOT NULL,
-    `farmDeviceId` INTEGER NULL,
+    `DeviceId` INTEGER NULL,
+    `windTurbineId` INTEGER NULL,
+    `windFarmId` INTEGER NULL,
 
-    UNIQUE INDEX `AttributeValue_attributeId_farmDeviceId_key`(`attributeId`, `farmDeviceId`),
+    UNIQUE INDEX `AttributeValue_attributeId_DeviceId_key`(`attributeId`, `DeviceId`),
     PRIMARY KEY (`id`)
 ) DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
@@ -134,7 +176,16 @@ ALTER TABLE `Session` ADD CONSTRAINT `Session_userId_fkey` FOREIGN KEY (`userId`
 ALTER TABLE `User` ADD CONSTRAINT `User_roleId_fkey` FOREIGN KEY (`roleId`) REFERENCES `Role`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `FarmDevice` ADD CONSTRAINT `FarmDevice_windFarmId_fkey` FOREIGN KEY (`windFarmId`) REFERENCES `WindFarm`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `WindTurbine` ADD CONSTRAINT `WindTurbine_windFarmId_fkey` FOREIGN KEY (`windFarmId`) REFERENCES `WindFarm`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Device` ADD CONSTRAINT `Device_windFarmId_fkey` FOREIGN KEY (`windFarmId`) REFERENCES `WindFarm`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Device` ADD CONSTRAINT `Device_windTurbineId_fkey` FOREIGN KEY (`windTurbineId`) REFERENCES `WindTurbine`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `Attribute` ADD CONSTRAINT `Attribute_attributeCategoryId_fkey` FOREIGN KEY (`attributeCategoryId`) REFERENCES `AttributeCategory`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `AttributeChoice` ADD CONSTRAINT `AttributeChoice_attributeId_fkey` FOREIGN KEY (`attributeId`) REFERENCES `Attribute`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
@@ -143,7 +194,13 @@ ALTER TABLE `AttributeChoice` ADD CONSTRAINT `AttributeChoice_attributeId_fkey` 
 ALTER TABLE `AttributeValue` ADD CONSTRAINT `AttributeValue_attributeId_fkey` FOREIGN KEY (`attributeId`) REFERENCES `Attribute`(`id`) ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE `AttributeValue` ADD CONSTRAINT `AttributeValue_farmDeviceId_fkey` FOREIGN KEY (`farmDeviceId`) REFERENCES `FarmDevice`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE `AttributeValue` ADD CONSTRAINT `AttributeValue_DeviceId_fkey` FOREIGN KEY (`DeviceId`) REFERENCES `Device`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `AttributeValue` ADD CONSTRAINT `AttributeValue_windTurbineId_fkey` FOREIGN KEY (`windTurbineId`) REFERENCES `WindTurbine`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE `AttributeValue` ADD CONSTRAINT `AttributeValue_windFarmId_fkey` FOREIGN KEY (`windFarmId`) REFERENCES `WindFarm`(`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE `_PermissionToRole` ADD CONSTRAINT `_PermissionToRole_A_fkey` FOREIGN KEY (`A`) REFERENCES `Permission`(`id`) ON DELETE CASCADE ON UPDATE CASCADE;

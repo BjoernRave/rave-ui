@@ -46,4 +46,12 @@ export const roleRouter = router({
         },
       })
     }),
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ ctx, input }) => {
+      const role = await ctx.prisma.role.delete({
+        where: { id: input.id },
+      })
+      return role
+    }),
 })

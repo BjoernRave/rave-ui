@@ -90,7 +90,7 @@ const Table: FC<Props> = ({
                   <div className="flex items-center">
                     {rowActions && rowActions(cell)}
                     {onEdit && (
-                      <Tooltip key="edit" title="Bearbeiten">
+                      <Tooltip title="Bearbeiten">
                         <IconButton
                           onClick={(e) => {
                             e.stopPropagation()
@@ -103,11 +103,11 @@ const Table: FC<Props> = ({
                       </Tooltip>
                     )}
                     {onDelete && (
-                      <Tooltip key="edit" title="Löschen">
+                      <Tooltip title="Löschen">
                         <IconButton
                           onClick={(e) => {
                             e.stopPropagation()
-                            onEdit(cell.row)
+                            onDelete(cell.row)
                           }}
                           size="large"
                         >

@@ -2,7 +2,6 @@ import Layout from "components/Blocks/Layout"
 import Table from "components/Table"
 import SelectFilter from "components/Table/Filter/SelectFilter"
 import { trpc } from "lib/trpc"
-import { formatDate, formatDateRelative } from "lib/utils"
 import { NextPage } from "next"
 import { useMemo } from "react"
 
@@ -27,22 +26,6 @@ const Nutzerverwaltung: NextPage<Props> = ({}) => {
         Header: "Rolle",
         accessor: "role_name",
         Filter: (props) => <SelectFilter {...props} />,
-      },
-      {
-        Header: "Erstellungsdatum",
-        accessor: (val) =>
-          val.created ? formatDate(val.created, "daytime") : "-",
-      },
-
-      {
-        Header: "Letzter Login",
-        accessor: (val) =>
-          val.last_login
-            ? formatDateRelative({
-                date: val.last_login,
-                withDays: true,
-              })
-            : "-",
       },
     ],
     []
