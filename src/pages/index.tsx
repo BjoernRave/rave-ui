@@ -1,13 +1,27 @@
+import { getEligibleRoutes } from "@/lib/routes"
 import Loader from "components/Blocks/Loader"
 import Meta from "components/Blocks/Meta"
 import { LoginSchema } from "lib/zod-schema"
-import { NextPage } from "next"
+import { GetServerSideProps, NextPage } from "next"
+import { unstable_getServerSession } from "next-auth"
 import { signIn } from "next-auth/react"
-import { useState } from "react"
-import { Toaster } from "react-hot-toast"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
+import toast, { Toaster } from "react-hot-toast"
 import { Form, PasswordInput, SubmitButton, TextInput } from "../rave-ui"
+import { authOptions } from "./api/auth/[...nextauth]"
 
 const Home: NextPage = () => {
+  const { query, replace } = useRouter()
+  console.log(query)
+
+  useEffect(() => {
+    if (query.error) {
+      toast.error("Login fehlgeschlagen")
+      replace("/")
+    }
+  }, [])
+
   const [isLoading, setIsLoading] = useState(false)
   const handleLogin = async ({
     username,
@@ -51,7 +65,10 @@ const Home: NextPage = () => {
               validationSchema={LoginSchema}
               className="w-1/2"
               onSubmit={handleLogin}
-              initialValues={{ username: "test@test.de", password: "test12" }}
+              initialValues={{
+                username: "bjoern.rave@gmail.com",
+                password: "Admin123",
+              }}
             >
               <TextInput autoFocus name="username" label="Benutzername" />
 
@@ -67,38 +84,32 @@ const Home: NextPage = () => {
 
 export default Home
 
-// export const getServerSideProps: GetServerSideProps = async (context) => {
-//   const cookies = parseCookies(context.req)
+export const getServerSideProps: GetServerSideProps = async (context) => {
+  const session = await unstable_getServerSession(
+    context.req,
+    context.res,
+    authOptions
+  )
 
-//   const isRealm = checkIsRealm(context.req.headers.host)
+  if (!session?.user) {
+    return {
+      props: {},
+    }
+  }
 
-//   if (cookies[AUTH_TOKEN_ID]) {
-//     const data = JSON.parse(decodeURIComponent(cookies[AUTH_TOKEN_ID]))
+  const availableLinks = getEligibleRoutes({
+    permissions: session.user.permissions,
+  }).reduce((prev, next) => {
+    return [...prev, ...next.routes]
+  }, [])
 
-//     if (data?.license === null || data?.license === undefined) {
-//       return {
-//         props: {},
-//       }
-//     }
-
-//     const availableLinks = getEligibleRoutes({
-//       isRealm,
-//       roles: data.roles,
-//       license: data?.license,
-//     }).reduce((prev, next) => {
-//       return [...prev, ...next.routes]
-//     }, [])
-
-//     return {
-//       redirect: {
-//         destination: availableLinks[0] ? availableLinks[0].href : '/stationen',
-//         permanent: false,
-//       },
-//       props: {},
-//     }
-//   }
-
-//   return {
-//     props: {},
-//   }
-// }
+  return {
+    redirect: {
+      destination: availableLinks[0]
+        ? `/dashboard${availableLinks[0].href}`
+        : "/dashboard/windfarms",
+      permanent: false,
+    },
+    props: {},
+  }
+}

@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { generateSlug } from '@inventhora/utils';
+import styled from "@emotion/styled"
+import { generateSlug } from "@inventhora/utils"
 import {
   Button,
   Dialog,
@@ -7,30 +7,30 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from '@mui/material';
+} from "@mui/material"
 
-import { FC, ReactNode } from 'react';
-import { useLocale } from './AppWrapper';
-import Form from './FormItems/Basic/Form';
-import SubmitButton from './FormItems/Basic/SubmitButton';
+import { FC, ReactNode } from "react"
+import { useLocale } from "./AppWrapper"
+import Form from "./FormItems/Basic/Form"
+import SubmitButton from "./FormItems/Basic/SubmitButton"
 
 const StyledDialogContent = styled(DialogContent)`
   @media (min-width: 767px) {
     min-width: 767px;
   }
-`;
+`
 
 const StyledButton = styled(Button)`
   @media (max-width: 767px) {
     width: 50%;
   }
-`;
+`
 
 const StyledSubmit = styled(SubmitButton)`
   @media (max-width: 767px) {
     width: 50%;
   }
-`;
+`
 
 const FormModal: FC<Props> = ({
   isOpen = true,
@@ -47,7 +47,7 @@ const FormModal: FC<Props> = ({
   edit,
   submitText,
 }) => {
-  const { locales } = useLocale();
+  const { locales } = useLocale()
   return (
     <Dialog
       disableEnforceFocus
@@ -58,8 +58,8 @@ const FormModal: FC<Props> = ({
     >
       <DialogTitle id={generateSlug(title)}>{title}</DialogTitle>
       <Form
-        defaultValues={initialValues}
-        schema={validationSchema}
+        initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={onSubmit}
       >
         <StyledDialogContent id={`${generateSlug(title)}-content`}>
@@ -81,22 +81,22 @@ const FormModal: FC<Props> = ({
         </StyledDialogContent>
       </Form>
     </Dialog>
-  );
-};
+  )
+}
 
-export default FormModal;
+export default FormModal
 
 interface Props {
-  isOpen?: boolean;
-  onClose: () => void;
-  title: string;
-  description?: string;
-  initialValues: object;
-  validationSchema: any;
-  onSubmit: (values: any) => void;
-  disabled?: boolean;
-  enableReinitialize?: boolean;
-  validate?: (values: any) => void;
-  edit?: boolean;
-  submitText?: ReactNode;
+  isOpen?: boolean
+  onClose: () => void
+  title: string
+  description?: string
+  initialValues: object
+  validationSchema: any
+  onSubmit: (values: any) => void
+  disabled?: boolean
+  enableReinitialize?: boolean
+  validate?: (values: any) => void
+  edit?: boolean
+  submitText?: ReactNode
 }

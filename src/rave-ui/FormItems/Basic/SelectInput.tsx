@@ -21,7 +21,7 @@ const SelectInput: FC<Props> = ({
   subName,
   onChange,
   disabledOptions,
-  allowEmpty = true,
+  allowEmpty = false,
   ...rest
 }) => {
   const formName =

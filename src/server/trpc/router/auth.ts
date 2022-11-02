@@ -1,4 +1,5 @@
-import { UserCreationSchema } from "lib/zod-schema"
+import { UserCreationSchema, UserUpdateSchema } from "lib/zod-schema"
+import { z } from "zod"
 import { protectedProcedure, publicProcedure, router } from "../trpc"
 export const authRouter = router({
   getSession: publicProcedure.query(({ ctx }) => {
@@ -26,6 +27,33 @@ export const authRouter = router({
           email: input.email,
           firstName: input.firstName,
           lastName: input.lastName,
+          password: input.password,
+          role: { connect: { id: input.role } },
+        },
+      })
+    }),
+  update: protectedProcedure
+    .input(UserUpdateSchema)
+    .mutation(async ({ input, ctx }) => {
+      return ctx.prisma.user.update({
+        where: {
+          id: input.id,
+        },
+        data: {
+          email: input.email,
+          firstName: input.firstName,
+          lastName: input.lastName,
+          ...(input.password && { password: input.password }),
+          role: { connect: { id: input.role } },
+        },
+      })
+    }),
+  delete: protectedProcedure
+    .input(z.object({ id: z.number() }))
+    .mutation(async ({ input, ctx }) => {
+      return ctx.prisma.user.delete({
+        where: {
+          id: input.id,
         },
       })
     }),

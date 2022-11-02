@@ -7,8 +7,14 @@ export const LoginSchema = z.object({
 
 export const UserCreationSchema = z.object({
   email: z.string(),
-  firstName: z.string(),
-  lastName: z.string(),
+  firstName: z.string().optional(),
+  lastName: z.string().optional(),
+  password: z.string(),
+  role: z.number(),
+})
+
+export const UserUpdateSchema = UserCreationSchema.extend({
+  id: z.number(),
 })
 
 export const RoleCreationSchema = z.object({
@@ -17,9 +23,6 @@ export const RoleCreationSchema = z.object({
   permissions: z.array(z.any()),
 })
 
-export const RoleUpdateSchema = z.object({
+export const RoleUpdateSchema = RoleCreationSchema.extend({
   id: z.number(),
-  name: z.string(),
-  description: z.string().optional(),
-  permissions: z.array(z.any()),
 })

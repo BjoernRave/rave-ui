@@ -9,22 +9,31 @@ import { prisma } from "../../../server/db"
 export const authOptions: NextAuthOptions = {
   // Include user.id on session
   callbacks: {
-    session(stuff) {
-      // if (session.user && user) {
-      //   session.user.id = user.id
-      // }
-      return stuff.session
+    session({ session, token }) {
+      if (session.user && token.id) {
+        session.user.id = token.id as any
+      }
+      if (session.user && token.permissions) {
+        session.user.permissions = token.permissions as any
+      }
+      return session
+    },
+    jwt(stuff) {
+      if (stuff.token && stuff.user) {
+        stuff.token.permissions = (stuff.user as any).permissions
+      }
+      return stuff.token
     },
   },
   session: {
     strategy: "jwt",
   },
   jwt: {
-    async encode({ token }) {
-      return jwt.sign(token, process.env.NEXTAUTH_SECRET!)
+    async encode(stuff) {
+      return jwt.sign(stuff.token, process.env.NEXTAUTH_SECRET!)
     },
-    async decode({ token }) {
-      return jwt.verify(token!, process.env.NEXTAUTH_SECRET!) as any
+    async decode(stuff) {
+      return jwt.verify(stuff.token!, process.env.NEXTAUTH_SECRET!) as any
     },
   },
 
@@ -45,6 +54,13 @@ export const authOptions: NextAuthOptions = {
       async authorize(credentials) {
         const user = await prisma.user.findUnique({
           where: { email: credentials.username },
+          include: {
+            role: {
+              include: {
+                permissions: true,
+              },
+            },
+          },
         })
 
         if (!user) {
@@ -54,7 +70,15 @@ export const authOptions: NextAuthOptions = {
         if (user.password !== credentials.password) {
           return null
         }
-        return user as any
+        return {
+          id: String(user.id),
+
+          name: `${user.firstName} ${user.lastName}`,
+          email: user.email,
+          permissions: user.role
+            ? user.role.permissions.map((p) => p.name)
+            : [],
+        }
       },
     }),
   ],

@@ -15,7 +15,7 @@ const TopBar = ({}) => {
 
   return (
     <div className="mt-2 flex w-full  items-center justify-between px-2">
-      <p className="text-center text-white">{data?.user?.email}</p>
+      <p className="text-center text-white">{data?.user?.name}</p>
       <div className="flex justify-between py-2">
         <div>
           <Tooltip title="Logout">
@@ -47,6 +47,7 @@ const TopBar = ({}) => {
 
 const Sidebar: FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
   const router = useRouter()
+  const session = useSession()
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -59,7 +60,13 @@ const Sidebar: FC<Props> = ({ sidebarOpen, setSidebarOpen }) => {
     setSidebarOpen(!sidebarOpen)
   }
 
-  const allNavItems = useMemo(() => getEligibleRoutes({ roles: [] }), [])
+  const allNavItems = useMemo(
+    () =>
+      getEligibleRoutes({
+        permissions: session?.data?.user ? session.data.user.permissions : [],
+      }),
+    [session]
+  )
 
   return (
     <>

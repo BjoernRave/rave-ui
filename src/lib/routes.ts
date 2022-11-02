@@ -9,12 +9,18 @@ interface Route {
   permissions: string[]
 }
 
-export const getEligibleRoutes = ({ roles }: { roles: any }) => {
+export const getEligibleRoutes = ({
+  permissions,
+}: {
+  permissions: string[]
+}) => {
   return routes
     .map((r) => {
-      const filteredRoutes = r.routes.filter((r) => {
-        return true
-      })
+      const filteredRoutes = r.routes.filter((r) =>
+        r.permissions.some((p) => permissions.includes(p))
+      )
+
+      console.log(filteredRoutes)
 
       return {
         name: r.name,
@@ -23,25 +29,6 @@ export const getEligibleRoutes = ({ roles }: { roles: any }) => {
     })
     .filter((r) => r.routes.length > 0)
 }
-
-// export const getEligibleRoutes = ({
-//   permissions,
-// }: {
-//   permissions: string[]
-// }) => {
-//   return routes
-//     .map((r) => {
-//       const filteredRoutes = r.routes.filter((r) =>
-//         r.permissions.some((p) => permissions.includes(p))
-//       )
-
-//       return {
-//         name: r.name,
-//         routes: filteredRoutes,
-//       }
-//     })
-//     .filter((r) => r.routes.length > 0)
-// }
 
 export const routes: Category[] = [
   {
