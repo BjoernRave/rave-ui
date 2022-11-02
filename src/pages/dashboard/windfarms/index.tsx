@@ -21,6 +21,7 @@ const WindFarms: NextPage<Props> = ({}) => {
   return (
     <Layout title="Windparks">
       <Table
+        permissionSuffix="FARM"
         title="Windparks"
         fetching={isFetching}
         columns={columns}

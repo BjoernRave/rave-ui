@@ -26,6 +26,7 @@ const Roles: NextPage<Props> = ({}) => {
   return (
     <Layout title="Rollen">
       <Table
+        permissionSuffix="ROLE"
         onCreate={() => Router.push("/dashboard/users/roles/new")}
         onEdit={(row) =>
           Router.push(`/dashboard/users/roles/${row.original.id}/edit`)

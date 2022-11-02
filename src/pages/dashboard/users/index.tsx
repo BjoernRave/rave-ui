@@ -39,15 +39,16 @@ const Nutzerverwaltung: NextPage<Props> = ({}) => {
   )
 
   return (
-    <Layout title="Nutzerverwaltung">
+    <Layout title="Benutzer">
       <Table
+        permissionSuffix="USER"
         columns={columns}
         data={data ?? []}
         fetching={isFetching}
         onCreate={() => setIsCreating(true)}
         onEdit={(row) => setIsUpdating(row.original)}
         onDelete={(row) => setIsUpdating(row.original)}
-        title="Nutzerverwaltung"
+        title="Benutzer"
       />
       {(isCreating || isUpdating) && (
         <UserModal

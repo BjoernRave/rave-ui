@@ -7,6 +7,7 @@ import TableHead from "components/Table/TableHead"
 import TableToolbar from "components/Table/TableToolbar"
 import { TableStat } from "lib/types"
 import { cleanObject, useAdjustedViewport } from "lib/utils"
+import { useSession } from "next-auth/react"
 import { useRouter } from "next/router"
 import {
   createContext,
@@ -68,8 +69,41 @@ const Table: FC<Props> = ({
   onEdit,
   onDelete,
   emptyScreen,
+  permissionSuffix,
 }) => {
+  const session = useSession()
   const { query } = useRouter()
+
+  const canCreate = useMemo(() => {
+    if (!session || !onCreate) return false
+
+    if (!permissionSuffix) return true
+
+    return session?.data?.user?.permissions?.includes(
+      `CREATE:${permissionSuffix.toUpperCase()}`
+    )
+  }, [session, permissionSuffix, onCreate])
+
+  const canEdit = useMemo(() => {
+    if (!session || !onEdit) return false
+
+    if (!permissionSuffix) return true
+
+    return session?.data?.user?.permissions?.includes(
+      `UPDATE:${permissionSuffix.toUpperCase()}`
+    )
+  }, [session, permissionSuffix, onEdit])
+
+  const canDelete = useMemo(() => {
+    if (!session || !onDelete) return false
+
+    if (!permissionSuffix) return true
+
+    return session?.data?.user?.permissions?.includes(
+      `DELETE:${permissionSuffix.toUpperCase()}`
+    )
+  }, [session, permissionSuffix, onDelete])
+
   const hooks = useCallback(
     (hooks) => {
       hooks.allColumns.push((columns) => [
@@ -81,7 +115,7 @@ const Table: FC<Props> = ({
             ]
           : []),
         ...columns,
-        ...(rowActions || onEdit || onDelete
+        ...(rowActions || canEdit || canDelete
           ? [
               {
                 id: "actions",
@@ -89,7 +123,7 @@ const Table: FC<Props> = ({
                 Cell: (cell) => (
                   <div className="flex items-center">
                     {rowActions && rowActions(cell)}
-                    {onEdit && (
+                    {canEdit && (
                       <Tooltip title="Bearbeiten">
                         <IconButton
                           onClick={(e) => {
@@ -102,7 +136,7 @@ const Table: FC<Props> = ({
                         </IconButton>
                       </Tooltip>
                     )}
-                    {onDelete && (
+                    {canDelete && (
                       <Tooltip title="Löschen">
                         <IconButton
                           onClick={(e) => {
@@ -202,7 +236,7 @@ const Table: FC<Props> = ({
         {getStats && <TableStats getStats={getStats} flatRows={flatRows} />}
         {!hideToolbar && (
           <TableToolbar
-            onCreate={onCreate}
+            onCreate={canCreate ? onCreate : undefined}
             onResetFilters={onResetFilter}
             globalFilter={globalFilter}
             setGlobalFilter={setGlobalFilter}
@@ -281,4 +315,5 @@ interface Props {
   onCreate?: () => void
   onEdit?: (row: Row<any>) => void
   onDelete?: (row: Row<any>) => void
+  permissionSuffix?: string
 }
