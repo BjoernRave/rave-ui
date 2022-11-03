@@ -9,7 +9,7 @@ const Layout: FC<Props> = ({ children, title, titleComponent }) => {
       <div
         id="scroll-wrapper"
         style={{ marginTop: HEADER_HEIGHT }}
-        className={`h-full flex-1 overflow-auto focus:outline-none`}
+        className={`h-full flex-1 overflow-auto pb-16 focus:outline-none`}
       >
         <Header titleComponent={titleComponent} title={title} />
         <div className="mt-1">{children}</div>

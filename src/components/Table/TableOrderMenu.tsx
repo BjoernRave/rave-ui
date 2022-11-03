@@ -1,43 +1,43 @@
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator";
-import { Button, Checkbox, Menu, MenuItem } from "@mui/material";
-import { FC, useContext } from "react";
-import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd";
-import { TableContext } from ".";
+import DragIndicatorIcon from "@mui/icons-material/DragIndicator"
+import { Button, Checkbox, Menu, MenuItem } from "@mui/material"
+import { FC, useContext } from "react"
+import { DragDropContext, Draggable, Droppable } from "react-beautiful-dnd"
+import { TableContext } from "."
 
 const TableOrderMenu: FC<Props> = ({ menuAnchorEl, setMenuAnchorEl }) => {
-  const { setColumnOrder, allColumns } = useContext(TableContext);
+  const { setColumnOrder, allColumns } = useContext(TableContext)
 
   const filteredColumns = allColumns.filter(
     (column) => column.id !== "actions" && column.id !== "selection"
-  );
+  )
 
   const reorder = (list, startIndex, endIndex) => {
-    const result = Array.from(list);
-    const [removed] = result.splice(startIndex, 1);
-    result.splice(endIndex, 0, removed);
+    const result = Array.from(list)
+    const [removed] = result.splice(startIndex, 1)
+    result.splice(endIndex, 0, removed)
 
-    return result;
-  };
+    return result
+  }
 
   const onDragEnd = (result) => {
     // dropped outside the list
     if (!result.destination) {
-      return;
+      return
     }
 
     const newItems = reorder(
       filteredColumns,
       result.source.index,
       result.destination.index
-    );
+    )
     if (allColumns[0].id === "selection") {
-      newItems.unshift(allColumns[0]);
+      newItems.unshift(allColumns[0])
     }
     if (allColumns[allColumns.length - 1].id === "actions") {
-      newItems.push(allColumns[allColumns.length - 1]);
+      newItems.push(allColumns[allColumns.length - 1])
     }
-    setColumnOrder(newItems.map((item: any) => item.id) as any);
-  };
+    setColumnOrder(newItems.map((item: any) => item.id) as any)
+  }
 
   return (
     <Menu
@@ -59,7 +59,7 @@ const TableOrderMenu: FC<Props> = ({ menuAnchorEl, setMenuAnchorEl }) => {
         <Button
           style={{ margin: "0 auto", display: "table" }}
           onClick={async () => {
-            window.location.reload();
+            window.location.reload()
           }}
         >
           Reset
@@ -69,7 +69,6 @@ const TableOrderMenu: FC<Props> = ({ menuAnchorEl, setMenuAnchorEl }) => {
             {(provided) => (
               <div {...provided.droppableProps} ref={provided.innerRef}>
                 {filteredColumns.map((column, index) => {
-                  console.log(column.getToggleHiddenProps());
                   return (
                     <Draggable
                       key={column.id}
@@ -89,7 +88,7 @@ const TableOrderMenu: FC<Props> = ({ menuAnchorEl, setMenuAnchorEl }) => {
                         </MenuItem>
                       )}
                     </Draggable>
-                  );
+                  )
                 })}
                 {provided.placeholder}
               </div>
@@ -98,12 +97,12 @@ const TableOrderMenu: FC<Props> = ({ menuAnchorEl, setMenuAnchorEl }) => {
         </DragDropContext>
       </div>
     </Menu>
-  );
-};
+  )
+}
 
-export default TableOrderMenu;
+export default TableOrderMenu
 
 interface Props {
-  menuAnchorEl: any;
-  setMenuAnchorEl: any;
+  menuAnchorEl: any
+  setMenuAnchorEl: any
 }

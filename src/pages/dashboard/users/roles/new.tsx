@@ -1,3 +1,4 @@
+import Layout from "@/components/Blocks/Layout"
 import RoleForm from "@/components/Forms/RoleForm"
 import { trpc } from "@/lib/trpc"
 import { handleMutation } from "@/lib/utils"
@@ -24,14 +25,15 @@ const CreateRole: NextPage<Props> = ({}) => {
   }
 
   return (
-    <FormPage
-      onSubmit={handleSubmit}
-      validationSchema={RoleCreationSchema}
-      title="Rolle erstellen"
-      initialValues={{ name: "", description: "", permissions: [] }}
-    >
-      <RoleForm />
-    </FormPage>
+    <Layout title="Rolle erstellen">
+      <FormPage
+        onSubmit={handleSubmit}
+        validationSchema={RoleCreationSchema}
+        initialValues={{ name: "", description: "", permissions: [] }}
+      >
+        <RoleForm />
+      </FormPage>
+    </Layout>
   )
 }
 

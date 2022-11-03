@@ -70,6 +70,7 @@ const Table: FC<Props> = ({
   onDelete,
   emptyScreen,
   permissionSuffix,
+  dynamicHeight = false,
 }) => {
   const session = useSession()
   const { query } = useRouter()
@@ -247,7 +248,7 @@ const Table: FC<Props> = ({
           />
         )}
         <TableContainer
-          className="table-container"
+          className={dynamicHeight ? "" : "table-container"}
           style={{
             overflow: "auto",
           }}
@@ -316,4 +317,5 @@ interface Props {
   onEdit?: (row: Row<any>) => void
   onDelete?: (row: Row<any>) => void
   permissionSuffix?: string
+  dynamicHeight?: boolean
 }

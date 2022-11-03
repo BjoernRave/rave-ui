@@ -5,7 +5,6 @@ import { FC, ReactNode } from "react"
 import { useLocale } from "./AppWrapper"
 import Form from "./FormItems/Basic/Form"
 import SubmitButton from "./FormItems/Basic/SubmitButton"
-import { Title } from "./lib/styles"
 
 // const leftAlignedStyles = css`
 //   width: calc(100% / 3 * 2);
@@ -49,7 +48,6 @@ const StyledSubmit = styled(SubmitButton)`
 `
 
 const FormPage: FC<Props> = ({
-  title,
   initialValues,
   validationSchema,
   validate,
@@ -66,9 +64,6 @@ const FormPage: FC<Props> = ({
   return (
     <PageWrapper style={style}>
       <StyledPaper elevation={2}>
-        <Header>
-          <Title>{title}</Title>
-        </Header>
         <Form
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -108,7 +103,6 @@ const FormPage: FC<Props> = ({
 export default FormPage
 
 interface Props {
-  title: string
   description?: string
   initialValues: object
   validationSchema: any

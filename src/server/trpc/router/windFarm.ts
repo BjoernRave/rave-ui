@@ -10,15 +10,62 @@ export const windFarmRouter = router({
           id: input.id,
         },
         include: {
+          turbines: {
+            include: {
+              devices: {
+                include: {
+                  attributeValues: {
+                    include: {
+                      attribute: {
+                        include: {
+                          attributeCategory: true,
+                        },
+                      },
+                    },
+                  },
+                },
+              },
+              attributeValues: {
+                include: {
+                  attribute: {
+                    include: {
+                      attributeCategory: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+          devices: {
+            include: {
+              attributeValues: {
+                include: {
+                  attribute: {
+                    include: {
+                      attributeCategory: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
           attributeValues: {
             include: {
-              attribute: true,
+              attribute: {
+                include: {
+                  attributeCategory: true,
+                },
+              },
             },
           },
         },
       })
     }),
   getAll: protectedProcedure.query(({ ctx }) => {
-    return ctx.prisma.windFarm.findMany()
+    return ctx.prisma.windFarm.findMany({
+      include: {
+        turbines: true,
+      },
+    })
   }),
 })

@@ -20,8 +20,6 @@ export const getEligibleRoutes = ({
         r.permissions.some((p) => permissions.includes(p))
       )
 
-      console.log(filteredRoutes)
-
       return {
         name: r.name,
         routes: filteredRoutes,

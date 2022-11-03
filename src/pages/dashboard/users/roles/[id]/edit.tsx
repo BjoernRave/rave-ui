@@ -1,3 +1,4 @@
+import Layout from "@/components/Blocks/Layout"
 import PageLoader from "@/components/Blocks/PageLoader"
 import RoleForm from "@/components/Forms/RoleForm"
 import { trpc } from "@/lib/trpc"
@@ -32,18 +33,20 @@ const EditRole: NextPage<Props> = () => {
   if (!role) return <PageLoader />
 
   return (
-    <FormPage
-      onSubmit={handleSubmit}
-      validationSchema={RoleCreationSchema}
-      title="Rolle bearbeiten"
-      initialValues={{
-        name: role.name,
-        description: role.description,
-        permissions: role.permissions.map((p) => p.name),
-      }}
-    >
-      <RoleForm />
-    </FormPage>
+    <Layout title="Rolle bearbeiten">
+      <FormPage
+        edit
+        onSubmit={handleSubmit}
+        validationSchema={RoleCreationSchema}
+        initialValues={{
+          name: role.name,
+          description: role.description,
+          permissions: role.permissions.map((p) => p.name),
+        }}
+      >
+        <RoleForm />
+      </FormPage>
+    </Layout>
   )
 }
 

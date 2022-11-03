@@ -9,9 +9,54 @@ import {
   isDate,
   parse,
 } from "date-fns"
-import { useEffect } from "react"
+import { useRouter } from "next/router"
+import { useEffect, useState } from "react"
 import toast from "react-hot-toast"
 import { DateFormat } from "./types"
+
+const transformValue = (value: string | number) => {
+  return typeof value === "number"
+    ? value
+    : !isNaN(Number(value))
+    ? Number(value)
+    : value === undefined
+    ? null
+    : value
+}
+
+export const useQueryParam = (key: string, initialState: string | number) => {
+  const router = useRouter()
+  const [state, setState] = useState(initialState)
+
+  useEffect(() => {
+    if (router.isReady && router.query[key]) {
+      setState(transformValue(router.query[key] as any))
+    }
+  }, [router.isReady])
+
+  useEffect(() => {
+    if (!router.isReady) return
+
+    if (transformValue(router.query[key] as any) !== state) {
+      if (!state) {
+        const newQuery = router.query
+
+        delete newQuery[key]
+        router.push({ pathname: router.pathname, query: newQuery })
+      } else {
+        router.push({
+          pathname: router.pathname,
+          query: { ...router.query, [key]: state },
+        })
+      }
+    }
+    if (router.query[key] && router.query[key] !== state) {
+      setState(transformValue(router.query[key] as any))
+    }
+  }, [router, key, state])
+
+  return [state, setState] as [typeof state, typeof setState]
+}
 
 export const handleMutation = async ({
   mutateAsync,
@@ -511,6 +556,11 @@ export const muiTheme = createTheme({
           fontWeight: 600,
           fontSize: "0.75rem",
         },
+      },
+    },
+    MuiDialog: {
+      defaultProps: {
+        transitionDuration: 0,
       },
     },
   },
