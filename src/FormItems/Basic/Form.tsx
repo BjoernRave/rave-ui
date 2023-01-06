@@ -1,8 +1,10 @@
-import styled from '@emotion/styled';
-import { zodResolver } from '@hookform/resolvers/zod';
-import React, { FC } from 'react';
-import { useForm } from 'react-hook-form';
-import { ZodSchema } from 'zod';
+import styled from "@emotion/styled"
+import { zodResolver } from "@hookform/resolvers/zod"
+import dynamic from "next/dynamic"
+import { FC } from "react"
+import { FormProvider, useForm } from "react-hook-form"
+import { ZodSchema } from "zod"
+import SubmitButton from "./SubmitButton"
 
 const StyledForm = styled.form`
   > *:not(label) {
@@ -15,42 +17,64 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-`;
+`
+
+const DevTool = dynamic(() => import("./DevTools"), { ssr: false })
 
 const Form: FC<Props> = ({
-  defaultValues,
+  initialValues,
   children,
   onSubmit,
-  schema,
+  validationSchema,
   className,
+  submitButton = false,
+  submitText = "Absenden",
+  validate,
 }) => {
-  const methods = useForm({ defaultValues, resolver: zodResolver(schema) });
-  const { handleSubmit } = methods;
+  const methods = useForm({
+    defaultValues: initialValues,
+    resolver: zodResolver(validationSchema),
+  })
 
   return (
-    <StyledForm className={className} onSubmit={handleSubmit(onSubmit)}>
-      {React.Children.map(children, (child) => {
-        return child.props.name
-          ? React.createElement(child.type, {
-              ...{
-                ...child.props,
-                register: methods.register,
-                control: methods.control,
-                key: child.props.name,
-              },
-            })
-          : child;
-      })}
-    </StyledForm>
-  );
-};
+    <FormProvider {...methods}>
+      <StyledForm
+        className={className}
+        onSubmit={(e) => {
+          if (!validate) {
+            return methods.handleSubmit(onSubmit)(e)
+          }
 
-export default Form;
+          const validation = validate(methods.getValues())
+          console.log(validation)
+          if (typeof validation === "boolean") {
+            return methods.handleSubmit(onSubmit)(e)
+          }
+
+          e.preventDefault()
+
+          Object.keys(validation).forEach((key) => {
+            methods.setError(key, { message: validation[key], type: "custom" })
+          })
+        }}
+      >
+        <DevTool control={methods.control} />
+        {children}
+        {submitButton && <SubmitButton>{submitText}</SubmitButton>}
+      </StyledForm>
+    </FormProvider>
+  )
+}
+
+export default Form
 
 interface Props {
-  schema: ZodSchema;
-  defaultValues: Record<string, any>;
-  onSubmit: (data: Record<string, any>) => void;
-  children: any;
-  className?: string;
+  validationSchema?: ZodSchema
+  initialValues: Record<string, any>
+  onSubmit: (data: Record<string, any>) => void
+  children: any
+  className?: string
+  submitButton?: boolean
+  submitText?: string
+  validate?: (data: Record<string, any>) => true | { [key: string]: string }
 }

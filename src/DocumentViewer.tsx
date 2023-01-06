@@ -1,7 +1,7 @@
-import DownloadIcon from '@mui/icons-material/CloudDownload';
-import DeleteIcon from '@mui/icons-material/Delete';
-import DocumentIcon from '@mui/icons-material/Description';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import DownloadIcon from "@mui/icons-material/CloudDownload"
+import DeleteIcon from "@mui/icons-material/Delete"
+import DocumentIcon from "@mui/icons-material/Description"
+import VisibilityIcon from "@mui/icons-material/Visibility"
 import {
   Divider,
   IconButton,
@@ -11,9 +11,9 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Tooltip,
-} from '@mui/material';
-import { FC } from 'react';
-import { useLocale } from './AppWrapper';
+} from "@mui/material"
+import { FC } from "react"
+import { useLocale } from "./LocaleContext"
 
 const DocumentViewer: FC<Props> = ({
   documents,
@@ -21,7 +21,7 @@ const DocumentViewer: FC<Props> = ({
   canDownload = true,
   canView,
 }) => {
-  const { locales } = useLocale();
+  const { locales } = useLocale()
 
   return (
     <List>
@@ -36,7 +36,7 @@ const DocumentViewer: FC<Props> = ({
             <ListItemSecondaryAction>
               {canView && (
                 <Tooltip title={locales.showDocument}>
-                  <a href={document.url} target="_blank">
+                  <a rel="noreferrer" href={document.url} target="_blank">
                     <IconButton size="large">
                       <VisibilityIcon />
                     </IconButton>
@@ -65,14 +65,14 @@ const DocumentViewer: FC<Props> = ({
         </>
       ))}
     </List>
-  );
-};
+  )
+}
 
-export default DocumentViewer;
+export default DocumentViewer
 
 interface Props {
-  documents: { url: string; name?: string; description?: string }[];
-  onDelete?: (document: any) => void;
-  canDownload?: boolean;
-  canView?: boolean;
+  documents: { url: string; name?: string; description?: string }[]
+  onDelete?: (document: any) => void
+  canDownload?: boolean
+  canView?: boolean
 }

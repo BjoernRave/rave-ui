@@ -1,5 +1,5 @@
-import styled from '@emotion/styled';
-import { removeFromArray } from '@inventhora/utils';
+import styled from "@emotion/styled"
+import { removeFromArray } from "@inventhora/utils"
 import {
   Checkbox,
   FormControl,
@@ -7,16 +7,16 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
-} from '@mui/material';
-import { FC } from 'react';
-import { useController } from 'react-hook-form';
-import { useLocale } from '../AppWrapper';
-import { InputProps, Option } from '../lib/types';
+} from "@mui/material"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { InputProps, Option } from "../lib/types"
+import { useLocale } from "../LocaleContext"
 
 const EntityField = styled.div`
   display: flex;
   flex-direction: column;
-`;
+`
 
 const Wrapper = styled(FormControl)`
   margin: 20px !important;
@@ -24,28 +24,28 @@ const Wrapper = styled(FormControl)`
   @media (max-width: 767px) {
     width: 100% !important;
   }
-`;
+`
 
 const LabelWrapper = styled.div`
   display: flex;
   align-items: center;
-`;
+`
 
 const StyledLabel = styled(FormLabel)`
   && {
-    color: ${({ theme }) => theme?.['palette']?.text.primary};
+    color: ${({ theme }) => theme?.["palette"]?.text.primary};
     font-size: 24px;
     font-weight: bolder;
   }
 
   .Mui-disabled {
-    color: ${({ theme }) => theme?.['palette']?.text.disabled};
+    color: ${({ theme }) => theme?.["palette"]?.text.disabled};
   }
 
   .Mui-focused {
     color: #3c9f80;
   }
-`;
+`
 
 const EntitySelect: FC<Props> = ({
   label,
@@ -53,26 +53,23 @@ const EntitySelect: FC<Props> = ({
   options,
   name,
   disabled,
-  control,
   subName,
   index,
 }) => {
   const formName =
-    typeof index === 'number' && subName
-      ? `${name}[${index}].${subName}`
-      : name;
-  const { locales } = useLocale();
-  const { field, fieldState } = useController({ control, name: formName });
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+  const { locales } = useLocale()
+  const { field } = useController({ name: formName })
 
   const handleSelect = (value: string) => {
     if (field.value.includes(value)) {
       field.onChange({
         target: { value: removeFromArray([value], field.value) },
-      });
+      })
     } else {
-      field.onChange({ target: { value: [...field.value, value] } });
+      field.onChange({ target: { value: [...field.value, value] } })
     }
-  };
+  }
 
   const handleSelectAll = () => {
     if (options.every((val) => field.value.includes(val.value))) {
@@ -83,23 +80,23 @@ const EntitySelect: FC<Props> = ({
             field.value
           ),
         },
-      });
+      })
     } else {
       const missingOptions = options
         .filter((val) => !field.value.includes(val.value))
-        .map((val) => val.value);
+        .map((val) => val.value)
       field.onChange({
         target: { value: [...field.value, ...missingOptions] },
-      });
+      })
     }
-  };
+  }
 
   return (
     <Wrapper disabled={disabled}>
       <LabelWrapper>
         <StyledLabel>{label}</StyledLabel>
         <FormControlLabel
-          style={{ marginLeft: '10px' }}
+          style={{ marginLeft: "10px" }}
           label={
             options.every((val) => field.value.includes(val.value))
               ? locales.unselectAll
@@ -116,7 +113,7 @@ const EntitySelect: FC<Props> = ({
       <FormGroup>
         {options.map((innerValue) => (
           <EntityField
-            style={innerValue.helperText ? { margin: '10px 0' } : {}}
+            style={innerValue.helperText ? { margin: "10px 0" } : {}}
             key={innerValue.label}
           >
             <FormControlLabel
@@ -140,12 +137,12 @@ const EntitySelect: FC<Props> = ({
       </FormGroup>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
     </Wrapper>
-  );
-};
+  )
+}
 
-export default EntitySelect;
+export default EntitySelect
 
 export interface Props extends InputProps {
-  options: Option[];
-  disabled?: boolean;
+  options: Option[]
+  disabled?: boolean
 }

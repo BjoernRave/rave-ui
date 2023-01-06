@@ -11,5 +11,6 @@
   "submit": "Einreichen",
   "prefix": "Vorwahl",
   "add": "Hinzufügen",
-  "noRecords": "Keine Einträge"
+  "noRecords": "Keine Einträge",
+  "save": "Save"
 }

@@ -1,22 +1,22 @@
-import styled from '@emotion/styled';
-import { generateSlug, getErrorMessage } from '@inventhora/utils';
-import PlusIcon from '@mui/icons-material/AddCircle';
+import styled from "@emotion/styled"
+import { generateSlug, getErrorMessage } from "@inventhora/utils"
+import PlusIcon from "@mui/icons-material/AddCircle"
 import {
   Autocomplete,
   CircularProgress,
   IconButton,
   Tooltip,
-} from '@mui/material';
-import TextField from '@mui/material/TextField';
-import { FC, useState } from 'react';
-import { useController } from 'react-hook-form';
-import { useLocale } from '../../AppWrapper';
-import { InputProps } from '../../lib/types';
+} from "@mui/material"
+import TextField from "@mui/material/TextField"
+import { FC, useState } from "react"
+import { useController } from "react-hook-form"
+import { InputProps } from "../../lib/types"
+import { useLocale } from "../../LocaleContext"
 
 const StyledButton = styled(IconButton)<{ hasInput: number }>`
   ${({ hasInput }) =>
-    hasInput === 1 ? 'color: #3c9f80 !important' : undefined};
-`;
+    hasInput === 1 ? "color: #3c9f80 !important" : undefined};
+`
 
 const MultiCombobox: FC<Props> = ({
   options,
@@ -30,29 +30,26 @@ const MultiCombobox: FC<Props> = ({
   disabled,
   autoFocus,
   loading,
-  control,
   canCreate = true,
   ...rest
 }) => {
-  const { locales } = useLocale();
+  const { locales } = useLocale()
 
   const formName =
-    typeof index === 'number' && subName
-      ? `${name}[${index}].${subName}`
-      : name;
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
-  const { field, fieldState } = useController({ name: formName, control });
+  const { field, fieldState } = useController({ name: formName })
 
-  const [input, setInput] = useState('');
-  const isLoading = !disabled && (loading || !Array.isArray(options));
+  const [input, setInput] = useState("")
+  const isLoading = !disabled && (loading || !Array.isArray(options))
 
-  const value = field.value ?? [];
+  const value = field.value ?? []
 
   return (
     <Autocomplete
       multiple
       id={generateSlug(formName)}
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       {...rest}
       value={field.value || []}
       selectOnFocus
@@ -88,7 +85,7 @@ const MultiCombobox: FC<Props> = ({
           }
           fullWidth
           onChange={(e) => {
-            setInput(e.target.value);
+            setInput(e.target.value)
           }}
           required={required}
           error={Boolean(fieldState.error)}
@@ -107,8 +104,8 @@ const MultiCombobox: FC<Props> = ({
                         if (input) {
                           field.onChange({
                             target: { value: [...value, input] },
-                          });
-                          setInput('');
+                          })
+                          setInput("")
                         }
                       }}
                     >
@@ -122,16 +119,16 @@ const MultiCombobox: FC<Props> = ({
         />
       )}
     />
-  );
-};
+  )
+}
 
-export default MultiCombobox;
+export default MultiCombobox
 
 export interface Props extends InputProps {
-  getOptionLabel?: (option: any) => string;
-  options: any[];
-  disabled?: boolean;
-  autoFocus?: boolean;
-  loading?: boolean;
-  canCreate?: boolean;
+  getOptionLabel?: (option: any) => string
+  options: any[]
+  disabled?: boolean
+  autoFocus?: boolean
+  loading?: boolean
+  canCreate?: boolean
 }

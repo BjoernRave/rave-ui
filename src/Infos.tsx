@@ -1,6 +1,6 @@
-import styled from '@emotion/styled'
-import { Table, TableBody, TableCell, TableRow } from '@mui/material'
-import React, { FC, ReactNode, useMemo } from 'react'
+import styled from "@emotion/styled"
+import { Table, TableBody, TableCell, TableRow } from "@mui/material"
+import { FC, ReactNode, useMemo } from "react"
 
 const KeyWrapper = styled.span`
   font-size: 18px;
@@ -9,13 +9,13 @@ const KeyWrapper = styled.span`
   }
 `
 
-const Infos: FC<Props> = ({ infos, hideEmpty = true }) => {
+const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
   const filteredInfos = useMemo(
     () =>
       hideEmpty
         ? infos.filter(
             (info) =>
-              info.value !== '' &&
+              info.value !== "" &&
               info.value !== null &&
               info.value !== undefined
           )
@@ -24,29 +24,46 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true }) => {
   )
 
   return (
-    <Table style={{ width: 'initial' }}>
+    <Table className={className} style={{ width: "initial" }}>
       <TableBody>
         {filteredInfos.map(({ Icon, name, value }) => (
           <TableRow key={name}>
-            <TableCell style={{ border: 'none' }}>{Icon && <Icon />}</TableCell>
+            {Icon && (
+              <TableCell style={{ border: "none" }}>
+                {" "}
+                <Icon />
+              </TableCell>
+            )}
             <TableCell
+              align="left"
               style={{
-                textAlign: 'left',
-                border: 'none',
-                paddingRight: '10px',
+                border: "none",
+                paddingRight: "10px",
               }}
             >
               <KeyWrapper>{name}:</KeyWrapper>
             </TableCell>
             <TableCell
+              align="left"
               style={{
                 fontSize: 18,
-                textAlign: 'left',
-                border: 'none',
-                fontWeight: 'bold',
+
+                border: "none",
+                fontWeight: "bold",
               }}
             >
-              {value ? value : '-'}
+              {typeof value === "string" && value.indexOf("http") === 0 ? (
+                <a
+                  rel="noreferrer"
+                  className="text-blue-500 underline"
+                  target="_blank"
+                  href={value}
+                >
+                  {value}
+                </a>
+              ) : (
+                value
+              )}
             </TableCell>
           </TableRow>
         ))}
@@ -60,6 +77,7 @@ export default Infos
 interface Props {
   infos: Info[]
   hideEmpty?: boolean
+  className?: string
 }
 
 export interface Info {

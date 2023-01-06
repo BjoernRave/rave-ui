@@ -1,13 +1,13 @@
-import styled from '@emotion/styled';
-import { countries as countryJSON } from '@inventhora/json-data';
-import { Tab, Tabs } from '@mui/material';
-import { FC, useState } from 'react';
-import { useLocale } from '../AppWrapper';
-import { SameLine } from '../lib/styles';
-import ComboBox from './Basic/ComboBox';
-import TextInput from './Basic/TextInput';
+import styled from "@emotion/styled"
+import { countries as countryJSON } from "@inventhora/json-data"
+import { Tab, Tabs } from "@mui/material"
+import { FC, useState } from "react"
+import { SameLine } from "../lib/styles"
+import { useLocale } from "../LocaleContext"
+import ComboBox from "./Basic/ComboBox"
+import TextInput from "./Basic/TextInput"
 
-const countries = countryJSON.countries;
+const countries = countryJSON.countries
 
 const Wrapper = styled.div`
   margin-bottom: 10px;
@@ -16,7 +16,7 @@ const Wrapper = styled.div`
   > *:not(label) {
     margin: 8px 0;
   }
-`;
+`
 
 const ZipInput = styled(TextInput)`
   width: 30% !important;
@@ -24,11 +24,11 @@ const ZipInput = styled(TextInput)`
   @media (max-width: 767px) {
     width: 100% !important;
   }
-`;
+`
 
 const AddressInput: FC<Props> = ({ withBilling = true }) => {
-  const { locales } = useLocale();
-  const [currentPage, setCurrentPage] = useState(0);
+  const { locales } = useLocale()
+  const [currentPage, setCurrentPage] = useState(0)
 
   if (!withBilling) {
     return (
@@ -53,13 +53,13 @@ const AddressInput: FC<Props> = ({ withBilling = true }) => {
           />
         </SameLine>
       </Wrapper>
-    );
+    )
   }
 
   return (
     <Wrapper>
       <Tabs
-        style={{ width: '100%', marginBottom: 10 }}
+        style={{ width: "100%", marginBottom: 10 }}
         variant="fullWidth"
         value={currentPage}
         onChange={(_, value) => setCurrentPage(value)}
@@ -114,11 +114,11 @@ const AddressInput: FC<Props> = ({ withBilling = true }) => {
         </>
       )}
     </Wrapper>
-  );
-};
+  )
+}
 
-export default AddressInput;
+export default AddressInput
 
 export interface Props {
-  withBilling?: boolean;
+  withBilling?: boolean
 }

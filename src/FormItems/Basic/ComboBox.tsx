@@ -1,15 +1,32 @@
-import { generateSlug, getErrorMessage } from '@inventhora/utils';
-import { Autocomplete, CircularProgress } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { generateSlug } from "@inventhora/utils"
+import { Autocomplete, Checkbox, CircularProgress } from "@mui/material"
+import TextField from "@mui/material/TextField"
 import {
   createFilterOptions,
   FilterOptionsState,
-} from '@mui/material/useAutocomplete';
-import { FC } from 'react';
-import { useController } from 'react-hook-form';
-import { InputProps } from '../../lib/types';
+} from "@mui/material/useAutocomplete"
+import { darken, lighten, styled } from "@mui/system"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { InputProps } from "../../lib/types"
 
-const filter = createFilterOptions();
+const GroupHeader = styled("div")(({ theme }) => ({
+  position: "sticky",
+  top: "-8px",
+  padding: "4px 10px",
+  color: theme.palette.primary.main,
+  zIndex: 999,
+  backgroundColor:
+    theme.palette.mode === "light"
+      ? lighten(theme.palette.primary.light, 0.85)
+      : darken(theme.palette.primary.main, 0.8),
+}))
+
+const GroupItems = styled("ul")({
+  padding: 0,
+})
+
+const filter = createFilterOptions()
 
 const ComboBox: FC<Props> = ({
   options,
@@ -27,66 +44,88 @@ const ComboBox: FC<Props> = ({
   onChange,
   loading,
   filterOptions,
-  control,
+  multiple,
+  readOnly,
+  groupBy,
+  isOptionEqualToValue,
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName
-      ? `${name}[${index}].${subName}`
-      : name;
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
-  const { field, fieldState } = useController({ control, name: formName });
+  const { field, fieldState } = useController({ name: formName })
+  const isLoading = !disabled && (loading || !Array.isArray(options))
 
-  const isLoading = !disabled && (loading || !Array.isArray(options));
   return (
     <Autocomplete
+      multiple={multiple}
+      readOnly={readOnly}
       id={generateSlug(formName)}
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       {...rest}
-      value={field.value || null}
+      value={field.value ? field.value : multiple ? [] : null}
       onChange={(_, value) => {
-        onChange && onChange(value);
+        onChange && onChange(value)
         if (onCreate && value && value.inputValue) {
-          onCreate(value.inputValue);
+          onCreate(value.inputValue)
         } else {
-          field.onChange({ target: { value: value || '' } });
+          field.onChange({ target: { value: value || "" } })
         }
       }}
       onInputChange={(_e, value) => {
         if (freeSolo) {
-          field.onChange({ target: { value: value || '' } });
+          field.onChange({ target: { value: value || "" } })
         }
       }}
       selectOnFocus
+      disableCloseOnSelect={multiple}
       disabled={disabled}
       freeSolo={freeSolo}
       options={isLoading || !options ? [] : options}
       loading={isLoading}
+      isOptionEqualToValue={isOptionEqualToValue ?? undefined}
+      renderOption={
+        multiple
+          ? (props, option, { selected }) => (
+              <li {...props}>
+                <Checkbox style={{ marginRight: 8 }} checked={selected} />
+                {getOptionLabel(option)}
+              </li>
+            )
+          : undefined
+      }
       filterOptions={
         filterOptions
           ? filterOptions
           : (options, params) => {
               if (freeSolo) {
-                params.inputValue = field.value;
+                params.inputValue = field.value ? field.value : ""
               }
 
-              const filtered = filter(options, params);
+              const filtered = filter(options, params)
 
               if (
                 onCreate &&
                 filtered.length === 0 &&
-                params.inputValue !== ''
+                params.inputValue !== ""
               ) {
                 filtered.push({
                   inputValue: params.inputValue,
                   inputTitle: `Add "${params.inputValue}"`,
-                });
+                })
               }
 
-              return filtered;
+              return filtered
             }
       }
-      getOptionLabel={(option) => option?.inputTitle ?? getOptionLabel(option)}
+      groupBy={groupBy}
+      getOptionLabel={getOptionLabel}
+      renderGroup={(params) => (
+        <li>
+          <GroupHeader>{params.group}</GroupHeader>
+          <GroupItems>{params.children}</GroupItems>
+        </li>
+      )}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -95,9 +134,7 @@ const ComboBox: FC<Props> = ({
           size="small"
           label={label}
           disabled={disabled}
-          helperText={
-            fieldState.error ? getErrorMessage(fieldState.error) : helperText
-          }
+          helperText={fieldState.error ? fieldState.error?.message : helperText}
           fullWidth
           required={required}
           error={Boolean(fieldState.error)}
@@ -115,19 +152,23 @@ const ComboBox: FC<Props> = ({
         />
       )}
     />
-  );
-};
+  )
+}
 
-export default ComboBox;
+export default ComboBox
 
 export interface Props extends InputProps {
-  freeSolo?: boolean;
-  getOptionLabel?: (option: any) => string;
-  options: any[];
-  disabled?: boolean;
-  onCreate?: (input: string) => void;
-  autoFocus?: boolean;
-  onChange?: (value?: any) => void;
-  loading?: boolean;
-  filterOptions?: (options: any[], state: FilterOptionsState<any>) => any[];
+  freeSolo?: boolean
+  getOptionLabel: (option: any) => string
+  options: any[]
+  disabled?: boolean
+  onCreate?: (input: string) => void
+  autoFocus?: boolean
+  onChange?: (value?: any) => void
+  loading?: boolean
+  filterOptions?: (options: any[], state: FilterOptionsState<any>) => any[]
+  readOnly?: boolean
+  multiple?: boolean
+  groupBy?: (option: any) => string
+  isOptionEqualToValue?: (option: any, value: any) => boolean
 }

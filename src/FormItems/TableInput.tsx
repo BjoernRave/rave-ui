@@ -1,12 +1,12 @@
-import styled from '@emotion/styled';
+import styled from "@emotion/styled"
 import {
   generateSlug,
   getErrorMessage,
   getObjectKeyByString,
   isServer,
   removeFromObjectArray,
-} from '@inventhora/utils';
-import CancelIcon from '@mui/icons-material/Cancel';
+} from "@inventhora/utils"
+import CancelIcon from "@mui/icons-material/Cancel"
 import {
   CircularProgress,
   FormControl,
@@ -15,14 +15,14 @@ import {
   IconButton,
   Paper,
   Tooltip,
-} from '@mui/material';
-import { ColumnDef } from '@tanstack/react-table';
-import { FC, useEffect, useMemo } from 'react';
-import { useController } from 'react-hook-form';
-import { useLocale } from '../AppWrapper';
-import Infos from '../Infos';
-import { InputProps } from '../lib/types';
-import Table from '../Table';
+} from "@mui/material"
+import { ColumnDef } from "@tanstack/react-table"
+import { FC, useEffect, useMemo } from "react"
+import { useController } from "react-hook-form"
+import Infos from "../Infos"
+import { InputProps } from "../lib/types"
+import { useLocale } from "../LocaleContext"
+import Table from "../Table"
 
 const SelectedWrapper = styled(Paper)`
   display: flex;
@@ -31,7 +31,7 @@ const SelectedWrapper = styled(Paper)`
   width: 100%;
   margin: 10px 0;
   padding: 5px;
-`;
+`
 
 const SelectedText = styled.span`
   margin: 0 10px;
@@ -40,7 +40,7 @@ const SelectedText = styled.span`
   flex-direction: column;
   align-items: center;
   text-align: center;
-`;
+`
 
 const MobileSelectedWrapper = styled(Paper)`
   margin: 10px 0;
@@ -53,15 +53,15 @@ const MobileSelectedWrapper = styled(Paper)`
     align-self: flex-end;
     margin: 10px 10px 0 0;
   }
-`;
+`
 
 const Selection = ({ columns, onDelete, value }) => {
-  const { locales } = useLocale();
+  const { locales } = useLocale()
 
   const isMobile =
     !isServer &&
     window.matchMedia &&
-    window.matchMedia('(max-width: 767px)').matches;
+    window.matchMedia("(max-width: 767px)").matches
 
   if (isMobile) {
     return (
@@ -79,23 +79,23 @@ const Selection = ({ columns, onDelete, value }) => {
           infos={columns.map((column) => ({
             name: column.Header,
             value:
-              typeof column.accessor === 'string'
+              typeof column.accessor === "string"
                 ? getObjectKeyByString(value, column.accessor)
                 : column.accessor(value),
           }))}
         />
       </MobileSelectedWrapper>
-    );
+    )
   }
 
   return (
     <SelectedWrapper>
       {columns.map((column) => (
         <SelectedText key={column.Header}>
-          <span style={{ fontWeight: 'bold', marginBottom: 10 }}>
+          <span style={{ fontWeight: "bold", marginBottom: 10 }}>
             {column.Header}
           </span>
-          {typeof column.accessor === 'string'
+          {typeof column.accessor === "string"
             ? getObjectKeyByString(value, column.accessor)
             : column.accessor(value)}
         </SelectedText>
@@ -110,8 +110,8 @@ const Selection = ({ columns, onDelete, value }) => {
         </IconButton>
       </Tooltip>
     </SelectedWrapper>
-  );
-};
+  )
+}
 
 const TableInput: FC<Props> = ({
   name,
@@ -125,20 +125,17 @@ const TableInput: FC<Props> = ({
   multiple,
   filterWith,
   withSearch,
-  control,
 }) => {
   const formName =
-    typeof index === 'number' && subName
-      ? `${name}[${index}].${subName}`
-      : name;
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
-  const { field, fieldState } = useController({ control, name: formName });
+  const { field, fieldState } = useController({ name: formName })
 
   useEffect(() => {
     if (options?.length === 1) {
-      field.onChange({ target: { value: options[1] } });
+      field.onChange({ target: { value: options[1] } })
     }
-  }, [options]);
+  }, [options])
 
   const data = useMemo(() => {
     // if (!field.value) return []
@@ -151,17 +148,17 @@ const TableInput: FC<Props> = ({
             getObjectKeyByString(option, filterWith) !==
               getObjectKeyByString(field.value[0], filterWith)
           ) {
-            return false;
+            return false
           }
 
-          return !Boolean(field.value.find((val) => val.id === option.id));
+          return !Boolean(field.value.find((val) => val.id === option.id))
         })
-      : options;
-  }, [multiple, options, field.value]);
+      : options
+  }, [multiple, options, field.value])
 
   return (
     <FormControl
-      style={{ width: '100%', display: 'grid' }}
+      style={{ width: "100%", display: "grid" }}
       error={Boolean(fieldState.error)}
       required={required}
     >
@@ -181,7 +178,7 @@ const TableInput: FC<Props> = ({
             onDelete={(v) =>
               field.onChange({
                 target: {
-                  value: removeFromObjectArray(field.value, 'id', v.id),
+                  value: removeFromObjectArray(field.value, "id", v.id),
                 },
               })
             }
@@ -192,10 +189,10 @@ const TableInput: FC<Props> = ({
       {!Boolean(options) ? (
         <div
           style={{
-            display: 'flex',
-            width: '100%',
-            alignItems: 'center',
-            margin: '10px 0',
+            display: "flex",
+            width: "100%",
+            alignItems: "center",
+            margin: "10px 0",
           }}
         >
           <CircularProgress />
@@ -205,7 +202,7 @@ const TableInput: FC<Props> = ({
           <Table
             labelledBy={`${generateSlug(name)}-input`}
             withSearch={withSearch}
-            style={{ margin: '10px 0' }}
+            style={{ margin: "10px 0" }}
             maxHeight={400}
             onRowClick={(row: any) =>
               field.onChange({
@@ -227,15 +224,15 @@ const TableInput: FC<Props> = ({
         </FormHelperText>
       )}
     </FormControl>
-  );
-};
+  )
+}
 
-export default TableInput;
+export default TableInput
 
 interface Props extends InputProps {
-  columns: ColumnDef<any>[];
-  options: any[];
-  multiple?: boolean;
-  filterWith?: string;
-  withSearch?: boolean;
+  columns: ColumnDef<any>[]
+  options: any[]
+  multiple?: boolean
+  filterWith?: string
+  withSearch?: boolean
 }

@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
-import ClearIcon from '@mui/icons-material/Clear';
-import SearchIcon from '@mui/icons-material/Search';
+import styled from "@emotion/styled"
+import ClearIcon from "@mui/icons-material/Clear"
+import SearchIcon from "@mui/icons-material/Search"
 import {
   IconButton,
   InputAdornment,
@@ -10,32 +10,18 @@ import {
   TableSortLabel,
   TextField,
   Tooltip,
-} from '@mui/material';
-import MaUTable from '@mui/material/Table';
-import TableCell from '@mui/material/TableCell';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import {
-  ColumnDef,
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFacetedMinMaxValues,
-  getFacetedRowModel,
-  getFacetedUniqueValues,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
-  Row,
-  useReactTable,
-} from '@tanstack/react-table';
-import { CSSProperties, FC, useMemo, useState } from 'react';
-import { useLocale } from './AppWrapper';
-import { fuzzyFilter } from './lib/tableUtils';
+} from "@mui/material"
+import MaUTable from "@mui/material/Table"
+import TableCell from "@mui/material/TableCell"
+import TableHead from "@mui/material/TableHead"
+import TableRow from "@mui/material/TableRow"
+import { CSSProperties, FC, useMemo } from "react"
+import { Column, Row, useGlobalFilter, useSortBy, useTable } from "react-table"
+import { useLocale } from "./LocaleContext"
 
 const StyledRow = styled(TableRow)<{ hover: boolean }>`
-  cursor: ${({ hover }) => hover && 'pointer'};
-`;
+  cursor: ${({ hover }) => hover && "pointer"};
+`
 
 const NoRecords = styled.tr`
   font-size: 18px;
@@ -45,29 +31,29 @@ const NoRecords = styled.tr`
   left: 0;
   right: 0;
   width: 100%;
-`;
+`
 
 const StyledTableBody = styled(TableBody)`
   @media (max-width: 1023px) {
     tr {
       :nth-of-type(even) {
         background-color: ${({ theme }) =>
-          theme?.['palette']?.background.default};
+          theme?.["palette"]?.background.default};
       }
     }
   }
-`;
+`
 
 const StyledCell = styled(TableCell)`
   font-weight: bold !important;
   background-color: ${({ theme }) =>
-    theme?.['palette']?.background.paper} !important;
-`;
+    theme?.["palette"]?.background.paper} !important;
+`
 
 const StyledContainer = styled(TableContainer)`
   overflow: auto;
   width: 100%;
-`;
+`
 
 const Table: FC<Props> = ({
   columns,
@@ -80,53 +66,48 @@ const Table: FC<Props> = ({
   style,
   labelledBy,
 }) => {
-  const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([]);
-  const [globalFilter, setGlobalFilter] = useState('');
-
-  const { locales } = useLocale();
-  const table = useReactTable({
-    data,
-    columns,
-    filterFns: {
-      fuzzy: fuzzyFilter,
+  const { locales } = useLocale()
+  const {
+    getTableProps,
+    getTableBodyProps,
+    headerGroups,
+    rows,
+    prepareRow,
+    state,
+    setGlobalFilter,
+  } = useTable(
+    {
+      columns,
+      data: data ?? [],
     },
-    state: {
-      columnFilters,
-      globalFilter,
-    },
-    onColumnFiltersChange: setColumnFilters,
-    onGlobalFilterChange: setGlobalFilter,
-    globalFilterFn: fuzzyFilter,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    getFacetedRowModel: getFacetedRowModel(),
-    getFacetedUniqueValues: getFacetedUniqueValues(),
-    getFacetedMinMaxValues: getFacetedMinMaxValues(),
-    debugTable: true,
-    debugHeaders: true,
-    debugColumns: false,
-  });
+    useGlobalFilter,
+    useSortBy,
+    (hooks) => {
+      hooks.allColumns.push((columns) => [
+        ...columns,
+        ...(actions ? actions : []),
+      ])
+    }
+  )
 
-  const array = useMemo(() => new Array(10).fill('blah'), []);
+  const array = useMemo(() => new Array(10).fill("blah"), [])
 
   return (
     <>
       {withSearch && (
         <TextField
-          style={{ width: '100%', margin: '15px 0' }}
+          style={{ width: "100%", margin: "15px 0" }}
           label={locales.search}
-          value={globalFilter ?? ''}
+          value={state.globalFilter ?? ""}
           onChange={(e) => setGlobalFilter(e.target.value)}
           InputProps={{
             endAdornment: (
               <>
-                {globalFilter && (
+                {state.globalFilter && (
                   <InputAdornment position="end">
                     <Tooltip title={locales.clear}>
                       <IconButton
-                        onClick={() => setGlobalFilter('')}
+                        onClick={() => setGlobalFilter("")}
                         size="large"
                       >
                         <ClearIcon />
@@ -143,27 +124,23 @@ const Table: FC<Props> = ({
         />
       )}
       <StyledContainer style={{ maxHeight, ...style }}>
-        <MaUTable aria-labelledby={labelledBy} stickyHeader>
+        <MaUTable
+          aria-labelledby={labelledBy}
+          stickyHeader
+          {...getTableProps()}
+        >
           <TableHead>
-            {table.getHeaderGroups().map((headerGroup, ind) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => (
-                  <StyledCell key={header.id} colSpan={header.colSpan}>
+            {headerGroups.map((headerGroup, ind) => (
+              <TableRow key={ind} {...headerGroup.getHeaderGroupProps()}>
+                {headerGroup.headers.map((column) => (
+                  <StyledCell key={column.id} {...column.getHeaderProps()}>
                     <TableSortLabel
                       hideSortIcon
-                      active={Boolean(header.column.getIsSorted())}
-                      direction={
-                        header.column.getIsSorted() === 'desc'
-                          ? 'desc'
-                          : header.column.getIsSorted() === 'asc'
-                          ? 'asc'
-                          : null
-                      }
+                      active={column.isSorted}
+                      direction={column.isSortedDesc ? "desc" : "asc"}
+                      {...column.getSortByToggleProps()}
                     >
-                      {flexRender(
-                        header.column.columnDef.header,
-                        header.getContext()
-                      )}
+                      {column.render("Header")}
                     </TableSortLabel>
                   </StyledCell>
                 ))}
@@ -171,7 +148,7 @@ const Table: FC<Props> = ({
             ))}
           </TableHead>
           {!Boolean(data) ? (
-            <StyledTableBody>
+            <StyledTableBody {...getTableBodyProps()}>
               {array.map((row) => (
                 <TableRow key={row.id}>
                   {columns.map((col, ind) => (
@@ -182,32 +159,32 @@ const Table: FC<Props> = ({
                 </TableRow>
               ))}
             </StyledTableBody>
-          ) : table.getRowModel().rows.length > 0 ? (
-            <StyledTableBody>
-              {table.getRowModel().rows.map((row) => {
+          ) : rows.length > 0 ? (
+            <StyledTableBody {...getTableBodyProps()}>
+              {rows.map((row) => {
+                prepareRow(row)
+
                 return (
                   <StyledRow
                     selected={selected === row.id}
                     hover={Boolean(onRowClick)}
                     onClick={() => onRowClick && onRowClick(row)}
                     key={row.id}
+                    {...row.getRowProps()}
                   >
-                    {row.getVisibleCells().map((cell) => {
+                    {row.cells.map((cell, ind) => {
                       return (
-                        <TableCell key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
+                        <TableCell key={ind} {...cell.getCellProps()}>
+                          {cell.render("Cell")}
                         </TableCell>
-                      );
+                      )
                     })}
                   </StyledRow>
-                );
+                )
               })}
             </StyledTableBody>
           ) : (
-            <tbody style={{ position: 'relative', height: 60 }}>
+            <tbody style={{ position: "relative", height: 60 }}>
               <NoRecords>
                 <span className="absolute left-0 right-0 text-center">
                   {locales.noRecords}
@@ -218,19 +195,19 @@ const Table: FC<Props> = ({
         </MaUTable>
       </StyledContainer>
     </>
-  );
-};
+  )
+}
 
-export default Table;
+export default Table
 
 export interface Props {
-  columns: ColumnDef<any>[];
-  data: any[];
-  actions?: any;
-  onRowClick?: (row: Row<any>) => void;
-  selected?: string;
-  withSearch?: boolean;
-  maxHeight?: number;
-  style?: CSSProperties;
-  labelledBy?: string;
+  columns: Column<any>[]
+  data: Record<string, any>[]
+  actions?: any
+  onRowClick?: (row: Row) => void
+  selected?: string
+  withSearch?: boolean
+  maxHeight?: number
+  style?: CSSProperties
+  labelledBy?: string
 }

@@ -1,20 +1,20 @@
-import styled from '@emotion/styled';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Backdrop, IconButton, Tooltip } from '@mui/material';
-import { FC, useState } from 'react';
-import { useLocale } from './AppWrapper';
+import styled from "@emotion/styled"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
+import DeleteIcon from "@mui/icons-material/Delete"
+import { Backdrop, IconButton, Tooltip } from "@mui/material"
+import { FC, useState } from "react"
+import { useLocale } from "./LocaleContext"
 
 const PreviewsWrapper = styled.div`
   display: flex;
   flex-wrap: wrap;
-`;
+`
 
 const UploadPreview = styled.img`
   height: 180px;
   width: auto;
-`;
+`
 
 const StyledIcon = styled(DeleteIcon)`
   position: absolute !important;
@@ -28,7 +28,7 @@ const StyledIcon = styled(DeleteIcon)`
   opacity: 0;
   transition: all linear 0.2s;
   z-index: 2;
-`;
+`
 
 const PreviewWrapper = styled.div`
   display: flex;
@@ -36,7 +36,7 @@ const PreviewWrapper = styled.div`
   align-items: center;
   border: 2px solid black;
   margin: 10px;
-`;
+`
 
 const ImagePreviewWrapper = styled.div<{ isdeleting: number }>`
   position: relative;
@@ -45,7 +45,7 @@ const ImagePreviewWrapper = styled.div<{ isdeleting: number }>`
   padding: 10px 10px 0 10px;
 
   ::after {
-    content: '';
+    content: "";
     position: absolute;
     width: 100%;
     height: 100%;
@@ -55,21 +55,21 @@ const ImagePreviewWrapper = styled.div<{ isdeleting: number }>`
     opacity: 0;
     transition: all 0.2s;
   }
-`;
+`
 
 const FullScreenImage = styled.img`
   position: fixed;
   width: auto;
   height: 95%;
   top: 2.5%;
-`;
+`
 
 const OrderChange = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
   width: 100%;
-`;
+`
 
 const ImageViewer: FC<Props> = ({
   images,
@@ -77,15 +77,15 @@ const ImageViewer: FC<Props> = ({
   onOrderChange,
   getImageUrl,
 }) => {
-  const { locales } = useLocale();
-  const [isFullScreen, setIsFullScreen] = useState(null);
+  const { locales } = useLocale()
+  const [isFullScreen, setIsFullScreen] = useState(null)
   return (
     <>
       <PreviewsWrapper>
         {images
           .sort((a, b) => a.order - b.order)
           .map((image, index) => (
-            <PreviewWrapper>
+            <PreviewWrapper key={index}>
               <ImagePreviewWrapper
                 isdeleting={onDelete ? 1 : 0}
                 onClick={() =>
@@ -108,22 +108,22 @@ const ImageViewer: FC<Props> = ({
                     <IconButton
                       disabled={image?.name ? index === 0 : image.order === 0}
                       onClick={() => {
-                        const newArray = Array.from(images);
+                        const newArray = Array.from(images)
 
                         if (image.name) {
-                          const temp = newArray[index];
+                          const temp = newArray[index]
 
-                          newArray[index] = newArray[index - 1];
+                          newArray[index] = newArray[index - 1]
 
-                          newArray[index - 1] = temp;
+                          newArray[index - 1] = temp
                         } else {
-                          newArray[index].order = newArray[index - 1].order;
+                          newArray[index].order = newArray[index - 1].order
 
                           newArray[index - 1].order =
-                            newArray[index - 1].order + 1;
+                            newArray[index - 1].order + 1
                         }
 
-                        onOrderChange(newArray);
+                        onOrderChange(newArray)
                       }}
                       size="large"
                     >
@@ -139,22 +139,22 @@ const ImageViewer: FC<Props> = ({
                           : image.order === images.length - 1
                       }
                       onClick={() => {
-                        const newArray = Array.from(images);
+                        const newArray = Array.from(images)
 
                         if (image.name) {
-                          const temp = newArray[index];
+                          const temp = newArray[index]
 
-                          newArray[index] = newArray[index + 1];
+                          newArray[index] = newArray[index + 1]
 
-                          newArray[index + 1] = temp;
+                          newArray[index + 1] = temp
                         } else {
-                          newArray[index].order = newArray[index + 1].order;
+                          newArray[index].order = newArray[index + 1].order
 
                           newArray[index + 1].order =
-                            newArray[index + 1].order - 1;
+                            newArray[index + 1].order - 1
                         }
 
-                        onOrderChange(newArray);
+                        onOrderChange(newArray)
                       }}
                       size="large"
                     >
@@ -182,16 +182,16 @@ const ImageViewer: FC<Props> = ({
         </Backdrop>
       )}
     </>
-  );
-};
+  )
+}
 
-export default ImageViewer;
+export default ImageViewer
 
 interface Props {
-  images: { url: string; name?: string; order?: number }[];
-  onDelete?: (image: any) => void;
+  images: { url: string; name?: string; order?: number }[]
+  onDelete?: (image: any) => void
   onOrderChange?: (
     files: { url: string; name?: string; order?: number }[]
-  ) => void;
-  getImageUrl: (image: any) => string;
+  ) => void
+  getImageUrl: (image: any) => string
 }

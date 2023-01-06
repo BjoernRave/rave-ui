@@ -1,11 +1,11 @@
-import Brightness4Icon from '@mui/icons-material/Brightness4';
-import BrightnessHighIcon from '@mui/icons-material/BrightnessHigh';
-import { IconButton, Tooltip } from '@mui/material';
-import { FC } from 'react';
-import { useLocale } from './AppWrapper';
+import Brightness4Icon from "@mui/icons-material/Brightness4"
+import BrightnessHighIcon from "@mui/icons-material/BrightnessHigh"
+import { IconButton, Tooltip } from "@mui/material"
+import { FC } from "react"
+import { useLocale } from "./LocaleContext"
 
 const DarkmodeSwitch: FC<Props> = ({ value, onChange }) => {
-  const { locales } = useLocale();
+  const { locales } = useLocale()
 
   return (
     <Tooltip title={locales.toggleDarkMode}>
@@ -13,12 +13,12 @@ const DarkmodeSwitch: FC<Props> = ({ value, onChange }) => {
         {value ? <Brightness4Icon /> : <BrightnessHighIcon />}
       </IconButton>
     </Tooltip>
-  );
-};
+  )
+}
 
-export default DarkmodeSwitch;
+export default DarkmodeSwitch
 
 interface Props {
-  value: boolean;
-  onChange: (value: boolean) => void;
+  value: boolean
+  onChange: (value: boolean) => void
 }
