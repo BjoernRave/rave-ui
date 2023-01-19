@@ -1,10 +1,15 @@
-import styled from "@emotion/styled"
-import { zodResolver } from "@hookform/resolvers/zod"
-import dynamic from "next/dynamic"
-import { FC } from "react"
-import { FormProvider, useForm } from "react-hook-form"
-import { ZodSchema } from "zod"
-import SubmitButton from "./SubmitButton"
+import styled from '@emotion/styled';
+import { zodResolver } from '@hookform/resolvers/zod';
+import dynamic from 'next/dynamic';
+import { FC, useEffect } from 'react';
+import {
+  FieldErrorsImpl,
+  FormProvider,
+  useForm,
+  UseFormSetError,
+} from 'react-hook-form';
+import { ZodSchema } from 'zod';
+import SubmitButton from './SubmitButton';
 
 const StyledForm = styled.form`
   > *:not(label) {
@@ -17,9 +22,9 @@ const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
   align-items: center;
-`
+`;
 
-const DevTool = dynamic(() => import("./DevTools"), { ssr: false })
+const DevTool = dynamic(() => import('./DevTools'), { ssr: false });
 
 const Form: FC<Props> = ({
   initialValues,
@@ -28,13 +33,20 @@ const Form: FC<Props> = ({
   validationSchema,
   className,
   submitButton = false,
-  submitText = "Absenden",
+  submitText = 'Absenden',
   validate,
+  onError,
 }) => {
   const methods = useForm({
     defaultValues: initialValues,
     resolver: zodResolver(validationSchema),
-  })
+  });
+
+  useEffect(() => {
+    if (methods.formState.isSubmitted && !methods.formState.isValid) {
+      onError(methods.formState.errors);
+    }
+  }, [methods.formState.submitCount]);
 
   return (
     <FormProvider {...methods}>
@@ -42,20 +54,24 @@ const Form: FC<Props> = ({
         className={className}
         onSubmit={(e) => {
           if (!validate) {
-            return methods.handleSubmit(onSubmit)(e)
+            return methods.handleSubmit((values) =>
+              onSubmit(values, methods.setError)
+            )(e);
           }
 
-          const validation = validate(methods.getValues())
-          console.log(validation)
-          if (typeof validation === "boolean") {
-            return methods.handleSubmit(onSubmit)(e)
+          const validation = validate(methods.getValues());
+
+          if (typeof validation === 'boolean') {
+            return methods.handleSubmit((values) =>
+              onSubmit(values, methods.setError)
+            )(e);
           }
 
-          e.preventDefault()
+          e.preventDefault();
 
           Object.keys(validation).forEach((key) => {
-            methods.setError(key, { message: validation[key], type: "custom" })
-          })
+            methods.setError(key, { message: validation[key], type: 'custom' });
+          });
         }}
       >
         <DevTool control={methods.control} />
@@ -63,18 +79,28 @@ const Form: FC<Props> = ({
         {submitButton && <SubmitButton>{submitText}</SubmitButton>}
       </StyledForm>
     </FormProvider>
-  )
-}
+  );
+};
 
-export default Form
+export default Form;
 
 interface Props {
-  validationSchema?: ZodSchema
-  initialValues: Record<string, any>
-  onSubmit: (data: Record<string, any>) => void
-  children: any
-  className?: string
-  submitButton?: boolean
-  submitText?: string
-  validate?: (data: Record<string, any>) => true | { [key: string]: string }
+  validationSchema?: ZodSchema;
+  initialValues: Record<string, any>;
+  onSubmit: (
+    data: Record<string, any>,
+    setError: UseFormSetError<Record<string, any>>
+  ) => void;
+  children: any;
+  className?: string;
+  submitButton?: boolean;
+  submitText?: string;
+  validate?: (data: Record<string, any>) => true | { [key: string]: string };
+  onError?: (
+    errors: Partial<
+      FieldErrorsImpl<{
+        [x: string]: any;
+      }>
+    >
+  ) => void;
 }

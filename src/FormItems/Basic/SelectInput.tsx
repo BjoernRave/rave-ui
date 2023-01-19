@@ -1,4 +1,4 @@
-import { generateSlug } from "@inventhora/utils"
+import { generateSlug } from '@inventhora/utils';
 import {
   FormControl,
   FormHelperText,
@@ -6,10 +6,10 @@ import {
   MenuItem,
   Select,
   SelectProps,
-} from "@mui/material"
-import { FC } from "react"
-import { useController } from "react-hook-form"
-import { InputProps, Option } from "../../lib/types"
+} from '@mui/material';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { InputProps, Option } from '../../lib/types';
 
 const SelectInput: FC<Props> = ({
   options,
@@ -18,6 +18,7 @@ const SelectInput: FC<Props> = ({
   helperText,
   required,
   index,
+  style,
   subName,
   onChange,
   disabledOptions,
@@ -25,9 +26,11 @@ const SelectInput: FC<Props> = ({
   ...rest
 }) => {
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const { field, fieldState } = useController({ name: formName })
+  const { field, fieldState } = useController({ name: formName });
 
   return (
     <FormControl
@@ -36,7 +39,7 @@ const SelectInput: FC<Props> = ({
       error={Boolean(fieldState.error)}
       required={required}
       id={generateSlug(formName)}
-      style={{ width: "100%" }}
+      style={style ?? { width: '100%' }}
     >
       <InputLabel margin="dense" id={`${generateSlug(formName)}-label`}>
         {label}
@@ -49,8 +52,8 @@ const SelectInput: FC<Props> = ({
         {...(rest as any)}
         {...field}
         onChange={(e) => {
-          field.onChange(e)
-          onChange && onChange(e.target.value)
+          field.onChange(e);
+          onChange && onChange(e.target.value);
         }}
       >
         {allowEmpty && (
@@ -74,15 +77,15 @@ const SelectInput: FC<Props> = ({
         {fieldState.error ? fieldState.error.message : helperText}
       </FormHelperText>
     </FormControl>
-  )
-}
+  );
+};
 
-export default SelectInput
+export default SelectInput;
 
 export interface Props
   extends InputProps,
-    Omit<SelectProps, "name" | "label" | "onChange"> {
-  options: Option[]
-  disabledOptions?: any[]
-  allowEmpty?: boolean
+    Omit<SelectProps, 'name' | 'label' | 'onChange'> {
+  options: Option[];
+  disabledOptions?: any[];
+  allowEmpty?: boolean;
 }

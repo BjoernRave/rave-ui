@@ -1,17 +1,17 @@
-import { generateSlug } from "@inventhora/utils"
-import VisibilityIcon from "@mui/icons-material/Visibility"
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
+import { generateSlug } from '@inventhora/utils';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import {
   BaseTextFieldProps,
   IconButton,
   InputAdornment,
   TextField,
   Tooltip,
-} from "@mui/material"
-import { FC, useState } from "react"
-import { useController } from "react-hook-form"
-import { InputProps } from "../../lib/types"
-import { useLocale } from "../../LocaleContext"
+} from '@mui/material';
+import { FC, useState } from 'react';
+import { useController } from 'react-hook-form';
+import { InputProps } from '../../lib/types';
+import { useLocale } from '../../LocaleContext';
 
 const PasswordInput: FC<Props> = ({
   name,
@@ -19,16 +19,19 @@ const PasswordInput: FC<Props> = ({
   subName,
   helperText,
   error,
-  variant = "outlined",
+  style,
+  variant = 'outlined',
   ...rest
 }) => {
-  const { locales } = useLocale()
+  const { locales } = useLocale();
 
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
-  const [showPassword, setShowPassword] = useState(false)
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
+  const [showPassword, setShowPassword] = useState(false);
 
-  const { field, fieldState } = useController({ name: formName })
+  const { field, fieldState } = useController({ name: formName });
 
   return (
     <TextField
@@ -37,8 +40,8 @@ const PasswordInput: FC<Props> = ({
       id={generateSlug(formName)}
       {...rest}
       {...field}
-      style={{ width: "100%" }}
-      type={showPassword ? "text" : "password"}
+      style={style ?? { width: '100%' }}
+      type={showPassword ? 'text' : 'password'}
       variant={variant as any}
       helperText={fieldState.error ? fieldState.error.message : helperText}
       error={Boolean(fieldState.error) || error}
@@ -62,11 +65,11 @@ const PasswordInput: FC<Props> = ({
         ),
       }}
     />
-  )
-}
+  );
+};
 
-export default PasswordInput
+export default PasswordInput;
 
 export interface Props
   extends InputProps,
-    Omit<BaseTextFieldProps, "name" | "label"> {}
+    Omit<BaseTextFieldProps, 'name' | 'label'> {}

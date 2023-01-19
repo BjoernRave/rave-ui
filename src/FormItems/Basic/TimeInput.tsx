@@ -1,11 +1,11 @@
-import { generateSlug, timeFormat } from "@inventhora/utils"
-import { TextField } from "@mui/material"
-import { TimePicker } from "@mui/x-date-pickers-pro"
-import { FC } from "react"
-import { useController } from "react-hook-form"
-import { InputProps, Language } from "../../lib/types"
-import { useLocale } from "../../LocaleContext"
-import DateTimeProvider from "./DateTimeProvider"
+import { generateSlug, timeFormat } from '@inventhora/utils';
+import { TextField } from '@mui/material';
+import { TimePicker } from '@mui/x-date-pickers-pro';
+import { FC } from 'react';
+import { useController } from 'react-hook-form';
+import { InputProps, Language } from '../../lib/types';
+import { useLocale } from '../../LocaleContext';
+import DateTimeProvider from './DateTimeProvider';
 
 const TimeInput: FC<Props> = ({
   name,
@@ -17,20 +17,22 @@ const TimeInput: FC<Props> = ({
   onChange,
   disabled,
 }) => {
-  const { lang } = useLocale()
+  const { lang } = useLocale();
 
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName
+      ? `${name}[${index}].${subName}`
+      : name;
 
-  const { field, fieldState } = useController({ name: formName })
+  const { field, fieldState } = useController({ name: formName });
 
   return (
     <DateTimeProvider lang={lang as Language}>
       <TimePicker
         value={field.value ?? null}
         onChange={(date) => {
-          field.onChange({ target: { value: date || null } })
-          onChange && onChange(date)
+          field.onChange({ target: { value: date || null } });
+          onChange && onChange(date);
         }}
         disabled={disabled}
         ampm={false}
@@ -47,17 +49,17 @@ const TimeInput: FC<Props> = ({
               fieldState.error ? fieldState.error.message : helperText
             }
             required={required}
-            style={{ width: "100%" }}
+            style={{ width: '100%' }}
             id={generateSlug(formName)}
           />
         )}
       />
     </DateTimeProvider>
-  )
-}
+  );
+};
 
-export default TimeInput
+export default TimeInput;
 
 export interface Props extends InputProps {
-  disabled?: boolean
+  disabled?: boolean;
 }
