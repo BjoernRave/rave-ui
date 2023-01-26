@@ -1,7 +1,7 @@
-import DownloadIcon from "@mui/icons-material/CloudDownload"
-import DeleteIcon from "@mui/icons-material/Delete"
-import DocumentIcon from "@mui/icons-material/Description"
-import VisibilityIcon from "@mui/icons-material/Visibility"
+import DownloadIcon from '@mui/icons-material/CloudDownload'
+import DeleteIcon from '@mui/icons-material/Delete'
+import DocumentIcon from '@mui/icons-material/Description'
+import VisibilityIcon from '@mui/icons-material/Visibility'
 import {
   Divider,
   IconButton,
@@ -11,9 +11,9 @@ import {
   ListItemSecondaryAction,
   ListItemText,
   Tooltip,
-} from "@mui/material"
-import { FC } from "react"
-import { useLocale } from "./LocaleContext"
+} from '@mui/material'
+import { FC } from 'react'
+import { useLocale } from './lib/theme'
 
 const DocumentViewer: FC<Props> = ({
   documents,

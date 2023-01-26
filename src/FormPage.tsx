@@ -1,31 +1,31 @@
-import styled from '@emotion/styled';
-import { Button, Paper } from '@mui/material';
-import Link from 'next/link';
-import { FC, ReactNode } from 'react';
-import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form';
-import Form from './FormItems/Basic/Form';
-import SubmitButton from './FormItems/Basic/SubmitButton';
-import { useLocale } from './LocaleContext';
+import styled from '@emotion/styled'
+import { Button, Paper } from '@mui/material'
+import Link from 'next/link'
+import { FC, ReactNode } from 'react'
+import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form'
+import Form from './FormItems/Basic/Form'
+import SubmitButton from './FormItems/Basic/SubmitButton'
+import { useLocale } from './lib/theme'
 
 const StyledPaper = styled(Paper)`
   padding: 10px 20px;
   margin: 10px;
   max-width: 960px;
   width: 100%;
-`;
+`
 
 const PageWrapper = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
-`;
+`
 
 const StyledSubmit = styled(SubmitButton)`
   @media (max-width: 767px) {
     padding: 20px 0;
     width: 100%;
   }
-`;
+`
 
 const FormPage: FC<Props> = ({
   initialValues,
@@ -40,7 +40,7 @@ const FormPage: FC<Props> = ({
   submitText,
   withCancel,
 }) => {
-  const { locales } = useLocale();
+  const { locales } = useLocale()
 
   return (
     <PageWrapper style={style}>
@@ -75,33 +75,33 @@ const FormPage: FC<Props> = ({
         </Form>
       </StyledPaper>
     </PageWrapper>
-  );
-};
+  )
+}
 
-export default FormPage;
+export default FormPage
 
 interface Props {
-  description?: string;
-  initialValues: object;
-  validationSchema: any;
+  description?: string
+  initialValues: object
+  validationSchema: any
   onSubmit: (
     data: Record<string, any>,
     setError: UseFormSetError<Record<string, any>>
-  ) => void;
+  ) => void
   onError?: (
     errors: Partial<
       FieldErrorsImpl<{
-        [x: string]: any;
+        [x: string]: any
       }>
     >
-  ) => void;
-  validate?: (values: any) => void;
-  edit?: boolean;
-  children: any;
-  style?: any;
-  enableReinitialize?: boolean;
-  hideSubmit?: boolean;
-  submitText?: ReactNode;
-  withRequiredNotice?: boolean;
-  withCancel?: string;
+  ) => void
+  validate?: (values: any) => void
+  edit?: boolean
+  children: any
+  style?: any
+  enableReinitialize?: boolean
+  hideSubmit?: boolean
+  submitText?: ReactNode
+  withRequiredNotice?: boolean
+  withCancel?: string
 }

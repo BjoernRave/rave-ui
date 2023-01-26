@@ -1,14 +1,14 @@
-import { generateSlug } from "@inventhora/utils"
 import {
   FormControl,
   FormHelperText,
   FormLabel,
   ToggleButton,
   ToggleButtonGroup,
-} from "@mui/material"
-import { FC } from "react"
-import { useController } from "react-hook-form"
-import { InputProps, Option } from "../../lib/types"
+} from '@mui/material'
+import { FC } from 'react'
+import { useController } from 'react-hook-form'
+import { generateSlug } from '../../lib/misc'
+import { InputProps, Option } from '../../lib/types'
 
 const ButtonGroupInput: FC<Props> = ({
   options,
@@ -22,7 +22,7 @@ const ButtonGroupInput: FC<Props> = ({
   onChange,
 }) => {
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -50,7 +50,7 @@ const ButtonGroupInput: FC<Props> = ({
         }}
       >
         {options.map((o) => (
-          <ToggleButton sx={{ width: "100%" }} key={o.value} value={o.value}>
+          <ToggleButton sx={{ width: '100%' }} key={o.value} value={o.value}>
             {o.label}
           </ToggleButton>
         ))}
@@ -71,6 +71,6 @@ interface Props extends InputProps {
   options: Option[]
   onClick?: (value: string) => void
   value?: string
-  size?: "small" | "medium" | "large"
+  size?: 'small' | 'medium' | 'large'
   readOnly?: boolean
 }

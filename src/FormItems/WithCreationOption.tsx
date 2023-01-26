@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import AddIcon from '@mui/icons-material/Add'
 import { Button, Tooltip } from '@mui/material'
-import React, { FC } from 'react'
+import { FC } from 'react'
 
 export const Wrapper = styled.div`
   display: flex;

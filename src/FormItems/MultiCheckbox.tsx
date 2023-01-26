@@ -5,10 +5,10 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
-} from '@mui/material';
-import { FC, ReactNode } from 'react';
-import { useController } from 'react-hook-form';
-import { InputProps } from '../lib/types';
+} from '@mui/material'
+import { FC, ReactNode } from 'react'
+import { useController } from 'react-hook-form'
+import { InputProps } from '../lib/types'
 
 const MultiCheckbox: FC<Props> = ({
   label,
@@ -19,11 +19,9 @@ const MultiCheckbox: FC<Props> = ({
   subName,
 }) => {
   const formName =
-    typeof index === 'number' && subName
-      ? `${name}[${index}].${subName}`
-      : name;
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
 
-  const { field, fieldState } = useController({ name: formName });
+  const { field, fieldState } = useController({ name: formName })
 
   return (
     <FormControl
@@ -48,7 +46,7 @@ const MultiCheckbox: FC<Props> = ({
                         ? [...field.value, option.value]
                         : field.value.filter((value) => value !== option.value),
                     },
-                  });
+                  })
                 }}
               />
             }
@@ -60,11 +58,11 @@ const MultiCheckbox: FC<Props> = ({
         {fieldState.error ? fieldState.error.message : helperText}
       </FormHelperText>
     </FormControl>
-  );
-};
+  )
+}
 
-export default MultiCheckbox;
+export default MultiCheckbox
 
 interface Props extends InputProps {
-  options: { label: ReactNode; value: any }[];
+  options: { label: ReactNode; value: any }[]
 }

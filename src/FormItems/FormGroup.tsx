@@ -1,5 +1,5 @@
-import { Divider } from "@mui/material"
-import { FC } from "react"
+import { Divider } from '@mui/material'
+import { FC } from 'react'
 
 const FormGroup: FC<Props> = ({ children, hideBottom, hideTop }) => {
   return (

@@ -1,12 +1,12 @@
-import styled from "@emotion/styled"
-import { generateSlug } from "@inventhora/utils"
-import { FormControl, FormLabel } from "@mui/material"
-import { FC } from "react"
-import { useController } from "react-hook-form"
-import DocumentViewer from "../DocumentViewer"
-import ImageViewer from "../ImageViewer"
-import { InputProps } from "../lib/types"
-import FileUpload from "./FileUpload"
+import styled from '@emotion/styled'
+import { FormControl, FormLabel } from '@mui/material'
+import { FC } from 'react'
+import { useController } from 'react-hook-form'
+import DocumentViewer from '../DocumentViewer'
+import ImageViewer from '../ImageViewer'
+import { generateSlug } from '../lib/misc'
+import { InputProps } from '../lib/types'
+import FileUpload from './FileUpload'
 
 const UploadWrapper = styled(FormControl)`
   width: 100%;
@@ -26,7 +26,7 @@ const FileInput: FC<Props> = ({
   getImageUrl,
 }) => {
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 

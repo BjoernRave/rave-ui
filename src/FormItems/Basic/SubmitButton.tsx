@@ -1,6 +1,6 @@
-import { Button, CircularProgress } from "@mui/material"
-import { FC } from "react"
-import { useFormContext } from "react-hook-form"
+import { Button, CircularProgress } from '@mui/material'
+import { FC } from 'react'
+import { useFormContext } from 'react-hook-form'
 
 const SubmitButton: FC<Props> = ({
   children,
@@ -9,9 +9,9 @@ const SubmitButton: FC<Props> = ({
   size,
   style,
   startIcon,
-  type = "submit",
-  variant = "contained",
-  color = "primary",
+  type = 'submit',
+  variant = 'contained',
+  color = 'primary',
   ...rest
 }) => {
   const { formState } = useFormContext()
@@ -20,7 +20,7 @@ const SubmitButton: FC<Props> = ({
       {...rest}
       disabled={disabled || formState.isSubmitting}
       variant={variant}
-      size={size || "medium"}
+      size={size || 'medium'}
       color={color as any}
       style={style}
       onClick={onClick}
@@ -34,7 +34,7 @@ const SubmitButton: FC<Props> = ({
 
 export default SubmitButton
 
-type ButtonSize = "small" | "medium" | "large"
+type ButtonSize = 'small' | 'medium' | 'large'
 
 export interface Props {
   disabled?: boolean
@@ -42,7 +42,7 @@ export interface Props {
   size?: ButtonSize
   style?: any
   startIcon?: any
-  variant?: "text" | "outlined" | "contained"
-  type?: "submit" | "button" | "reset"
+  variant?: 'text' | 'outlined' | 'contained'
+  type?: 'submit' | 'button' | 'reset'
   color?: string
 }

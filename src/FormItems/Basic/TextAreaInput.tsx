@@ -1,8 +1,8 @@
-import { generateSlug } from "@inventhora/utils"
-import { BaseTextFieldProps, TextField } from "@mui/material"
-import { FC } from "react"
-import { useController } from "react-hook-form"
-import { InputProps } from "../../lib/types"
+import { BaseTextFieldProps, TextField } from '@mui/material'
+import { FC } from 'react'
+import { useController } from 'react-hook-form'
+import { generateSlug } from '../../lib/misc'
+import { InputProps } from '../../lib/types'
 
 const TextAreaInput: FC<Props> = ({
   name,
@@ -10,12 +10,12 @@ const TextAreaInput: FC<Props> = ({
   index,
   helperText,
   error,
-  variant = "outlined",
+  variant = 'outlined',
   rows = 4,
   ...rest
 }) => {
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -27,7 +27,7 @@ const TextAreaInput: FC<Props> = ({
       type="text"
       margin="dense"
       size="small"
-      style={{ width: "100%" }}
+      style={{ width: '100%' }}
       multiline
       rows={String(rows)}
       variant={variant as any}
@@ -41,6 +41,6 @@ export default TextAreaInput
 
 export interface Props
   extends InputProps,
-    Omit<BaseTextFieldProps, "name" | "label"> {
+    Omit<BaseTextFieldProps, 'name' | 'label'> {
   rows?: number
 }

@@ -1,15 +1,16 @@
-import { AlertColor } from "@mui/lab"
-import { Dispatch, ReactNode, SetStateAction } from "react"
+import { AlertColor } from '@mui/lab'
+import { Dispatch, ReactNode, SetStateAction } from 'react'
 
-export type Language = "es" | "en" | "de" | "pt"
+export type Language = 'es' | 'en' | 'de' | 'pt'
 
 export interface Option {
   value: any
   label: string
   helperText?: string
+  icon?: any
 }
 
-export type DateFormat = "daytime" | "day" | "time"
+export type DateFormat = 'daytime' | 'day' | 'time'
 
 export interface Amount {
   id: string

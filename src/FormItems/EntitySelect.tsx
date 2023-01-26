@@ -1,5 +1,4 @@
-import styled from "@emotion/styled"
-import { removeFromArray } from "@inventhora/utils"
+import styled from '@emotion/styled'
 import {
   Checkbox,
   FormControl,
@@ -7,11 +6,12 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
-} from "@mui/material"
-import { FC } from "react"
-import { useController } from "react-hook-form"
-import { InputProps, Option } from "../lib/types"
-import { useLocale } from "../LocaleContext"
+} from '@mui/material'
+import { FC } from 'react'
+import { useController } from 'react-hook-form'
+import { removeFromArray } from '../lib/misc'
+import { useLocale } from '../lib/theme'
+import { InputProps, Option } from '../lib/types'
 
 const EntityField = styled.div`
   display: flex;
@@ -33,13 +33,13 @@ const LabelWrapper = styled.div`
 
 const StyledLabel = styled(FormLabel)`
   && {
-    color: ${({ theme }) => theme?.["palette"]?.text.primary};
+    color: ${({ theme }) => theme?.['palette']?.text.primary};
     font-size: 24px;
     font-weight: bolder;
   }
 
   .Mui-disabled {
-    color: ${({ theme }) => theme?.["palette"]?.text.disabled};
+    color: ${({ theme }) => theme?.['palette']?.text.disabled};
   }
 
   .Mui-focused {
@@ -57,7 +57,7 @@ const EntitySelect: FC<Props> = ({
   index,
 }) => {
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
   const { locales } = useLocale()
   const { field } = useController({ name: formName })
 
@@ -96,7 +96,7 @@ const EntitySelect: FC<Props> = ({
       <LabelWrapper>
         <StyledLabel>{label}</StyledLabel>
         <FormControlLabel
-          style={{ marginLeft: "10px" }}
+          style={{ marginLeft: '10px' }}
           label={
             options.every((val) => field.value.includes(val.value))
               ? locales.unselectAll
@@ -113,7 +113,7 @@ const EntitySelect: FC<Props> = ({
       <FormGroup>
         {options.map((innerValue) => (
           <EntityField
-            style={innerValue.helperText ? { margin: "10px 0" } : {}}
+            style={innerValue.helperText ? { margin: '10px 0' } : {}}
             key={innerValue.label}
           >
             <FormControlLabel

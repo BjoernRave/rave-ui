@@ -1,17 +1,17 @@
-import { generateSlug } from '@inventhora/utils';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import VisibilityIcon from '@mui/icons-material/Visibility'
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
 import {
   BaseTextFieldProps,
   IconButton,
   InputAdornment,
   TextField,
   Tooltip,
-} from '@mui/material';
-import { FC, useState } from 'react';
-import { useController } from 'react-hook-form';
-import { InputProps } from '../../lib/types';
-import { useLocale } from '../../LocaleContext';
+} from '@mui/material'
+import { FC, useState } from 'react'
+import { useController } from 'react-hook-form'
+import { generateSlug } from '../../lib/misc'
+import { useLocale } from '../../lib/theme'
+import { InputProps } from '../../lib/types'
 
 const PasswordInput: FC<Props> = ({
   name,
@@ -23,15 +23,13 @@ const PasswordInput: FC<Props> = ({
   variant = 'outlined',
   ...rest
 }) => {
-  const { locales } = useLocale();
+  const { locales } = useLocale()
 
   const formName =
-    typeof index === 'number' && subName
-      ? `${name}[${index}].${subName}`
-      : name;
-  const [showPassword, setShowPassword] = useState(false);
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+  const [showPassword, setShowPassword] = useState(false)
 
-  const { field, fieldState } = useController({ name: formName });
+  const { field, fieldState } = useController({ name: formName })
 
   return (
     <TextField
@@ -65,10 +63,10 @@ const PasswordInput: FC<Props> = ({
         ),
       }}
     />
-  );
-};
+  )
+}
 
-export default PasswordInput;
+export default PasswordInput
 
 export interface Props
   extends InputProps,

@@ -1,12 +1,5 @@
-import styled from "@emotion/styled"
-import {
-  generateSlug,
-  getErrorMessage,
-  getObjectKeyByString,
-  isServer,
-  removeFromObjectArray,
-} from "@inventhora/utils"
-import CancelIcon from "@mui/icons-material/Cancel"
+import styled from '@emotion/styled'
+import CancelIcon from '@mui/icons-material/Cancel'
 import {
   CircularProgress,
   FormControl,
@@ -15,14 +8,21 @@ import {
   IconButton,
   Paper,
   Tooltip,
-} from "@mui/material"
-import { ColumnDef } from "@tanstack/react-table"
-import { FC, useEffect, useMemo } from "react"
-import { useController } from "react-hook-form"
-import Infos from "../Infos"
-import { InputProps } from "../lib/types"
-import { useLocale } from "../LocaleContext"
-import Table from "../Table"
+} from '@mui/material'
+import { ColumnDef } from '@tanstack/react-table'
+import { FC, useEffect, useMemo } from 'react'
+import { useController } from 'react-hook-form'
+import Infos from '../Infos'
+import {
+  generateSlug,
+  getErrorMessage,
+  getObjectKeyByString,
+  isServer,
+  removeFromObjectArray,
+} from '../lib/misc'
+import { useLocale } from '../lib/theme'
+import { InputProps } from '../lib/types'
+import Table from '../Table'
 
 const SelectedWrapper = styled(Paper)`
   display: flex;
@@ -61,12 +61,12 @@ const Selection = ({ columns, onDelete, value }) => {
   const isMobile =
     !isServer &&
     window.matchMedia &&
-    window.matchMedia("(max-width: 767px)").matches
+    window.matchMedia('(max-width: 767px)').matches
 
   if (isMobile) {
     return (
       <MobileSelectedWrapper>
-        <Tooltip title={locales.remove}>
+        <Tooltip title={locales.delete}>
           <IconButton
             style={{ marginLeft: 20 }}
             onClick={() => onDelete(value)}
@@ -79,7 +79,7 @@ const Selection = ({ columns, onDelete, value }) => {
           infos={columns.map((column) => ({
             name: column.Header,
             value:
-              typeof column.accessor === "string"
+              typeof column.accessor === 'string'
                 ? getObjectKeyByString(value, column.accessor)
                 : column.accessor(value),
           }))}
@@ -92,15 +92,15 @@ const Selection = ({ columns, onDelete, value }) => {
     <SelectedWrapper>
       {columns.map((column) => (
         <SelectedText key={column.Header}>
-          <span style={{ fontWeight: "bold", marginBottom: 10 }}>
+          <span style={{ fontWeight: 'bold', marginBottom: 10 }}>
             {column.Header}
           </span>
-          {typeof column.accessor === "string"
+          {typeof column.accessor === 'string'
             ? getObjectKeyByString(value, column.accessor)
             : column.accessor(value)}
         </SelectedText>
       ))}
-      <Tooltip title={locales.remove}>
+      <Tooltip title={locales.delete}>
         <IconButton
           style={{ marginLeft: 20 }}
           onClick={() => onDelete(value)}
@@ -127,7 +127,7 @@ const TableInput: FC<Props> = ({
   withSearch,
 }) => {
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -158,7 +158,7 @@ const TableInput: FC<Props> = ({
 
   return (
     <FormControl
-      style={{ width: "100%", display: "grid" }}
+      style={{ width: '100%', display: 'grid' }}
       error={Boolean(fieldState.error)}
       required={required}
     >
@@ -178,7 +178,7 @@ const TableInput: FC<Props> = ({
             onDelete={(v) =>
               field.onChange({
                 target: {
-                  value: removeFromObjectArray(field.value, "id", v.id),
+                  value: removeFromObjectArray(field.value, 'id', v.id),
                 },
               })
             }
@@ -189,10 +189,10 @@ const TableInput: FC<Props> = ({
       {!Boolean(options) ? (
         <div
           style={{
-            display: "flex",
-            width: "100%",
-            alignItems: "center",
-            margin: "10px 0",
+            display: 'flex',
+            width: '100%',
+            alignItems: 'center',
+            margin: '10px 0',
           }}
         >
           <CircularProgress />
@@ -202,7 +202,7 @@ const TableInput: FC<Props> = ({
           <Table
             labelledBy={`${generateSlug(name)}-input`}
             withSearch={withSearch}
-            style={{ margin: "10px 0" }}
+            style={{ margin: '10px 0' }}
             maxHeight={400}
             onRowClick={(row: any) =>
               field.onChange({

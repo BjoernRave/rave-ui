@@ -1,15 +1,15 @@
-import { generateSlug } from "@inventhora/utils"
-import { BaseTextFieldProps, TextField } from "@mui/material"
-import { FC } from "react"
-import { useController } from "react-hook-form"
-import { InputProps } from "../../lib/types"
+import { BaseTextFieldProps, TextField } from '@mui/material'
+import { FC } from 'react'
+import { useController } from 'react-hook-form'
+import { generateSlug } from '../../lib/misc'
+import { InputProps } from '../../lib/types'
 
 const TextInput: FC<Props> = ({
   name,
   index,
   subName,
   helperText,
-  variant = "outlined",
+  variant = 'outlined',
   style,
   onChange,
   error,
@@ -17,7 +17,7 @@ const TextInput: FC<Props> = ({
   ...rest
 }) => {
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -36,7 +36,7 @@ const TextInput: FC<Props> = ({
         field.onChange(e)
         onChange && onChange(e.target.value)
       }}
-      style={style ?? { width: "100%" }}
+      style={style ?? { width: '100%' }}
       variant={variant as any}
       helperText={fieldState.error ? fieldState.error.message : helperText}
       error={Boolean(fieldState.error) || error}
@@ -48,7 +48,7 @@ export default TextInput
 
 export interface Props
   extends InputProps,
-    Omit<BaseTextFieldProps, "name" | "label"> {
+    Omit<BaseTextFieldProps, 'name' | 'label'> {
   InputProps?: any
 
   maxLength?: number

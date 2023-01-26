@@ -1,14 +1,14 @@
-import { generateSlug } from '@inventhora/utils';
-import { Autocomplete, Checkbox, CircularProgress } from '@mui/material';
-import TextField from '@mui/material/TextField';
+import { Autocomplete, Checkbox, CircularProgress } from '@mui/material'
+import TextField from '@mui/material/TextField'
 import {
   createFilterOptions,
   FilterOptionsState,
-} from '@mui/material/useAutocomplete';
-import { darken, lighten, styled } from '@mui/system';
-import { FC } from 'react';
-import { useController } from 'react-hook-form';
-import { InputProps } from '../../lib/types';
+} from '@mui/material/useAutocomplete'
+import { darken, lighten, styled } from '@mui/system'
+import { CSSProperties, FC } from 'react'
+import { useController } from 'react-hook-form'
+import { generateSlug } from '../../lib/misc'
+import { InputProps } from '../../lib/types'
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -20,13 +20,13 @@ const GroupHeader = styled('div')(({ theme }) => ({
     theme.palette.mode === 'light'
       ? lighten(theme.palette.primary.light, 0.85)
       : darken(theme.palette.primary.main, 0.8),
-}));
+}))
 
 const GroupItems = styled('ul')({
   padding: 0,
-});
+})
 
-const filter = createFilterOptions();
+const filter = createFilterOptions()
 
 const ComboBox: FC<Props> = ({
   options,
@@ -52,12 +52,10 @@ const ComboBox: FC<Props> = ({
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName
-      ? `${name}[${index}].${subName}`
-      : name;
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
 
-  const { field, fieldState } = useController({ name: formName });
-  const isLoading = !disabled && (loading || !Array.isArray(options));
+  const { field, fieldState } = useController({ name: formName })
+  const isLoading = !disabled && (loading || !Array.isArray(options))
 
   return (
     <Autocomplete
@@ -68,16 +66,16 @@ const ComboBox: FC<Props> = ({
       {...rest}
       value={field.value ? field.value : multiple ? [] : null}
       onChange={(_, value) => {
-        onChange && onChange(value);
+        onChange && onChange(value)
         if (onCreate && value && value.inputValue) {
-          onCreate(value.inputValue);
+          onCreate(value.inputValue)
         } else {
-          field.onChange({ target: { value: value || '' } });
+          field.onChange({ target: { value: value || '' } })
         }
       }}
       onInputChange={(_e, value) => {
         if (freeSolo) {
-          field.onChange({ target: { value: value || '' } });
+          field.onChange({ target: { value: value || '' } })
         }
       }}
       selectOnFocus
@@ -102,10 +100,10 @@ const ComboBox: FC<Props> = ({
           ? filterOptions
           : (options, params) => {
               if (freeSolo) {
-                params.inputValue = field.value ? field.value : '';
+                params.inputValue = field.value ? field.value : ''
               }
 
-              const filtered = filter(options, params);
+              const filtered = filter(options, params)
 
               if (
                 onCreate &&
@@ -115,10 +113,10 @@ const ComboBox: FC<Props> = ({
                 filtered.push({
                   inputValue: params.inputValue,
                   inputTitle: `Add "${params.inputValue}"`,
-                });
+                })
               }
 
-              return filtered;
+              return filtered
             }
       }
       groupBy={groupBy}
@@ -155,23 +153,24 @@ const ComboBox: FC<Props> = ({
         />
       )}
     />
-  );
-};
+  )
+}
 
-export default ComboBox;
+export default ComboBox
 
 export interface Props extends InputProps {
-  freeSolo?: boolean;
-  getOptionLabel: (option: any) => string;
-  options: any[];
-  disabled?: boolean;
-  onCreate?: (input: string) => void;
-  autoFocus?: boolean;
-  onChange?: (value?: any) => void;
-  loading?: boolean;
-  filterOptions?: (options: any[], state: FilterOptionsState<any>) => any[];
-  readOnly?: boolean;
-  multiple?: boolean;
-  groupBy?: (option: any) => string;
-  isOptionEqualToValue?: (option: any, value: any) => boolean;
+  freeSolo?: boolean
+  getOptionLabel: (option: any) => string
+  options: any[]
+  disabled?: boolean
+  onCreate?: (input: string) => void
+  autoFocus?: boolean
+  onChange?: (value?: any) => void
+  loading?: boolean
+  filterOptions?: (options: any[], state: FilterOptionsState<any>) => any[]
+  readOnly?: boolean
+  multiple?: boolean
+  groupBy?: (option: any) => string
+  isOptionEqualToValue?: (option: any, value: any) => boolean
+  style?: CSSProperties
 }

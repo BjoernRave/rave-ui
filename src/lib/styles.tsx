@@ -1,6 +1,6 @@
-import styled from '@emotion/styled';
-import { Button, CircularProgress, Container, Paper } from '@mui/material';
-import { FC, ReactNode } from 'react';
+import styled from '@emotion/styled'
+import { Button, CircularProgress, Container, Paper } from '@mui/material'
+import { FC, ReactNode } from 'react'
 
 export const Loader = styled(CircularProgress)`
   position: fixed;
@@ -13,18 +13,18 @@ export const Loader = styled(CircularProgress)`
     top: 5px;
     left: 80px;
   }
-`;
+`
 
 export const Title = styled.h1`
   margin: 0;
-`;
+`
 
 export const Header = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   margin-bottom: 10px;
-`;
+`
 
 export const SameLine = styled.div`
   display: inline-flex;
@@ -47,12 +47,12 @@ export const SameLine = styled.div`
       }
     }
   }
-`;
+`
 
 export const BoldText = styled.span`
   font-weight: bold;
   margin-right: 5px;
-`;
+`
 
 const InfoWrapper = styled.li`
   list-style: none;
@@ -64,28 +64,28 @@ const InfoWrapper = styled.li`
   svg {
     margin-right: 5px;
   }
-`;
+`
 
 export const Info: FC<{
-  name: string;
-  value: string | ReactNode;
-  Icon?: any;
+  name: string
+  value: string | ReactNode
+  Icon?: any
 }> = ({ name, value, Icon }) => {
-  if (!value) return null;
+  if (!value) return null
 
   return (
     <InfoWrapper>
       {Icon && <Icon />}
       {name}: <BoldText>{' ' + value}</BoldText>
     </InfoWrapper>
-  );
-};
+  )
+}
 
 export const PageWrapper: FC<{
-  title: string;
-  maxWidth?: string;
-  actionLabel?: ReactNode;
-  onClick?: () => void;
+  title: string
+  maxWidth?: string
+  actionLabel?: ReactNode
+  onClick?: () => void
 }> = ({ children, title, maxWidth = 'md', actionLabel, onClick }) => {
   return (
     <Container maxWidth={maxWidth as any}>
@@ -103,5 +103,5 @@ export const PageWrapper: FC<{
         {children}
       </Paper>
     </Container>
-  );
-};
+  )
+}

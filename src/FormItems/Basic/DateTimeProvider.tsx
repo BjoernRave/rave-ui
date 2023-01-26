@@ -4,7 +4,7 @@ import deLocale from 'date-fns/locale/de'
 import enLocale from 'date-fns/locale/en-US'
 import esLocale from 'date-fns/locale/es'
 import ptLocale from 'date-fns/locale/pt'
-import React, { FC } from 'react'
+import { FC } from 'react'
 import { Language } from '../../lib/types'
 
 const localeMap = {

@@ -1,5 +1,7 @@
 {
   "cancel": "Abbrechen",
+  "update": "Aktualisieren",
+  "create": "Erstellen",
   "importUploadDrop": "Verschiebe das Bild hierher ...",
   "importFileFormatError": "Die Datei hat nicht das richtige Format",
   "importUploadInfo": "Füge ein Bild per Drag 'n' Drop hinzu oder indem du hier klickst.",
@@ -10,5 +12,18 @@
   "prefix": "Vorwahl",
   "add": "Hinzufügen",
   "noRecords": "Keine Einträge",
-  "save": "Speichern"
+  "save": "Speichern",
+  "toggleDarkMode": "Toggle Dark Modus",
+  "supportedFormats": "Unterstützte Formate",
+  "hidePassword": "Passwort ausblenden",
+  "showPassword": "Passwort anzeigen",
+  "showDocument": "Dokument anzeigen",
+  "downloadDocument": "Dokument herunterladen",
+  "deleteDocument": "Dokument löschen",
+  "back": "Zurück",
+  "forward": "Vorwärts",
+  "search": "Suche",
+  "clear": "Löschen",
+  "unselectAll": "Alle abwählen",
+  "selectAll": "Alle auswählen"
 }

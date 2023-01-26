@@ -12,5 +12,18 @@
   "prefix": "Vorwahl",
   "add": "Hinzufügen",
   "noRecords": "Keine Einträge",
-  "save": "Save"
+  "save": "Save",
+  "toggleDarkMode": "Toggle Dark Mode",
+  "supportedFormats": "Supported Formats",
+  "hidePassword": "Hide Password",
+  "showPassword": "Show Password",
+  "showDocument": "Show Document",
+  "downloadDocument": "Download Document",
+  "deleteDocument": "Delete Document",
+  "back": "Back",
+  "forward": "Forward",
+  "search": "Search",
+  "clear": "Clear",
+  "unselectAll": "Unselect All",
+  "selectAll": "Select All"
 }

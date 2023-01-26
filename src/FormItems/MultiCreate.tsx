@@ -1,8 +1,7 @@
-import styled from '@emotion/styled';
-import { generateSlug, getErrorMessage } from '@inventhora/utils';
-import PlusIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import styled from '@emotion/styled'
+import PlusIcon from '@mui/icons-material/Add'
+import DeleteIcon from '@mui/icons-material/Delete'
+import EditIcon from '@mui/icons-material/Edit'
 import {
   Button,
   Dialog,
@@ -14,14 +13,15 @@ import {
   FormLabel,
   IconButton,
   Tooltip,
-} from '@mui/material';
-import { FC, useMemo, useState } from 'react';
-import { useController, useFormContext, useWatch } from 'react-hook-form';
-import { ZodSchema } from 'zod';
-import { useLocale } from '../LocaleContext';
-import Table from '../Table';
+} from '@mui/material'
+import { FC, useMemo, useState } from 'react'
+import { useController, useFormContext, useWatch } from 'react-hook-form'
+import { ZodSchema } from 'zod'
+import { generateSlug, getErrorMessage } from '../lib/misc'
+import { useLocale } from '../lib/theme'
+import Table from '../Table'
 
-import SubmitButton from './Basic/SubmitButton';
+import SubmitButton from './Basic/SubmitButton'
 
 const StyledDialogContent = styled(DialogContent)`
   > *:not(label) {
@@ -38,24 +38,24 @@ const StyledDialogContent = styled(DialogContent)`
   @media (min-width: 767px) {
     min-width: 767px;
   }
-`;
+`
 
 const HelperText = styled.span`
   align-self: flex-start;
   color: ${({ theme }) => theme?.['palette']?.text.secondary};
-`;
+`
 
 const StyledButton = styled(Button)`
   @media (max-width: 767px) {
     width: 50%;
   }
-`;
+`
 
 const StyledSubmit = styled(SubmitButton)`
   @media (max-width: 767px) {
     width: 50%;
   }
-`;
+`
 
 const CreateButton = styled(Button)`
   align-self: flex-start;
@@ -65,7 +65,7 @@ const CreateButton = styled(Button)`
     padding: 20px;
     width: 100% !important;
   }
-`;
+`
 
 const MultiCreate: FC<Props> = ({
   children,
@@ -82,83 +82,83 @@ const MultiCreate: FC<Props> = ({
   required,
   initialValues,
 }) => {
-  const { locales } = useLocale();
-  const [isCreating, setIsCreating] = useState(false);
-  const [isUpdating, setIsUpdating] = useState('');
+  const { locales } = useLocale()
+  const [isCreating, setIsCreating] = useState(false)
+  const [isUpdating, setIsUpdating] = useState('')
 
-  const { setError } = useFormContext();
-  const { field, fieldState } = useController({ name });
+  const { setError } = useFormContext()
+  const { field, fieldState } = useController({ name })
 
-  const value = useWatch({ name });
+  const value = useWatch({ name })
 
   const tableData = useMemo(() => {
     if (isCreating) {
-      const data = Array.from(value);
-      data.pop();
-      return data;
+      const data = Array.from(value)
+      data.pop()
+      return data
     } else {
-      return value;
+      return value
     }
-  }, [isCreating, value]);
+  }, [isCreating, value])
 
   const handleClose = () => {
     if (isCreating) {
-      const newArray = Array.from(value);
-      newArray.pop();
-      field.onChange({ target: { value: newArray } });
+      const newArray = Array.from(value)
+      newArray.pop()
+      field.onChange({ target: { value: newArray } })
 
-      setIsCreating(false);
+      setIsCreating(false)
     } else {
-      const validateRes = validate && validate(value[isUpdating]);
+      const validateRes = validate && validate(value[isUpdating])
 
       if (validateRes) {
-        return setError(`${name}[${isUpdating}]`, validateRes);
+        return setError(`${name}[${isUpdating}]`, validateRes)
       }
 
-      const result: any = schema.safeParse(value[isUpdating]);
+      const result: any = schema.safeParse(value[isUpdating])
 
       if (result.success) {
-        setIsUpdating('');
+        setIsUpdating('')
       } else {
-        console.log('multi errors', result.error.issues);
+        console.log('multi errors', result.error.issues)
         for (const error of result.error.issues) {
           setError(`${name}[${isUpdating}].${error.path[0]}`, {
             message: error.message,
             type: 'custom',
-          });
+          })
         }
       }
     }
-  };
+  }
 
   const handleSubmit = () => {
-    const index = isCreating ? value.length - 1 : isUpdating;
+    const index = isCreating ? value.length - 1 : isUpdating
 
-    const validateRes = validate && validate(value[index]);
+    const validateRes = validate && validate(value[index])
 
     if (validateRes) {
-      return setError(`${name}[${index}]`, validateRes);
+      return setError(`${name}[${index}]`, validateRes)
     }
 
-    const result: any = schema.safeParse(value[index]);
+    const result: any = schema.safeParse(value[index])
 
     if (result.success) {
       if (isCreating) {
-        setIsCreating(false);
+        setIsCreating(false)
       } else {
-        setIsUpdating('');
+        setIsUpdating('')
       }
     } else {
-      console.log(result.error.issues);
+      console.log(result.error.issues)
       for (const error of result.error.issues) {
-        console.log(`${name}[${index}].${error.path[0]}`);
+        console.log(`${name}[${index}].${error.path[0]}`)
         setError(`${name}[${index}].${error.path[0]}`, {
           message: error.message,
           type: 'custom',
-        });
+        })
       }
     }
-  };
+  }
 
   return (
     <div style={{ width: '100%' }}>
@@ -184,15 +184,15 @@ const MultiCreate: FC<Props> = ({
                       <Tooltip title={locales.edit}>
                         <IconButton
                           onClick={() => {
-                            const newArray = Array.from(tableData);
+                            const newArray = Array.from(tableData)
 
-                            const item = newArray.splice(row.index, 1);
+                            const item = newArray.splice(row.index, 1)
 
-                            newArray.push(item[0]);
+                            newArray.push(item[0])
 
-                            field.onChange({ target: { value: newArray } });
+                            field.onChange({ target: { value: newArray } })
 
-                            setIsUpdating(row.index);
+                            setIsUpdating(row.index)
                           }}
                           size="large"
                         >
@@ -202,11 +202,11 @@ const MultiCreate: FC<Props> = ({
                       <Tooltip title={locales.delete}>
                         <IconButton
                           onClick={() => {
-                            const updatedData = Array.from(tableData);
-                            updatedData.splice(row.index, 1);
+                            const updatedData = Array.from(tableData)
+                            updatedData.splice(row.index, 1)
                             field.onChange({
                               target: { value: updatedData },
-                            });
+                            })
                           }}
                           size="large"
                         >
@@ -233,15 +233,15 @@ const MultiCreate: FC<Props> = ({
               : {}
           }
           onClick={() => {
-            setIsCreating(true);
+            setIsCreating(true)
             if (onOpen) {
-              onOpen(value.length);
+              onOpen(value.length)
             } else {
               field.onChange({
                 target: {
                   value: [...value, initialValues ? { ...initialValues } : {}],
                 },
-              });
+              })
             }
           }}
         >
@@ -281,26 +281,26 @@ const MultiCreate: FC<Props> = ({
         </DialogActions>
       </Dialog>
     </div>
-  );
-};
+  )
+}
 
-export default MultiCreate;
+export default MultiCreate
 
 interface Field {
-  name: string;
-  label: string;
+  name: string
+  label: string
 }
 
 export interface Props {
-  fields: Field[];
-  title: string;
-  name: string;
-  formatFunction?: any;
-  helperText?: string;
-  schema: ZodSchema<any>;
-  onOpen?: (index: string) => void;
-  validate?: (values: any) => any;
-  label: string;
-  required?: boolean;
-  initialValues?: any;
+  fields: Field[]
+  title: string
+  name: string
+  formatFunction?: any
+  helperText?: string
+  schema: ZodSchema<any>
+  onOpen?: (index: string) => void
+  validate?: (values: any) => any
+  label: string
+  required?: boolean
+  initialValues?: any
 }

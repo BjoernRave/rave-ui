@@ -1,5 +1,4 @@
-import styled from '@emotion/styled';
-import { generateSlug } from '@inventhora/utils';
+import styled from '@emotion/styled'
 import {
   Button,
   Dialog,
@@ -7,31 +6,32 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
-} from '@mui/material';
+} from '@mui/material'
+import { generateSlug } from './lib/misc'
 
-import { FC, ReactNode } from 'react';
-import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form';
-import Form from './FormItems/Basic/Form';
-import SubmitButton from './FormItems/Basic/SubmitButton';
-import { useLocale } from './LocaleContext';
+import { FC, ReactNode } from 'react'
+import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form'
+import Form from './FormItems/Basic/Form'
+import SubmitButton from './FormItems/Basic/SubmitButton'
+import { useLocale } from './lib/theme'
 
 const StyledDialogContent = styled(DialogContent)`
   @media (min-width: 767px) {
     min-width: 767px;
   }
-`;
+`
 
 const StyledButton = styled(Button)`
   @media (max-width: 767px) {
     width: 50%;
   }
-`;
+`
 
 const StyledSubmit = styled(SubmitButton)`
   @media (max-width: 767px) {
     width: 50%;
   }
-`;
+`
 
 const FormModal: FC<Props> = ({
   isOpen = true,
@@ -48,7 +48,7 @@ const FormModal: FC<Props> = ({
   submitText,
   validate,
 }) => {
-  const { locales } = useLocale();
+  const { locales } = useLocale()
   return (
     <Dialog
       disableEnforceFocus
@@ -85,31 +85,31 @@ const FormModal: FC<Props> = ({
         </StyledDialogContent>
       </Form>
     </Dialog>
-  );
-};
+  )
+}
 
-export default FormModal;
+export default FormModal
 
 interface Props {
-  isOpen?: boolean;
-  onClose: () => void;
-  title: string;
-  description?: string;
-  initialValues: object;
-  validationSchema: any;
+  isOpen?: boolean
+  onClose: () => void
+  title: string
+  description?: string
+  initialValues: object
+  validationSchema: any
   onSubmit: (
     data: Record<string, any>,
     setError: UseFormSetError<Record<string, any>>
-  ) => void;
+  ) => void
   onError?: (
     errors: Partial<
       FieldErrorsImpl<{
-        [x: string]: any;
+        [x: string]: any
       }>
     >
-  ) => void;
-  disabled?: boolean;
-  edit?: boolean;
-  submitText?: ReactNode;
-  validate?: (data: Record<string, any>) => true | { [key: string]: string };
+  ) => void
+  disabled?: boolean
+  edit?: boolean
+  submitText?: ReactNode
+  validate?: (data: Record<string, any>) => true | { [key: string]: string }
 }

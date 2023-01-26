@@ -1804,16 +1804,6 @@
     gud "^1.0.0"
     warning "^4.0.3"
 
-"@inventhora/json-data@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@inventhora/json-data/-/json-data-0.0.2.tgz#3c0f733cd14b82f5763b321c3e66f5bc877a1f3d"
-  integrity sha512-Dt2/71CO7w2oZ1bDcNu9sieST66IM5uENjzStdaBJSXmxxM5GLCHuRzSJFTM3nEBLhsyYnVv05CkLzz5fWyR5A==
-
-"@inventhora/utils@0.0.2":
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/@inventhora/utils/-/utils-0.0.2.tgz#53c177d9eb3e35de4a16547ba05121328402b34a"
-  integrity sha512-vSKKVZXYhKkfyDcuYT8y7HKNIU6Cyk+xCZNvlIyi2hOwmCJyFPol5JqH86qxPL/t5kQVJApO+T2yRu0PTD64lA==
-
 "@istanbuljs/load-nyc-config@^1.0.0":
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/@istanbuljs/load-nyc-config/-/load-nyc-config-1.1.0.tgz#fd3db1d59ecf7cf121e80650bb86712f9b55eced"
@@ -11565,6 +11555,11 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
+prettier-plugin-organize-imports@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/prettier-plugin-organize-imports/-/prettier-plugin-organize-imports-3.2.2.tgz#91993365e017daa5d0d28d8183179834224d8dd1"
+  integrity sha512-e97lE6odGSiHonHJMTYC0q0iLXQyw0u5z/PJpvP/3vRy6/Zi9kLBwFAbEGjDzIowpjQv8b+J04PDamoUSQbzGA==
+
 "prettier@>=2.2.1 <=2.3.0":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.3.0.tgz#b6a5bf1284026ae640f17f7ff5658a7567fc0d18"
@@ -11574,6 +11569,11 @@ prettier@^2.8.1:
   version "2.8.1"
   resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.1.tgz#4e1fd11c34e2421bc1da9aea9bd8127cd0a35efc"
   integrity sha512-lqGoSJBQNJidqCHE80vqZJHWHRFoNYsSpP9AjFhlhi9ODCJA541svILes/+/1GM3VaL/abZi7cpFzOpdR9UPKg==
+
+prettier@^2.8.3:
+  version "2.8.3"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-2.8.3.tgz#ab697b1d3dd46fb4626fbe2f543afe0cc98d8632"
+  integrity sha512-tJ/oJ4amDihPoufT5sM0Z1SKEuKay8LfVAMlbbhnnkvt6BUserZylqo2PN+p9KeljLr0OHa2rXHU1T8reeoTrw==
 
 pretty-error@^2.1.1:
   version "2.1.2"

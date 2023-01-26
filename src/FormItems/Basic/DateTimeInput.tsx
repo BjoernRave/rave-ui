@@ -1,11 +1,12 @@
-import { dateTimeFormat, generateSlug } from "@inventhora/utils"
-import { TextField } from "@mui/material"
-import { DateTimePicker } from "@mui/x-date-pickers-pro"
-import { FC } from "react"
-import { useController } from "react-hook-form"
-import { InputProps, Language } from "../../lib/types"
-import { useLocale } from "../../LocaleContext"
-import DateTimeProvider from "./DateTimeProvider"
+import { TextField } from '@mui/material'
+import { DateTimePicker } from '@mui/x-date-pickers-pro'
+import { FC } from 'react'
+import { useController } from 'react-hook-form'
+import { dateTimeFormat } from '../../lib/date'
+import { generateSlug } from '../../lib/misc'
+import { useLocale } from '../../lib/theme'
+import { InputProps, Language } from '../../lib/types'
+import DateTimeProvider from './DateTimeProvider'
 
 const DateTimeInput: FC<Props> = ({
   name,
@@ -20,7 +21,7 @@ const DateTimeInput: FC<Props> = ({
   const { lang } = useLocale()
 
   const formName =
-    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
+    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -48,7 +49,7 @@ const DateTimeInput: FC<Props> = ({
                 fieldState.error ? fieldState.error.message : helperText
               }
               required={required}
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               id={generateSlug(formName)}
             />
           )

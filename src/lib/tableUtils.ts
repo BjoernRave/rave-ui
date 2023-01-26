@@ -1,6 +1,6 @@
-import { FilterFn, SortingFn, sortingFns } from "@tanstack/react-table"
+import { FilterFn, SortingFn, sortingFns } from '@tanstack/react-table'
 
-import { compareItems, rankItem } from "@tanstack/match-sorter-utils"
+import { compareItems, rankItem } from '@tanstack/match-sorter-utils'
 
 // declare module '@tanstack/table-core' {
 //   interface FilterFns {

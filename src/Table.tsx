@@ -1,6 +1,6 @@
-import styled from "@emotion/styled"
-import ClearIcon from "@mui/icons-material/Clear"
-import SearchIcon from "@mui/icons-material/Search"
+import styled from '@emotion/styled'
+import ClearIcon from '@mui/icons-material/Clear'
+import SearchIcon from '@mui/icons-material/Search'
 import {
   IconButton,
   InputAdornment,
@@ -10,17 +10,17 @@ import {
   TableSortLabel,
   TextField,
   Tooltip,
-} from "@mui/material"
-import MaUTable from "@mui/material/Table"
-import TableCell from "@mui/material/TableCell"
-import TableHead from "@mui/material/TableHead"
-import TableRow from "@mui/material/TableRow"
-import { CSSProperties, FC, useMemo } from "react"
-import { Column, Row, useGlobalFilter, useSortBy, useTable } from "react-table"
-import { useLocale } from "./LocaleContext"
+} from '@mui/material'
+import MaUTable from '@mui/material/Table'
+import TableCell from '@mui/material/TableCell'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import { CSSProperties, FC, useMemo } from 'react'
+import { Column, Row, useGlobalFilter, useSortBy, useTable } from 'react-table'
+import { useLocale } from './lib/theme'
 
 const StyledRow = styled(TableRow)<{ hover: boolean }>`
-  cursor: ${({ hover }) => hover && "pointer"};
+  cursor: ${({ hover }) => hover && 'pointer'};
 `
 
 const NoRecords = styled.tr`
@@ -38,7 +38,7 @@ const StyledTableBody = styled(TableBody)`
     tr {
       :nth-of-type(even) {
         background-color: ${({ theme }) =>
-          theme?.["palette"]?.background.default};
+          theme?.['palette']?.background.default};
       }
     }
   }
@@ -47,7 +47,7 @@ const StyledTableBody = styled(TableBody)`
 const StyledCell = styled(TableCell)`
   font-weight: bold !important;
   background-color: ${({ theme }) =>
-    theme?.["palette"]?.background.paper} !important;
+    theme?.['palette']?.background.paper} !important;
 `
 
 const StyledContainer = styled(TableContainer)`
@@ -90,15 +90,15 @@ const Table: FC<Props> = ({
     }
   )
 
-  const array = useMemo(() => new Array(10).fill("blah"), [])
+  const array = useMemo(() => new Array(10).fill('blah'), [])
 
   return (
     <>
       {withSearch && (
         <TextField
-          style={{ width: "100%", margin: "15px 0" }}
+          style={{ width: '100%', margin: '15px 0' }}
           label={locales.search}
-          value={state.globalFilter ?? ""}
+          value={state.globalFilter ?? ''}
           onChange={(e) => setGlobalFilter(e.target.value)}
           InputProps={{
             endAdornment: (
@@ -107,7 +107,7 @@ const Table: FC<Props> = ({
                   <InputAdornment position="end">
                     <Tooltip title={locales.clear}>
                       <IconButton
-                        onClick={() => setGlobalFilter("")}
+                        onClick={() => setGlobalFilter('')}
                         size="large"
                       >
                         <ClearIcon />
@@ -137,10 +137,10 @@ const Table: FC<Props> = ({
                     <TableSortLabel
                       hideSortIcon
                       active={column.isSorted}
-                      direction={column.isSortedDesc ? "desc" : "asc"}
+                      direction={column.isSortedDesc ? 'desc' : 'asc'}
                       {...column.getSortByToggleProps()}
                     >
-                      {column.render("Header")}
+                      {column.render('Header')}
                     </TableSortLabel>
                   </StyledCell>
                 ))}
@@ -175,7 +175,7 @@ const Table: FC<Props> = ({
                     {row.cells.map((cell, ind) => {
                       return (
                         <TableCell key={ind} {...cell.getCellProps()}>
-                          {cell.render("Cell")}
+                          {cell.render('Cell')}
                         </TableCell>
                       )
                     })}
@@ -184,7 +184,7 @@ const Table: FC<Props> = ({
               })}
             </StyledTableBody>
           ) : (
-            <tbody style={{ position: "relative", height: 60 }}>
+            <tbody style={{ position: 'relative', height: 60 }}>
               <NoRecords>
                 <span className="absolute left-0 right-0 text-center">
                   {locales.noRecords}

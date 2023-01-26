@@ -1,10 +1,10 @@
-import styled from "@emotion/styled"
-import ArrowBackIcon from "@mui/icons-material/ArrowBack"
-import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
-import DeleteIcon from "@mui/icons-material/Delete"
-import { Backdrop, IconButton, Tooltip } from "@mui/material"
-import { FC, useState } from "react"
-import { useLocale } from "./LocaleContext"
+import styled from '@emotion/styled'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { Backdrop, IconButton, Tooltip } from '@mui/material'
+import { FC, useState } from 'react'
+import { useLocale } from './lib/theme'
 
 const PreviewsWrapper = styled.div`
   display: flex;
@@ -45,7 +45,7 @@ const ImagePreviewWrapper = styled.div<{ isdeleting: number }>`
   padding: 10px 10px 0 10px;
 
   ::after {
-    content: "";
+    content: '';
     position: absolute;
     width: 100%;
     height: 100%;
