@@ -44,7 +44,7 @@ const Form: FC<Props> = ({
 
   useEffect(() => {
     if (methods.formState.isSubmitted && !methods.formState.isValid) {
-      onError(methods.formState.errors)
+      onError?.(methods.formState.errors)
     }
   }, [methods.formState.submitCount])
 

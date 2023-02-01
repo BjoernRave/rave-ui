@@ -19,15 +19,27 @@ const AppWrapper: FC<Props> = ({
   return (
     <CacheProvider value={emotionCache ? emotionCache : clientSideEmotionCache}>
       <ThemeProvider theme={defaultTheme(locale, withBaseTheme)}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <LocalizationProvider
-            adapterLocale={locale === 'en' ? 'en' : deLocale}
-            dateAdapter={AdapterDateFns}
-          >
-            {children}
-          </LocalizationProvider>
-        </ThemeProvider>
+        {theme ? (
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            <LocalizationProvider
+              adapterLocale={locale === 'en' ? 'en' : deLocale}
+              dateAdapter={AdapterDateFns}
+            >
+              {children}
+            </LocalizationProvider>
+          </ThemeProvider>
+        ) : (
+          <>
+            <CssBaseline />
+            <LocalizationProvider
+              adapterLocale={locale === 'en' ? 'en' : deLocale}
+              dateAdapter={AdapterDateFns}
+            >
+              {children}
+            </LocalizationProvider>
+          </>
+        )}
       </ThemeProvider>
     </CacheProvider>
   )
