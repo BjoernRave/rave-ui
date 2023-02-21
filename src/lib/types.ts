@@ -43,3 +43,10 @@ export interface InputProps {
   required?: boolean
   onChange?: (value: any) => void
 }
+
+export interface Action {
+  label: string
+  onClick: (entry?: any) => void
+  icon?: any
+  isShown?: boolean | ((entry?: any) => boolean)
+}

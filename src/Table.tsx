@@ -2,6 +2,7 @@ import styled from '@emotion/styled'
 import ClearIcon from '@mui/icons-material/Clear'
 import SearchIcon from '@mui/icons-material/Search'
 import {
+  Box,
   IconButton,
   InputAdornment,
   Skeleton,
@@ -15,23 +16,20 @@ import MaUTable from '@mui/material/Table'
 import TableCell from '@mui/material/TableCell'
 import TableHead from '@mui/material/TableHead'
 import TableRow from '@mui/material/TableRow'
-import { CSSProperties, FC, useMemo } from 'react'
-import { Column, Row, useGlobalFilter, useSortBy, useTable } from 'react-table'
+import { visuallyHidden } from '@mui/utils'
+import {
+  ColumnDef,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  Row,
+  SortingState,
+  useReactTable,
+} from '@tanstack/react-table'
+import { CSSProperties, FC, useMemo, useState } from 'react'
 import { useLocale } from './lib/theme'
-
-const StyledRow = styled(TableRow)<{ hover: boolean }>`
-  cursor: ${({ hover }) => hover && 'pointer'};
-`
-
-const NoRecords = styled.tr`
-  font-size: 18px;
-  display: table;
-  position: absolute;
-  margin: 20px auto;
-  left: 0;
-  right: 0;
-  width: 100%;
-`
+import { Action } from './lib/types'
 
 const StyledTableBody = styled(TableBody)`
   @media (max-width: 1023px) {
@@ -44,12 +42,6 @@ const StyledTableBody = styled(TableBody)`
   }
 `
 
-const StyledCell = styled(TableCell)`
-  font-weight: bold !important;
-  background-color: ${({ theme }) =>
-    theme?.['palette']?.background.paper} !important;
-`
-
 const StyledContainer = styled(TableContainer)`
   overflow: auto;
   width: 100%;
@@ -58,52 +50,78 @@ const StyledContainer = styled(TableContainer)`
 const Table: FC<Props> = ({
   columns,
   data,
-  actions,
+  rowActions,
   onRowClick,
-  withSearch,
-  selected,
+  hideSearch,
   maxHeight,
   style,
   labelledBy,
 }) => {
   const { locales } = useLocale()
-  const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows,
-    prepareRow,
-    state,
-    setGlobalFilter,
-  } = useTable(
-    {
-      columns,
-      data: data ?? [],
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [globalFilter, setGlobalFilter] = useState('')
+
+  const populatedColumns: ColumnDef<any>[] = useMemo(() => {
+    if (!rowActions) return columns
+
+    return [
+      ...columns,
+      {
+        id: 'actions',
+        maxSize: 1,
+        size: 1,
+        enableSorting: false,
+        enableGlobalFilter: false,
+        cell: ({ row }) => (
+          <div className="flex">
+            {rowActions.map((action) => (
+              <Tooltip title={action.label} key={action.label}>
+                <IconButton
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    action.onClick(row)
+                  }}
+                >
+                  {action.icon}
+                </IconButton>
+              </Tooltip>
+            ))}
+          </div>
+        ),
+      },
+    ]
+  }, [columns, rowActions])
+
+  const table = useReactTable({
+    data,
+    columns: populatedColumns,
+    state: {
+      sorting,
+      globalFilter,
     },
-    useGlobalFilter,
-    useSortBy,
-    (hooks) => {
-      hooks.allColumns.push((columns) => [
-        ...columns,
-        ...(actions ? actions : []),
-      ])
-    }
-  )
+    onGlobalFilterChange: setGlobalFilter,
+    onSortingChange: setSorting,
+    getCoreRowModel: getCoreRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+  })
 
   const array = useMemo(() => new Array(10).fill('blah'), [])
 
+  const { rows } = table.getRowModel()
+
   return (
     <>
-      {withSearch && (
+      {!hideSearch && (
         <TextField
           style={{ width: '100%', margin: '15px 0' }}
           label={locales.search}
-          value={state.globalFilter ?? ''}
-          onChange={(e) => setGlobalFilter(e.target.value)}
+          value={globalFilter}
+          onChange={(e) => table.setGlobalFilter(e.target.value)}
           InputProps={{
             endAdornment: (
               <>
-                {state.globalFilter && (
+                {globalFilter && (
                   <InputAdornment position="end">
                     <Tooltip title={locales.clear}>
                       <IconButton
@@ -124,72 +142,109 @@ const Table: FC<Props> = ({
         />
       )}
       <StyledContainer style={{ maxHeight, ...style }}>
-        <MaUTable
-          aria-labelledby={labelledBy}
-          stickyHeader
-          {...getTableProps()}
-        >
+        <MaUTable aria-labelledby={labelledBy} stickyHeader>
           <TableHead>
-            {headerGroups.map((headerGroup, ind) => (
-              <TableRow key={ind} {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => (
-                  <StyledCell key={column.id} {...column.getHeaderProps()}>
-                    <TableSortLabel
-                      hideSortIcon
-                      active={column.isSorted}
-                      direction={column.isSortedDesc ? 'desc' : 'asc'}
-                      {...column.getSortByToggleProps()}
+            {table.getHeaderGroups().map((headerGroup, ind) => (
+              <TableRow key={ind}>
+                {headerGroup.headers.map((header) => {
+                  const sortDir = header.column.getIsSorted()
+                  const isSorted = Boolean(sortDir)
+
+                  return (
+                    <TableCell
+                      style={{
+                        fontWeight: 'bold',
+                        width: header.getSize(),
+                        ...(header.column.getCanSort() && {
+                          cursor: 'pointer',
+                          select: 'none',
+                        }),
+                      }}
+                      key={header.id}
+                      colSpan={header.colSpan}
                     >
-                      {column.render('Header')}
-                    </TableSortLabel>
-                  </StyledCell>
-                ))}
+                      {header.isPlaceholder ? null : header.column.getCanSort() ? (
+                        <TableSortLabel
+                          active={isSorted}
+                          direction={isSorted ? (sortDir as any) : 'asc'}
+                          onClick={header.column.getToggleSortingHandler()}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext()
+                          )}
+                          {isSorted ? (
+                            <Box component="span" sx={visuallyHidden}>
+                              {sortDir === 'desc'
+                                ? 'sorted descending'
+                                : 'sorted ascending'}
+                            </Box>
+                          ) : null}
+                        </TableSortLabel>
+                      ) : (
+                        flexRender(
+                          header.column.columnDef.header,
+                          header.getContext()
+                        )
+                      )}
+                    </TableCell>
+                  )
+                })}
               </TableRow>
             ))}
           </TableHead>
           {!Boolean(data) ? (
-            <StyledTableBody {...getTableBodyProps()}>
-              {array.map((row) => (
-                <TableRow key={row.id}>
-                  {columns.map((col, ind) => (
-                    <TableCell key={ind}>
-                      <Skeleton variant="text" />
-                    </TableCell>
-                  ))}
+            <StyledTableBody>
+              {array.map((row, ind) => (
+                <TableRow key={ind}>
+                  {table
+                    .getAllColumns()
+                    .filter((c) => c.getIsVisible())
+                    .map((col, ind) => (
+                      <TableCell key={ind}>
+                        <Skeleton variant="text" />
+                      </TableCell>
+                    ))}
                 </TableRow>
               ))}
             </StyledTableBody>
           ) : rows.length > 0 ? (
-            <StyledTableBody {...getTableBodyProps()}>
+            <StyledTableBody>
               {rows.map((row) => {
-                prepareRow(row)
-
                 return (
-                  <StyledRow
-                    selected={selected === row.id}
-                    hover={Boolean(onRowClick)}
-                    onClick={() => onRowClick && onRowClick(row)}
+                  <TableRow
                     key={row.id}
-                    {...row.getRowProps()}
+                    className={` ${
+                      onRowClick && 'cursor-pointer hover:bg-gray-300'
+                    }`}
+                    onClick={() => onRowClick && onRowClick(row)}
                   >
-                    {row.cells.map((cell, ind) => {
+                    {row.getVisibleCells().map((cell) => {
                       return (
-                        <TableCell key={ind} {...cell.getCellProps()}>
-                          {cell.render('Cell')}
+                        <TableCell key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext()
+                          )}
                         </TableCell>
                       )
                     })}
-                  </StyledRow>
+                  </TableRow>
                 )
               })}
             </StyledTableBody>
           ) : (
-            <tbody style={{ position: 'relative', height: 60 }}>
-              <NoRecords>
-                <span className="absolute left-0 right-0 text-center">
+            <tbody>
+              <TableRow>
+                <TableCell
+                  className="text-lg text-center "
+                  colSpan={
+                    table.getAllColumns().filter((c) => c.getIsVisible()).length
+                  }
+                >
                   {locales.noRecords}
-                </span>
-              </NoRecords>
+                </TableCell>
+              </TableRow>
             </tbody>
           )}
         </MaUTable>
@@ -201,12 +256,11 @@ const Table: FC<Props> = ({
 export default Table
 
 export interface Props {
-  columns: Column<any>[]
-  data: Record<string, any>[]
-  actions?: any
-  onRowClick?: (row: Row) => void
-  selected?: string
-  withSearch?: boolean
+  columns: ColumnDef<any>[]
+  data: any[]
+  rowActions?: Action[]
+  onRowClick?: (row: Row<any>) => void
+  hideSearch?: boolean
   maxHeight?: number
   style?: CSSProperties
   labelledBy?: string

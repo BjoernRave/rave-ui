@@ -1,38 +1,27 @@
-import { withA11y } from '@storybook/addon-a11y';
-import { withKnobs } from '@storybook/addon-knobs';
-import StorybookWrapper from '../.storybook/wrapper';
+import { withRHF } from '../.storybook/withRHF'
+import { Table } from '../src'
+
 export default {
   title: 'Composites',
-  decorators: [StorybookWrapper, withKnobs, withA11y],
-};
+  decorators: [withRHF(false)],
+}
 
-// export const TableStory = (props) => {
-//   const [selected, setSelected] = useState(null);
-
-//   return (
-//     <Table
-//       selected={boolean('Selectable', false) ? selected : undefined}
-//       onRowClick={
-//         boolean('Selectable', false) ? (row) => setSelected(row.id) : null
-//       }
-//       data={
-//         boolean('Has data', true)
-//           ? [
-//               { name: 'Shoe', amount: 10 },
-//               { name: 'Table', amount: 20 },
-//               { name: 'Trouser', amount: 22 },
-//               { name: 'Ball', amount: 19 },
-//             ]
-//           : []
-//       }
-//       columns={[
-//         { accessor: 'name', Header: 'Name' },
-//         { accessor: 'amount', Header: 'Amount' },
-//       ]}
-//       withSearch={boolean('With Search?', true)}
-//     />
-//   );
-// };
+export const TableStory = (props) => {
+  return (
+    <Table
+      data={[
+        { name: 'Shoe', amount: '10' },
+        { name: 'Table', amount: '20' },
+        { name: 'Trouser', amount: '22' },
+        { name: 'Ball', amount: '19' },
+      ]}
+      columns={[
+        { accessorKey: 'name', header: 'Name' },
+        { accessorKey: 'amount', header: 'Amount' },
+      ]}
+    />
+  )
+}
 
 // export const ImageViewerStory = (props) => {
 //   const [images, setImages] = useState<any>([

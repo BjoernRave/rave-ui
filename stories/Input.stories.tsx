@@ -1,13 +1,8 @@
-import { withA11y } from '@storybook/addon-a11y';
-import { boolean, withKnobs } from '@storybook/addon-knobs';
-import React from 'react';
-import { useController } from 'react-hook-form';
-import { withRHF } from '../.storybook/withRHF';
+import { ComponentMeta } from '@storybook/react'
+import { useController } from 'react-hook-form'
+import { withRHF } from '../.storybook/withRHF'
 
-import StorybookWrapper from '../.storybook/wrapper';
 import {
-  ButtonGroup,
-  Checkbox,
   ComboBox,
   DateInput,
   DateTimeInput,
@@ -25,24 +20,12 @@ import {
   TextListInput,
   TimeInput,
   WithCreationOption,
-} from '../src';
+} from '../src'
 
+// More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
 export default {
-  title: 'Inputs',
-  decorators: [
-    StorybookWrapper,
-    withKnobs,
-    withA11y,
-    withRHF(true, {
-      MultiCreateStory: [],
-      DimensionsInput: {},
-      FileInputStory: boolean('Multiple Files?', true) ? [] : null,
-      consumables: [],
-      TableInputStory: [],
-      MultiComboboxStory: [],
-    }),
-  ],
-};
+  decorators: [withRHF(false)],
+} as ComponentMeta<typeof TextInput>
 
 const exampleOptions2: Option[] = [
   {
@@ -53,7 +36,7 @@ const exampleOptions2: Option[] = [
     label: 'Option 2',
     value: 'option2',
   },
-];
+]
 
 const exampleOptions3: Option[] = [
   {
@@ -68,175 +51,140 @@ const exampleOptions3: Option[] = [
     label: 'Option 3',
     value: 'option3',
   },
-];
+]
 
 // By passing optional props to this story, you can control the props of the component when
 // you consume the story in a test.
-export const TextInputStory = (props) => (
+export const TextInputStory = (args) => (
   <TextInput
     name="TextInput"
     label="TextInput"
     helperText="HelperText"
-    error={boolean('Has Error', false)}
-    required={boolean('Required', false)}
+    {...args}
   />
-);
+)
 
-export const NumberInputStory = (props) => (
-  <NumberInput
-    allowDecimals={boolean('Allow Decimals', true)}
-    name="NumberInput"
-    required={boolean('Required', false)}
-    label="NumberInput"
-  />
-);
+export const NumberInputStory = (args) => (
+  <NumberInput name="NumberInput" label="NumberInput" {...args} />
+)
 
-export const PasswordInputStory = (props) => (
+export const PasswordInputStory = (args) => (
   <PasswordInput
     name="PasswordInput"
     label="PasswordInput"
     helperText="HelperText"
-    required={boolean('Required', false)}
+    {...args}
   />
-);
+)
 
-export const EmailInputStory = (props) => (
+export const EmailInputStory = (args) => (
   <EmailInput
     name="EmailInput"
     label="EmailInput"
     helperText="HelperText"
-    required={boolean('Required', false)}
+    {...args}
   />
-);
+)
 
-export const TextListInputStory = (props) => (
+export const TextListInputStory = (args) => (
   <TextListInput
     name="TextListInput"
     label="TextListInput"
     helperText="HelperText"
-    required={boolean('Required', false)}
+    {...args}
   />
-);
+)
 
-export const TextAreaInputStory = (props) => (
+export const TextAreaInputStory = (args) => (
   <TextAreaInput
     name="TextAreaInput"
     label="TextAreaInput"
     helperText="HelperText"
-    required={boolean('Required', false)}
+    {...args}
   />
-);
+)
 
-export const ComboBoxStory = (props) => (
+export const ComboBoxStory = (args) => (
   <ComboBox
-    required={boolean('Required', false)}
     name="ComboboxInput"
     label="ComboboxInput"
     helperText="HelperText"
     options={exampleOptions2}
     getOptionLabel={(option) => option.label}
+    {...args}
   />
-);
+)
 
-export const SelectInputStory = (props) => (
+export const SelectInputStory = (args) => (
   <SelectInput
-    required={boolean('Required', false)}
     name="SelectInput"
     label="SelectInput"
     helperText="HelperText"
     options={exampleOptions2}
+    {...args}
   />
-);
+)
 
-export const DateInputStory = (props) => (
+export const DateInputStory = (args) => (
   <DateInput
     name="DateInput"
     label="DateInput"
     helperText="HelperText"
-    required={boolean('Required', false)}
+    {...args}
   />
-);
-export const TimeInputStory = (props) => (
+)
+export const TimeInputStory = (args) => (
   <TimeInput
     name="TimeInput"
     label="TimeInput"
     helperText="HelperText"
-    required={boolean('Required', false)}
+    {...args}
   />
-);
-export const DateTimeInputStory = (props) => (
+)
+export const DateTimeInputStory = (args) => (
   <DateTimeInput
     name="DateTimeInput"
     label="DateTimeInput"
     helperText="HelperText"
-    required={boolean('Required', false)}
+    {...args}
   />
-);
+)
 
-export const CheckboxStory = (props) => (
-  <Checkbox
-    name="Checkbox"
-    label="Checkbox"
-    helperText="HelperText"
-    required={boolean('Required', false)}
-  />
-);
-
-export const ButtonGroupStory = (props) => (
-  <>
-    <ButtonGroup
-      label="ButtonGroupInput2"
-      name="ButtonGroupInput2"
-      helperText="ButtonGroupHelper2"
-      options={exampleOptions2}
-      required={boolean('Required', false)}
-    />
-    <ButtonGroup
-      label="ButtonGroupInput3"
-      name="ButtonGroupInput3"
-      helperText="ButtonGroupHelper3"
-      options={exampleOptions3}
-      required={boolean('Required', false)}
-    />
-  </>
-);
-
-export const WithCreationOptionStory = (props) => (
+export const WithCreationOptionStory = (args) => (
   <WithCreationOption
     title="CreationOption"
-    canCreate={boolean('Can Create', true)}
     onCreate={() => console.log('creating')}
+    {...args}
   >
     <TextInput label="WithCreationOption" name="WithCreationOption" />
   </WithCreationOption>
-);
+)
 
-// export const DimensionsInputStory = (props) => (
+// export const DimensionsInputStory = (args) => (
 //   <DimensionsInput name='DimensionsInput' lengthUnit='cm' />
 // )
 
-export const PhoneInputStory = (props) => (
+export const PhoneInputStory = (args) => (
   <PhoneInput
     name="PhoneInputStory"
     prefixName="PrefixPhoneInputStory"
     label="PhoneInput"
-    required={boolean('Required', false)}
+    {...args}
   />
-);
+)
 
-export const FileInputStory = (props) => (
+export const FileInputStory = (args) => (
   <FileInput
     getImageUrl={(url) => 'https://test.com'}
     label="FileInputStory"
     onDelete={() => {}}
     onReOrder={() => {}}
-    isImages={boolean('Is Image Upload?', false)}
     name="FileInputStory"
-    multiple={boolean('Multiple Files?', true)}
+    {...args}
   />
-);
+)
 
-// export const WYSIWYGInputStory = (props) => {
+// export const WYSIWYGInputStory = (args) => {
 //   const [value, setValue] = useState('')
 
 //   return (
@@ -245,29 +193,29 @@ export const FileInputStory = (props) => (
 //         onChange={(val) => setValue(val)}
 //         name='WYSIWYGInput'
 //         label='WYSIWYGInput'
-//         required={boolean('Required', false)}
+//
 //       />
 //       <Markdown source={value} />
 //     </>
 //   )
 // }
 
-// export const AddressInputStory = (props) => (
+// export const AddressInputStory = (args) => (
 //   <AddressInput withBilling={boolean('With Billing Address', true)} />
 // )
 
-export const MultiComboboxStory = (props) => (
+export const MultiComboboxStory = (args) => (
   <MultiCombobox
     name="MultiComboboxStory"
     helperText="MultiComboboxHelper"
-    required={boolean('Required', false)}
     label="MultiComboboxStory"
     options={['tag1', 'tag2', 'tag3']}
+    {...args}
   />
-);
+)
 
 const MultiCrateForm = () => {
-  const { field } = useController({ name: 'MultiCreateStory' });
+  const { field } = useController({ name: 'MultiCreateStory' })
 
   return (
     <>
@@ -289,10 +237,10 @@ const MultiCrateForm = () => {
         helperText={'baseAmountHelper'}
       />
     </>
-  );
-};
+  )
+}
 
-// export const MultiCreateStory = (props) => {
+// export const MultiCreateStory = (args) => {
 //   return (
 //     <>
 //       <MultiCreate
@@ -324,7 +272,7 @@ const MultiCrateForm = () => {
 //   );
 // };
 
-// export const TableInputStory = (props) => {
+// export const TableInputStory = (args) => {
 
 //   const columnHelper = createCol
 
@@ -435,4 +383,4 @@ const MultiCrateForm = () => {
 //   );
 // };
 
-export const SubmitButtonStory = (props) => <SubmitButton>Submit</SubmitButton>;
+export const SubmitButtonStory = (args) => <SubmitButton>Submit</SubmitButton>

@@ -124,7 +124,7 @@ const TableInput: FC<Props> = ({
   columns,
   multiple,
   filterWith,
-  withSearch,
+  hideSearch,
 }) => {
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
@@ -201,7 +201,7 @@ const TableInput: FC<Props> = ({
         (multiple || !field.value) && (
           <Table
             labelledBy={`${generateSlug(name)}-input`}
-            withSearch={withSearch}
+            hideSearch={hideSearch}
             style={{ margin: '10px 0' }}
             maxHeight={400}
             onRowClick={(row: any) =>
@@ -234,5 +234,5 @@ interface Props extends InputProps {
   options: any[]
   multiple?: boolean
   filterWith?: string
-  withSearch?: boolean
+  hideSearch?: boolean
 }

@@ -1,8 +1,15 @@
 module.exports = {
-  stories: ['../stories/**/*.stories.@(ts|tsx|js|jsx)'],
-  addons: ['@storybook/addon-links', '@storybook/addon-essentials'],
-  // https://storybook.js.org/docs/react/configure/typescript#mainjs-configuration
-  typescript: {
-    check: false, // type-check stories during Storybook build
+  stories: ['../stories/*.stories.@(js|jsx|ts|tsx)'],
+  addons: [
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-interactions',
+  ],
+  framework: '@storybook/react',
+  reactOptions: {
+    fastRefresh: true,
   },
-};
+  core: {
+    builder: '@storybook/builder-webpack5',
+  },
+}

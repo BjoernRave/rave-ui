@@ -11,8 +11,6 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-  IconButton,
-  Tooltip,
 } from '@mui/material'
 import { FC, useMemo, useState } from 'react'
 import { useController, useFormContext, useWatch } from 'react-hook-form'
@@ -164,57 +162,43 @@ const MultiCreate: FC<Props> = ({
     <div style={{ width: '100%' }}>
       <FormControl
         required={required}
-        style={{ alignSelf: 'flex-start', margin: '20px 0', width: '100%' }}
+        style={{ alignSelf: 'flex-start', margin: '10px 0', width: '100%' }}
       >
         <FormLabel style={{ marginBottom: 10 }}>{label}</FormLabel>
         {tableData?.length > 0 && (
           <>
             <Table
               columns={fields.map((field) => ({
-                accessor: field.name,
-                Header: field.label,
+                accessorKey: field.name,
+                header: field.label,
               }))}
               data={formatFunction ? formatFunction(tableData) : tableData}
-              actions={[
+              rowActions={[
                 {
-                  id: 'actions',
-                  Header: locales.actions,
-                  Cell: ({ row }) => (
-                    <div className="flex">
-                      <Tooltip title={locales.edit}>
-                        <IconButton
-                          onClick={() => {
-                            const newArray = Array.from(tableData)
+                  label: locales.edit,
+                  onClick: (row) => {
+                    const newArray = Array.from(tableData)
 
-                            const item = newArray.splice(row.index, 1)
+                    const item = newArray.splice(row.index, 1)
 
-                            newArray.push(item[0])
+                    newArray.push(item[0])
 
-                            field.onChange({ target: { value: newArray } })
+                    field.onChange({ target: { value: newArray } })
 
-                            setIsUpdating(row.index)
-                          }}
-                          size="large"
-                        >
-                          <EditIcon />
-                        </IconButton>
-                      </Tooltip>
-                      <Tooltip title={locales.delete}>
-                        <IconButton
-                          onClick={() => {
-                            const updatedData = Array.from(tableData)
-                            updatedData.splice(row.index, 1)
-                            field.onChange({
-                              target: { value: updatedData },
-                            })
-                          }}
-                          size="large"
-                        >
-                          <DeleteIcon />
-                        </IconButton>
-                      </Tooltip>
-                    </div>
-                  ),
+                    setIsUpdating(row.index)
+                  },
+                  icon: <EditIcon />,
+                },
+                {
+                  label: locales.delete,
+                  onClick: (row) => {
+                    const updatedData = Array.from(tableData)
+                    updatedData.splice(row.index, 1)
+                    field.onChange({
+                      target: { value: updatedData },
+                    })
+                  },
+                  icon: <DeleteIcon />,
                 },
               ]}
             />

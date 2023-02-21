@@ -44,6 +44,8 @@ const Form: FC<Props> = ({
 
   useEffect(() => {
     if (methods.formState.isSubmitted && !methods.formState.isValid) {
+      console.log(methods.formState.errors)
+
       onError?.(methods.formState.errors)
     }
   }, [methods.formState.submitCount])
@@ -68,6 +70,8 @@ const Form: FC<Props> = ({
           }
 
           e.preventDefault()
+
+          console.log(validation)
 
           Object.keys(validation).forEach((key) => {
             methods.setError(key, { message: validation[key], type: 'custom' })
