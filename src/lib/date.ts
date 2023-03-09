@@ -48,10 +48,12 @@ export const formatDateRelative = ({
   date,
   dateLeft,
   withDays = false,
+  withSeconds,
 }: {
   date: Date
   dateLeft?: Date
   withDays?: boolean
+  withSeconds?: boolean
 }) => {
   if (!date || dateLeft === null) return '-'
 
@@ -66,16 +68,20 @@ export const formatDateRelative = ({
   const minuteDiff = differenceInMinutes(secondDate, date)
 
   if (minuteDiff <= 60) {
-    return `${minuteDiff}m`
+    return `${minuteDiff}m ${
+      withSeconds && secondsDiff % 60 !== 0 ? `${secondsDiff % 60}s` : ''
+    }`
   }
 
   const hourDiff = differenceInHours(secondDate, date)
 
   if (hourDiff <= 24 || !withDays) {
-    return `${hourDiff}h`
+    return `${hourDiff}h ${
+      minuteDiff % 60 !== 0 ? `${minuteDiff % 60}m` : ''
+    } ${withSeconds && secondsDiff % 60 !== 0 ? `${secondsDiff % 60}s` : ''}`
   }
 
   const dayDiff = differenceInDays(secondDate, date)
 
-  return `${dayDiff}d`
+  return `${dayDiff}d ${hourDiff % 24 !== 0 ? `${hourDiff % 24}h` : ''}`
 }

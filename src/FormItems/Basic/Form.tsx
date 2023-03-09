@@ -44,9 +44,9 @@ const Form: FC<Props> = ({
 
   useEffect(() => {
     if (methods.formState.isSubmitted && !methods.formState.isValid) {
-      console.log(methods.formState.errors)
+      console.log(methods.formState.errors, 'from Form component rave-ui')
 
-      onError?.(methods.formState.errors)
+      onError && onError(methods.formState.errors)
     }
   }, [methods.formState.submitCount])
 
@@ -71,7 +71,9 @@ const Form: FC<Props> = ({
 
           e.preventDefault()
 
-          console.log(validation)
+          console.log(validation, 'validation')
+
+          onError && onError(validation as any)
 
           Object.keys(validation).forEach((key) => {
             methods.setError(key, { message: validation[key], type: 'custom' })
