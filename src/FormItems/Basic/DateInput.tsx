@@ -1,9 +1,7 @@
-import { TextField } from '@mui/material'
 import { DatePicker } from '@mui/x-date-pickers-pro'
 import { FC } from 'react'
 import { useController } from 'react-hook-form'
 import { dateFormat } from '../../lib/date'
-import { generateSlug } from '../../lib/misc'
 import { useLocale } from '../../lib/theme'
 import { InputProps, Language } from '../../lib/types'
 import DateTimeProvider from './DateTimeProvider'
@@ -42,23 +40,8 @@ const DateInput: FC<Props> = ({
 
           field.onChange({ target: { value: date } })
         }}
-        mask="__.__.____"
-        inputFormat={dateFormat}
+        format={dateFormat}
         label={label}
-        renderInput={(props) => (
-          <TextField
-            margin="dense"
-            size="small"
-            {...props}
-            error={Boolean(fieldState.error)}
-            helperText={
-              fieldState.error ? fieldState.error.message : helperText
-            }
-            required={required}
-            style={{ width: '100%' }}
-            id={generateSlug(formName)}
-          />
-        )}
       />
     </DateTimeProvider>
   )

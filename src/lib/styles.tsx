@@ -1,6 +1,6 @@
 import styled from '@emotion/styled'
 import { Button, CircularProgress, Container, Paper } from '@mui/material'
-import { FC, ReactNode } from 'react'
+import { FC, PropsWithChildren, ReactNode } from 'react'
 
 export const Loader = styled(CircularProgress)`
   position: fixed;
@@ -81,12 +81,14 @@ export const Info: FC<{
   )
 }
 
-export const PageWrapper: FC<{
-  title: string
-  maxWidth?: string
-  actionLabel?: ReactNode
-  onClick?: () => void
-}> = ({ children, title, maxWidth = 'md', actionLabel, onClick }) => {
+export const PageWrapper: FC<
+  PropsWithChildren<{
+    title: string
+    maxWidth?: string
+    actionLabel?: ReactNode
+    onClick?: () => void
+  }>
+> = ({ children, title, maxWidth = 'md', actionLabel, onClick }) => {
   return (
     <Container maxWidth={maxWidth as any}>
       <Paper sx={{ padding: 4 }}>

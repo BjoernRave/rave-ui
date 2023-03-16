@@ -49,11 +49,16 @@ const ButtonGroupInput: FC<Props> = ({
           }
         }}
       >
-        {options.map((o) => (
-          <ToggleButton sx={{ width: '100%' }} key={o.value} value={o.value}>
-            {o.label}
-          </ToggleButton>
-        ))}
+        {options.map((o) => {
+          const label = typeof o === 'string' ? o : o.label
+          const value = typeof o === 'string' ? o : o.value
+
+          return (
+            <ToggleButton sx={{ width: '100%' }} key={value} value={value}>
+              {label}
+            </ToggleButton>
+          )
+        })}
       </ToggleButtonGroup>
 
       {(helperText || fieldState.error) && (
@@ -68,7 +73,7 @@ const ButtonGroupInput: FC<Props> = ({
 export default ButtonGroupInput
 
 interface Props extends InputProps {
-  options: Option[]
+  readonly options: (Option | string)[]
   onClick?: (value: string) => void
   value?: string
   size?: 'small' | 'medium' | 'large'

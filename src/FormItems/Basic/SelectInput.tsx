@@ -59,17 +59,22 @@ const SelectInput: FC<Props> = ({
             <em>--</em>
           </MenuItem>
         )}
-        {options.map(({ value, label }, ind) => (
-          <MenuItem
-            disabled={Boolean(
-              disabledOptions?.find((option) => option === value)
-            )}
-            key={ind}
-            value={value}
-          >
-            <span dangerouslySetInnerHTML={{ __html: label }} />
-          </MenuItem>
-        ))}
+        {options.map((option, ind) => {
+          const value = typeof option === 'string' ? option : option.value
+          const label = typeof option === 'string' ? option : option.label
+
+          return (
+            <MenuItem
+              disabled={Boolean(
+                disabledOptions?.find((option) => option === value)
+              )}
+              key={ind}
+              value={value}
+            >
+              <span dangerouslySetInnerHTML={{ __html: label }} />
+            </MenuItem>
+          )
+        })}
       </Select>
       <FormHelperText margin="dense">
         {fieldState.error ? fieldState.error.message : helperText}
@@ -83,7 +88,7 @@ export default SelectInput
 export interface Props
   extends InputProps,
     Omit<SelectProps, 'name' | 'label' | 'onChange'> {
-  options: Option[]
+  readonly options: (Option | string)[]
   disabledOptions?: any[]
   allowEmpty?: boolean
 }

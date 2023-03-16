@@ -1,7 +1,11 @@
 import { Divider } from '@mui/material'
-import { FC } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
-const FormGroup: FC<Props> = ({ children, hideBottom, hideTop }) => {
+const FormGroup: FC<PropsWithChildren<Props>> = ({
+  children,
+  hideBottom,
+  hideTop,
+}) => {
   return (
     <>
       {!hideTop && <Divider style={{ marginTop: 30 }} className=" w-full" />}

@@ -5,6 +5,7 @@ import { withRHF } from '../.storybook/withRHF'
 import {
   ComboBox,
   DateInput,
+  DateRangeInput,
   DateTimeInput,
   EmailInput,
   FileInput,
@@ -210,6 +211,15 @@ export const MultiComboboxStory = (args) => (
     helperText="MultiComboboxHelper"
     label="MultiComboboxStory"
     options={['tag1', 'tag2', 'tag3']}
+    {...args}
+  />
+)
+
+export const DateRangeInputStory = (args) => (
+  <DateRangeInput
+    name="DateRangeInputStory"
+    helperText="DateRangeInputHelper"
+    label="DateRangeInputStory"
     {...args}
   />
 )

@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import AddIcon from '@mui/icons-material/Add'
 import { Button, Tooltip } from '@mui/material'
-import { FC } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
 export const Wrapper = styled.div`
   display: flex;
@@ -13,7 +13,7 @@ export const Wrapper = styled.div`
   }
 `
 
-const WithCreationOption: FC<Props> = ({
+const WithCreationOption: FC<PropsWithChildren<Props>> = ({
   children,
   canCreate = true,
   onCreate,

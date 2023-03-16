@@ -1,7 +1,7 @@
 import styled from '@emotion/styled'
 import { Button, Paper } from '@mui/material'
 import Link from 'next/link'
-import { FC, ReactNode } from 'react'
+import { FC, PropsWithChildren, ReactNode } from 'react'
 import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form'
 import Form from './FormItems/Basic/Form'
 import SubmitButton from './FormItems/Basic/SubmitButton'
@@ -27,7 +27,7 @@ const StyledSubmit = styled(SubmitButton)`
   }
 `
 
-const FormPage: FC<Props> = ({
+const FormPage: FC<PropsWithChildren<Props>> = ({
   initialValues,
   validationSchema,
   validate,

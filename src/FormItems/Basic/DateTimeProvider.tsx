@@ -4,7 +4,7 @@ import deLocale from 'date-fns/locale/de'
 import enLocale from 'date-fns/locale/en-US'
 import esLocale from 'date-fns/locale/es'
 import ptLocale from 'date-fns/locale/pt'
-import { FC } from 'react'
+import { FC, PropsWithChildren } from 'react'
 import { Language } from '../../lib/types'
 
 const localeMap = {
@@ -14,9 +14,12 @@ const localeMap = {
   de: deLocale,
 }
 
-const DateTimeProvider: FC<Props> = ({ children, lang }) => {
+const DateTimeProvider: FC<PropsWithChildren<Props>> = ({ children, lang }) => {
   return (
-    <LocalizationProvider locale={localeMap[lang]} dateAdapter={AdapterDateFns}>
+    <LocalizationProvider
+      adapterLocale={localeMap[lang]}
+      dateAdapter={AdapterDateFns}
+    >
       {children}
     </LocalizationProvider>
   )

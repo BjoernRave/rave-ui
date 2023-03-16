@@ -7,7 +7,6 @@ import {
 import { darken, lighten, styled } from '@mui/system'
 import { CSSProperties, FC } from 'react'
 import { useController } from 'react-hook-form'
-import { generateSlug } from '../../lib/misc'
 import { InputProps } from '../../lib/types'
 
 const GroupHeader = styled('div')(({ theme }) => ({
@@ -61,7 +60,6 @@ const ComboBox: FC<Props> = ({
     <Autocomplete
       multiple={multiple}
       readOnly={readOnly}
-      id={generateSlug(formName)}
       style={style ?? { width: '100%' }}
       {...rest}
       value={field.value ? field.value : multiple ? [] : null}

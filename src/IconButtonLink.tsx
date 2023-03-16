@@ -1,8 +1,14 @@
 import { IconButton, Tooltip } from '@mui/material'
 import Link from 'next/link'
-import { FC } from 'react'
+import { FC, PropsWithChildren } from 'react'
 
-const IconButtonLink: FC<Props> = ({ href, as, title, children, onClick }) => {
+const IconButtonLink: FC<PropsWithChildren<Props>> = ({
+  href,
+  as,
+  title,
+  children,
+  onClick,
+}) => {
   return (
     <Link passHref href={href} as={as}>
       <Tooltip title={title}>

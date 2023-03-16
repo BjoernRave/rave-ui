@@ -1,8 +1,8 @@
 import { Button, CircularProgress } from '@mui/material'
-import { FC } from 'react'
+import { FC, PropsWithChildren } from 'react'
 import { useFormContext } from 'react-hook-form'
 
-const SubmitButton: FC<Props> = ({
+const SubmitButton: FC<PropsWithChildren<Props>> = ({
   children,
   disabled,
   onClick,

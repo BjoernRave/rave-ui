@@ -12,7 +12,7 @@ import {
   FormHelperText,
   FormLabel,
 } from '@mui/material'
-import { FC, useMemo, useState } from 'react'
+import { FC, PropsWithChildren, useId, useMemo, useState } from 'react'
 import { useController, useFormContext, useWatch } from 'react-hook-form'
 import { ZodSchema } from 'zod'
 import { generateSlug, getErrorMessage } from '../lib/misc'
@@ -65,13 +65,12 @@ const CreateButton = styled(Button)`
   }
 `
 
-const MultiCreate: FC<Props> = ({
+const MultiCreate: FC<PropsWithChildren<Props>> = ({
   children,
   fields,
   name,
   formatFunction,
   title,
-
   schema,
   helperText,
   onOpen,
@@ -86,7 +85,7 @@ const MultiCreate: FC<Props> = ({
 
   const { setError } = useFormContext()
   const { field, fieldState } = useController({ name })
-
+  const id = useId()
   const value = useWatch({ name })
 
   const tableData = useMemo(() => {
@@ -244,16 +243,13 @@ const MultiCreate: FC<Props> = ({
         open={isCreating || isUpdating !== ''}
         onClose={handleClose}
         id={generateSlug(title)}
-        aria-labelledby={`${generateSlug(title)}-label`}
+        aria-labelledby={id}
         maxWidth="xl"
       >
-        <DialogTitle
-          style={{ paddingBottom: 0 }}
-          id={`${generateSlug(title)}-label`}
-        >
+        <DialogTitle style={{ paddingBottom: 0 }} id={id}>
           {title}
         </DialogTitle>
-        <StyledDialogContent id={`${generateSlug(title)}-content`}>
+        <StyledDialogContent>
           {helperText && <HelperText>{helperText}</HelperText>}
           {children}
         </StyledDialogContent>

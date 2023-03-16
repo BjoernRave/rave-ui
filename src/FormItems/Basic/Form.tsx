@@ -1,7 +1,6 @@
 import styled from '@emotion/styled'
 import { zodResolver } from '@hookform/resolvers/zod'
-import dynamic from 'next/dynamic'
-import { FC, useEffect } from 'react'
+import { FC, PropsWithChildren, useEffect } from 'react'
 import {
   FieldErrorsImpl,
   FormProvider,
@@ -24,9 +23,7 @@ const StyledForm = styled.form`
   align-items: center;
 `
 
-const DevTool = dynamic(() => import('./DevTools'), { ssr: false })
-
-const Form: FC<Props> = ({
+const Form: FC<PropsWithChildren<Props>> = ({
   initialValues,
   children,
   onSubmit,
@@ -80,7 +77,6 @@ const Form: FC<Props> = ({
           })
         }}
       >
-        <DevTool control={methods.control} />
         {children}
         {submitButton && <SubmitButton>{submitText}</SubmitButton>}
       </StyledForm>

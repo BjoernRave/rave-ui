@@ -7,9 +7,8 @@ import {
   DialogContentText,
   DialogTitle,
 } from '@mui/material'
-import { generateSlug } from './lib/misc'
 
-import { FC, ReactNode } from 'react'
+import { FC, PropsWithChildren, ReactNode, useId } from 'react'
 import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form'
 import Form from './FormItems/Basic/Form'
 import SubmitButton from './FormItems/Basic/SubmitButton'
@@ -33,7 +32,7 @@ const StyledSubmit = styled(SubmitButton)`
   }
 `
 
-const FormModal: FC<Props> = ({
+const FormModal: FC<PropsWithChildren<Props>> = ({
   isOpen = true,
   onClose,
   title,
@@ -48,6 +47,8 @@ const FormModal: FC<Props> = ({
   submitText,
   validate,
 }) => {
+  const id = useId()
+
   const { locales } = useLocale()
   return (
     <Dialog
@@ -55,9 +56,9 @@ const FormModal: FC<Props> = ({
       maxWidth="xl"
       open={isOpen}
       onClose={() => onClose()}
-      aria-labelledby={generateSlug(title)}
+      aria-labelledby={id}
     >
-      <DialogTitle id={generateSlug(title)}>{title}</DialogTitle>
+      <DialogTitle id={id}>{title}</DialogTitle>
       <Form
         validate={validate}
         initialValues={initialValues}
@@ -65,7 +66,7 @@ const FormModal: FC<Props> = ({
         onSubmit={onSubmit}
         onError={onError}
       >
-        <StyledDialogContent id={`${generateSlug(title)}-content`}>
+        <StyledDialogContent id={`${id}-content`}>
           {description && <DialogContentText>{description}</DialogContentText>}
           {children}
           <DialogActions>

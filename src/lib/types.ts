@@ -1,4 +1,3 @@
-import { AlertColor } from '@mui/lab'
 import { Dispatch, ReactNode, SetStateAction } from 'react'
 
 export type Language = 'es' | 'en' | 'de' | 'pt'
@@ -21,7 +20,7 @@ export interface Amount {
 
 export interface NotificationType {
   message: string
-  state: AlertColor
+  state: 'success' | 'info' | 'warning' | 'error'
   duration?: number
 }
 

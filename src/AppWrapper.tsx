@@ -3,13 +3,13 @@ import { CssBaseline, ThemeProvider } from '@mui/material'
 import { LocalizationProvider } from '@mui/x-date-pickers-pro'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
 import deLocale from 'date-fns/locale/de'
-import { FC } from 'react'
+import { FC, PropsWithChildren } from 'react'
 import { createEmotionCache } from './lib/misc'
 import { defaultTheme } from './lib/theme'
 
 const clientSideEmotionCache = createEmotionCache()
 
-const AppWrapper: FC<Props> = ({
+const AppWrapper: FC<PropsWithChildren<Props>> = ({
   children,
   emotionCache,
   theme,
@@ -52,5 +52,4 @@ interface Props {
   theme?: any
   locale?: 'en' | 'de'
   withBaseTheme?: boolean
-  children: any
 }
