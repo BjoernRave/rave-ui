@@ -38,6 +38,7 @@ const ComboBox: FC<Props> = ({
   index,
   subName,
   disabled,
+  listItemStyle,
   onCreate,
   autoFocus,
   onChange,
@@ -86,7 +87,7 @@ const ComboBox: FC<Props> = ({
       renderOption={
         multiple
           ? (props, option, { selected }) => (
-              <li {...props}>
+              <li {...props} style={{ ...props?.style, ...listItemStyle }}>
                 <Checkbox style={{ marginRight: 8 }} checked={selected} />
                 {getOptionLabel(option)}
               </li>
@@ -171,4 +172,5 @@ export interface Props extends InputProps {
   groupBy?: (option: any) => string
   isOptionEqualToValue?: (option: any, value: any) => boolean
   style?: CSSProperties
+  listItemStyle?: CSSProperties
 }

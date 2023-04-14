@@ -1,4 +1,4 @@
-import styled from '@emotion/styled'
+import CloseIcon from '@mui/icons-material/Close'
 import {
   Button,
   Dialog,
@@ -6,21 +6,35 @@ import {
   DialogContent,
   DialogContentText,
   DialogTitle,
+  IconButton,
 } from '@mui/material'
-
+import { styled } from '@mui/material/styles'
 import { FC, PropsWithChildren, ReactNode, useId } from 'react'
 import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form'
 import Form from './FormItems/Basic/Form'
 import SubmitButton from './FormItems/Basic/SubmitButton'
 import { useLocale } from './lib/theme'
 
+const BootstrapDialog = styled(Dialog)(({ theme }) => ({
+  '& .MuiDialogContent-root': {
+    padding: theme.spacing(2),
+  },
+  '& .MuiDialogActions-root': {
+    padding: theme.spacing(1),
+  },
+}))
+
 const StyledDialogContent = styled(DialogContent)`
+  width: 100%;
+
   @media (min-width: 767px) {
     min-width: 767px;
   }
 `
 
 const StyledButton = styled(Button)`
+  width: 100%;
+
   @media (max-width: 767px) {
     width: 50%;
   }
@@ -31,6 +45,36 @@ const StyledSubmit = styled(SubmitButton)`
     width: 50%;
   }
 `
+
+export interface DialogTitleProps {
+  id: string
+  children?: React.ReactNode
+  onClose: () => void
+}
+
+function BootstrapDialogTitle(props: DialogTitleProps) {
+  const { children, onClose, ...other } = props
+
+  return (
+    <DialogTitle {...other} className={`flex justify-between w-full `}>
+      {children}
+      {onClose ? (
+        <IconButton
+          aria-label="close"
+          onClick={onClose}
+          sx={{
+            position: 'absolute',
+            right: 8,
+            top: 8,
+            color: (theme) => theme.palette.grey[500],
+          }}
+        >
+          <CloseIcon />
+        </IconButton>
+      ) : null}
+    </DialogTitle>
+  )
+}
 
 const FormModal: FC<PropsWithChildren<Props>> = ({
   isOpen = true,
@@ -51,14 +95,18 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
 
   const { locales } = useLocale()
   return (
-    <Dialog
+    <BootstrapDialog
+      scroll="paper"
       disableEnforceFocus
-      maxWidth="xl"
+      maxWidth="lg"
+      fullWidth
       open={isOpen}
       onClose={() => onClose()}
       aria-labelledby={id}
     >
-      <DialogTitle id={id}>{title}</DialogTitle>
+      <BootstrapDialogTitle onClose={onClose} id={id}>
+        {title}
+      </BootstrapDialogTitle>
       <Form
         validate={validate}
         initialValues={initialValues}
@@ -66,26 +114,26 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
         onSubmit={onSubmit}
         onError={onError}
       >
-        <StyledDialogContent id={`${id}-content`}>
+        <StyledDialogContent dividers id={`${id}-content`}>
           {description && <DialogContentText>{description}</DialogContentText>}
           {children}
-          <DialogActions>
-            <StyledButton
-              variant="text"
-              size="large"
-              type="button"
-              onClick={() => onClose()}
-              color="primary"
-            >
-              {locales.cancel}
-            </StyledButton>
-            <StyledSubmit size="large" disabled={disabled}>
-              {submitText ?? locales.save}
-            </StyledSubmit>
-          </DialogActions>
         </StyledDialogContent>
+        <DialogActions>
+          <StyledButton
+            variant="text"
+            size="large"
+            type="button"
+            onClick={() => onClose()}
+            color="primary"
+          >
+            {locales.cancel}
+          </StyledButton>
+          <StyledSubmit size="large" disabled={disabled}>
+            {submitText ?? locales.save}
+          </StyledSubmit>
+        </DialogActions>
       </Form>
-    </Dialog>
+    </BootstrapDialog>
   )
 }
 

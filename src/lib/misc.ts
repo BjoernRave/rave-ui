@@ -278,7 +278,7 @@ export const getTimeSince = (_fromDate, _toDate, dateStringCap) => {
     ['hour', 1000 * 60 * 60],
     ['minute', 1000 * 60],
     ['second', 1000],
-  ])
+  ] as const)
     if (Math.abs(diff) >= value) {
       const { sign, floor, ceil } = Math
       let result = formatTimeSince.format(
@@ -365,7 +365,7 @@ export const useAdjustedViewport = () => {
   useEffect(() => {
     const handleViewport = () => {
       // We execute the same script as before
-      const vh = window.innerHeight * 0.01
+      const vh = window.innerHeight
       document.documentElement.style.setProperty('--vh', `${vh}px`)
     }
     handleViewport()

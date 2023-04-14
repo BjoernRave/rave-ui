@@ -35,6 +35,7 @@ const FormPage: FC<PropsWithChildren<Props>> = ({
   onSubmit,
   onError,
   edit,
+  title,
   style,
   hideSubmit,
   submitText,
@@ -45,6 +46,7 @@ const FormPage: FC<PropsWithChildren<Props>> = ({
   return (
     <PageWrapper style={style}>
       <StyledPaper elevation={2}>
+        {title && <h1>{title}</h1>}
         <Form
           initialValues={initialValues}
           validationSchema={validationSchema}
@@ -104,4 +106,5 @@ interface Props {
   submitText?: ReactNode
   withRequiredNotice?: boolean
   withCancel?: string
+  title?: string
 }

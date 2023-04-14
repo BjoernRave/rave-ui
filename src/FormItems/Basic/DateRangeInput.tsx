@@ -1,5 +1,5 @@
 import { FormControl, FormHelperText, FormLabel } from '@mui/material'
-import { DateRangeCalendar } from '@mui/x-date-pickers-pro'
+import { DateRangePicker } from '@mui/x-date-pickers-pro'
 import { FC } from 'react'
 import { useController } from 'react-hook-form'
 import { useLocale } from '../../lib/theme'
@@ -21,10 +21,16 @@ const DateRangeInput: FC<Props> = ({
   const { field, fieldState } = useController({ name: formName })
 
   return (
-    <FormControl error={Boolean(fieldState.error)}>
+    <FormControl
+      style={{ width: '100%' }}
+      className="my-2"
+      error={Boolean(fieldState.error)}
+    >
       <FormLabel>{label}</FormLabel>
       <DateTimeProvider lang={lang as Language}>
-        <DateRangeCalendar
+        <DateRangePicker
+          slotProps={{ textField: { size: 'small' } }}
+          className="mt-4"
           onChange={(dateRange) => {
             field.onChange({ target: { value: dateRange } })
             onChange && onChange(dateRange)

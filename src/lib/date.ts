@@ -49,11 +49,13 @@ export const formatDateRelative = ({
   dateLeft,
   withDays = false,
   withSeconds,
+  capAtHour,
 }: {
   date: Date
   dateLeft?: Date
   withDays?: boolean
   withSeconds?: boolean
+  capAtHour?: boolean
 }) => {
   if (!date || dateLeft === null) return '-'
 
@@ -72,6 +74,8 @@ export const formatDateRelative = ({
       withSeconds && secondsDiff % 60 !== 0 ? `${secondsDiff % 60}s` : ''
     }`
   }
+
+  if (capAtHour) return `> 1h`
 
   const hourDiff = differenceInHours(secondDate, date)
 

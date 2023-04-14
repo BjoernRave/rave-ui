@@ -1,16 +1,17 @@
+import type {} from '@mui/lab/themeAugmentation'
 import { createTheme, useTheme } from '@mui/material/styles'
 import deLocales from '../locales/de/common.json'
 import enLocales from '../locales/en/common.json'
 
 declare module '@mui/material/styles' {
   interface Theme {
-    locale: typeof enLocales
-    lang: string
+    locale?: typeof enLocales
+    lang?: string
   }
   // allow configuration using `createTheme`
   interface ThemeOptions {
-    locale: typeof enLocales
-    lang: string
+    locale?: typeof enLocales
+    lang?: string
   }
 }
 
@@ -92,7 +93,23 @@ export const defaultTheme = (locale: string, withBaseTheme: boolean) =>
             },
           },
         },
+
         MuiButton: {
+          defaultProps: {
+            variant: 'contained',
+          },
+          styleOverrides: {
+            root: {
+              borderRadius: '0.5rem',
+              fontWeight: 600,
+              fontSize: '0.75rem',
+            },
+          },
+        },
+        MuiLoadingButton: {
+          defaultProps: {
+            variant: 'contained',
+          },
           styleOverrides: {
             root: {
               borderRadius: '0.5rem',

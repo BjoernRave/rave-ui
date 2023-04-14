@@ -29,7 +29,7 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
         {filteredInfos.map(({ Icon, name, value }) => (
           <TableRow key={name}>
             {Icon && (
-              <TableCell style={{ border: 'none' }}>
+              <TableCell style={{ border: 'none', textAlign: 'left' }}>
                 {' '}
                 <Icon />
               </TableCell>
@@ -39,6 +39,7 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
               style={{
                 border: 'none',
                 paddingRight: '10px',
+                textAlign: 'left',
               }}
             >
               <KeyWrapper>{name}:</KeyWrapper>
@@ -47,7 +48,7 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
               align="left"
               style={{
                 fontSize: 18,
-
+                textAlign: 'left',
                 border: 'none',
                 fontWeight: 'bold',
               }}

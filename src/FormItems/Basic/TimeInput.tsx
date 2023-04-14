@@ -35,6 +35,14 @@ const TimeInput: FC<Props> = ({
         ampm={false}
         format={timeFormat}
         label={label}
+        slotProps={{
+          textField: {
+            style: {
+              width: '100%',
+            },
+            size: 'small',
+          },
+        }}
       />
     </DateTimeProvider>
   )
