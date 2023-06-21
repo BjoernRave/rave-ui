@@ -9,7 +9,7 @@ export interface Option {
   icon?: any
 }
 
-export type DateFormat = 'daytime' | 'day' | 'time'
+export type DateFormat = 'daytime' | 'day' | 'time' | 'apiDate' | 'apiTime'
 
 export interface Amount {
   id: string

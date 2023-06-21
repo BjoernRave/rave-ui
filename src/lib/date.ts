@@ -15,6 +15,10 @@ export const timeFormat = 'HH:mm'
 
 export const dateFormat = 'dd.MM.yyyy'
 
+export const apiDateFormat = 'yyyy-MM-dd'
+
+export const apiTime = 'HH:mm:ss'
+
 export const getDateTimeFormat = (dateString: DateFormat) => {
   switch (dateString) {
     case 'daytime':
@@ -25,6 +29,12 @@ export const getDateTimeFormat = (dateString: DateFormat) => {
 
     case 'time':
       return timeFormat
+
+    case 'apiDate':
+      return apiDateFormat
+
+    case 'apiTime':
+      return apiTime
   }
 }
 

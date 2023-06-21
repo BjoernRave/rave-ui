@@ -1,4 +1,4 @@
-import { DateTimePicker } from '@mui/x-date-pickers-pro'
+import { DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers-pro'
 import { FC } from 'react'
 import { useController } from 'react-hook-form'
 import { dateTimeFormat } from '../../lib/date'
@@ -12,9 +12,9 @@ const DateTimeInput: FC<Props> = ({
   subName,
   label,
   helperText,
-  required,
   onChange,
   disabled,
+  ...props
 }) => {
   const { lang } = useLocale()
 
@@ -26,6 +26,7 @@ const DateTimeInput: FC<Props> = ({
   return (
     <DateTimeProvider lang={lang as Language}>
       <DateTimePicker
+        {...props}
         value={field.value ?? null}
         onChange={(date) => {
           field.onChange({ target: { value: date || null } })
@@ -34,6 +35,14 @@ const DateTimeInput: FC<Props> = ({
         disabled={disabled}
         ampm={false}
         format={dateTimeFormat}
+        slotProps={{
+          textField: {
+            error: Boolean(fieldState.error),
+            helperText: fieldState.error
+              ? fieldState.error.message
+              : helperText,
+          },
+        }}
         label={label}
       />
     </DateTimeProvider>
@@ -42,6 +51,8 @@ const DateTimeInput: FC<Props> = ({
 
 export default DateTimeInput
 
-export interface Props extends InputProps {
+export interface Props
+  extends InputProps,
+    Omit<DateTimePickerProps<any>, 'label' | 'onChange'> {
   disabled?: boolean
 }

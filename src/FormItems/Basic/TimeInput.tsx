@@ -1,4 +1,4 @@
-import { TimePicker } from '@mui/x-date-pickers-pro'
+import { TimePicker, TimePickerProps } from '@mui/x-date-pickers-pro'
 import { FC } from 'react'
 import { useController } from 'react-hook-form'
 import { timeFormat } from '../../lib/date'
@@ -15,6 +15,7 @@ const TimeInput: FC<Props> = ({
   required,
   onChange,
   disabled,
+  ...props
 }) => {
   const { lang } = useLocale()
 
@@ -26,6 +27,7 @@ const TimeInput: FC<Props> = ({
   return (
     <DateTimeProvider lang={lang as Language}>
       <TimePicker
+        {...props}
         value={field.value ?? null}
         onChange={(date) => {
           field.onChange({ target: { value: date || null } })
@@ -41,6 +43,10 @@ const TimeInput: FC<Props> = ({
               width: '100%',
             },
             size: 'small',
+            error: Boolean(fieldState.error),
+            helperText: fieldState.error
+              ? fieldState.error.message
+              : helperText,
           },
         }}
       />
@@ -50,6 +56,8 @@ const TimeInput: FC<Props> = ({
 
 export default TimeInput
 
-export interface Props extends InputProps {
+export interface Props
+  extends InputProps,
+    Omit<TimePickerProps<any>, 'label' | 'onChange'> {
   disabled?: boolean
 }

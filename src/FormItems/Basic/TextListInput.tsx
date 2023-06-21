@@ -31,9 +31,12 @@ const TextListInput: FC<Props> = ({
   helperText,
   style,
   onChange,
+  canAdd,
   required,
   error,
   maxItems = 999,
+  onlyNumbers,
+  allowDecimals,
   ...rest
 }) => {
   const { locales } = useLocale()
@@ -47,6 +50,8 @@ const TextListInput: FC<Props> = ({
   const value = Array.isArray(field.value) ? field.value : []
 
   const handleAdd = () => {
+    if (canAdd && !canAdd(input)) return
+
     if (input && value.length < maxItems) {
       field.onChange({ target: { value: [...value, input] } })
       setInput('')
@@ -89,16 +94,45 @@ const TextListInput: FC<Props> = ({
             </InputAdornment>
           }
           type="text"
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          id={generateSlug(formName)}
           onKeyDown={(e) => {
             if (e.keyCode === 13 && Boolean(input) && value.length < maxItems) {
               e.stopPropagation()
               e.preventDefault()
               handleAdd()
             }
+
+            if (!onlyNumbers) return
+
+            //delete, tab, etc
+            if ([8, 9, 37, 39].includes(e.keyCode)) {
+              return
+            }
+
+            //number keys
+            if (e.keyCode >= 48 && e.keyCode <= 57) {
+              return
+            }
+
+            //numpad
+            if (e.keyCode >= 96 && e.keyCode <= 105) {
+              return
+            }
+
+            if (
+              allowDecimals &&
+              (e.keyCode === 190 || e.keyCode === 188) &&
+              field?.value?.split &&
+              field?.value?.split('.')?.length < 2 &&
+              field?.value?.split(',')?.length < 2
+            ) {
+              return
+            }
+            e.preventDefault()
           }}
+          inputMode={onlyNumbers ? 'numeric' : undefined}
+          value={input}
+          onChange={(e) => setInput(e.target.value)}
+          id={generateSlug(formName)}
         />
         <div>
           {value.map((val, ind) => (
@@ -130,4 +164,7 @@ export interface Props
   extends InputProps,
     Omit<MuiInputProps, 'name' | 'label' | 'onChange'> {
   maxItems?: number
+  canAdd?: (value: string) => boolean
+  onlyNumbers?: boolean
+  allowDecimals?: boolean
 }

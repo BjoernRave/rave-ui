@@ -21,6 +21,8 @@ const PasswordInput: FC<Props> = ({
   error,
   style,
   variant = 'outlined',
+  maxLength,
+  onChange,
   ...rest
 }) => {
   const { locales } = useLocale()
@@ -38,6 +40,13 @@ const PasswordInput: FC<Props> = ({
       id={generateSlug(formName)}
       {...rest}
       {...field}
+      onChange={(e) => {
+        if (maxLength && e.target.value.length > maxLength) {
+          return
+        }
+        field.onChange(e)
+        onChange && onChange(e.target.value)
+      }}
       style={style ?? { width: '100%' }}
       type={showPassword ? 'text' : 'password'}
       variant={variant as any}
@@ -70,4 +79,6 @@ export default PasswordInput
 
 export interface Props
   extends InputProps,
-    Omit<BaseTextFieldProps, 'name' | 'label'> {}
+    Omit<BaseTextFieldProps, 'name' | 'label'> {
+  maxLength?: number
+}
