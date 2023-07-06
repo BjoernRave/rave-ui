@@ -1,3 +1,4 @@
+import { DateRangePickerProps } from '@mui/lab'
 import { FormControl, FormHelperText, FormLabel } from '@mui/material'
 import { DateRangePicker } from '@mui/x-date-pickers-pro'
 import { FC } from 'react'
@@ -13,6 +14,7 @@ const DateRangeInput: FC<Props> = ({
   helperText,
   onChange,
   index,
+  ...props
 }) => {
   const { lang } = useLocale()
   const formName =
@@ -29,8 +31,9 @@ const DateRangeInput: FC<Props> = ({
       <FormLabel>{label}</FormLabel>
       <DateTimeProvider lang={lang as Language}>
         <DateRangePicker
+          {...props}
           slotProps={{ textField: { size: 'small' } }}
-          className="mt-4"
+          className="mt-2"
           onChange={(dateRange) => {
             field.onChange({ target: { value: dateRange } })
             onChange && onChange(dateRange)
@@ -47,4 +50,6 @@ const DateRangeInput: FC<Props> = ({
 
 export default DateRangeInput
 
-interface Props extends InputProps {}
+interface Props
+  extends InputProps,
+    Omit<DateRangePickerProps, 'label' | 'onChange'> {}

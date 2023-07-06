@@ -38,6 +38,7 @@ const ButtonGroupInput: FC<Props> = ({
       <FormLabel htmlFor={id}>{label}</FormLabel>
       <ToggleButtonGroup
         id={id}
+        className="mt-2"
         disabled={readOnly}
         color="primary"
         value={field.value}
