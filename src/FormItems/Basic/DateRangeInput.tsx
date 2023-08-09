@@ -32,7 +32,13 @@ const DateRangeInput: FC<Props> = ({
       <DateTimeProvider lang={lang as Language}>
         <DateRangePicker
           {...props}
-          slotProps={{ textField: { size: 'small' } }}
+          slotProps={{
+            textField: {
+              size: 'small',
+              style: { marginTop: 0 },
+              error: Boolean(fieldState.error),
+            },
+          }}
           className="mt-2"
           onChange={(dateRange) => {
             field.onChange({ target: { value: dateRange } })
