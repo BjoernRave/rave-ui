@@ -13,6 +13,7 @@ const ButtonGroup: FC<Props> = ({
   label,
   helperText,
   value,
+  size,
   className,
   onClick,
 }) => {
@@ -23,6 +24,7 @@ const ButtonGroup: FC<Props> = ({
       {label && <FormLabel htmlFor={id}>{label}</FormLabel>}
       <ToggleButtonGroup
         id={id}
+        size={size}
         color="primary"
         value={value}
         exclusive
@@ -33,7 +35,12 @@ const ButtonGroup: FC<Props> = ({
         }}
       >
         {options.map((o) => (
-          <ToggleButton sx={{ width: '100%' }} key={o.value} value={o.value}>
+          <ToggleButton
+            size={size}
+            sx={{ width: '100%' }}
+            key={o.value}
+            value={o.value}
+          >
             {o.label}
           </ToggleButton>
         ))}
