@@ -49,6 +49,7 @@ export const defaultTheme = (locale: string, withBaseTheme: boolean) =>
             },
           },
         },
+
         MuiTableFooter: {
           styleOverrides: {
             root: {

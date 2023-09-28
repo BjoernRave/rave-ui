@@ -133,7 +133,7 @@ export const removeFromObjectArray = (
   return newArray
 }
 
-export const getObjectKeyByString = (o: any, s: string) => {
+export const getObjectKeyByString = (o: Record<string, any>, s: string) => {
   s = s.replace(/\[(\w+)\]/g, '.$1') // convert indexes to properties
   s = s.replace(/^\./, '') // strip a leading dot
   const a = s.split('.')

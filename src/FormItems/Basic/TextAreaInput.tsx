@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { useController } from 'react-hook-form'
 import { generateSlug } from '../../lib/misc'
 import { InputProps } from '../../lib/types'
+import { useIsRequired } from './SchemaContext'
 
 const TextAreaInput: FC<Props> = ({
   name,
@@ -16,6 +17,7 @@ const TextAreaInput: FC<Props> = ({
 }) => {
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+  const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -27,6 +29,7 @@ const TextAreaInput: FC<Props> = ({
       type="text"
       margin="dense"
       size="small"
+      required={isRequired}
       style={{ width: '100%' }}
       multiline
       rows={String(rows)}

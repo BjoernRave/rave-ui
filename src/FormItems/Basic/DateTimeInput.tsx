@@ -5,6 +5,7 @@ import { dateTimeFormat } from '../../lib/date'
 import { useLocale } from '../../lib/theme'
 import { InputProps, Language } from '../../lib/types'
 import DateTimeProvider from './DateTimeProvider'
+import { useIsRequired } from './SchemaContext'
 
 const DateTimeInput: FC<Props> = ({
   name,
@@ -20,6 +21,7 @@ const DateTimeInput: FC<Props> = ({
 
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+  const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -38,6 +40,7 @@ const DateTimeInput: FC<Props> = ({
         slotProps={{
           textField: {
             error: Boolean(fieldState.error),
+            required: isRequired,
             helperText: fieldState.error
               ? fieldState.error.message
               : helperText,

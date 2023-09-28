@@ -12,6 +12,7 @@ import { useController } from 'react-hook-form'
 import { generateSlug } from '../../lib/misc'
 import { useLocale } from '../../lib/theme'
 import { InputProps } from '../../lib/types'
+import { useIsRequired } from './SchemaContext'
 
 const PasswordInput: FC<Props> = ({
   name,
@@ -29,6 +30,8 @@ const PasswordInput: FC<Props> = ({
 
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+
+  const isRequired = useIsRequired(formName)
   const [showPassword, setShowPassword] = useState(false)
 
   const { field, fieldState } = useController({ name: formName })

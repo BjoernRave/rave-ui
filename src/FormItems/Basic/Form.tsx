@@ -4,10 +4,11 @@ import { FC, PropsWithChildren, useEffect } from 'react'
 import {
   FieldErrorsImpl,
   FormProvider,
-  useForm,
   UseFormSetError,
+  useForm,
 } from 'react-hook-form'
-import { ZodSchema } from 'zod'
+import { ZodObject } from 'zod'
+import { SchemaContext } from './SchemaContext'
 import SubmitButton from './SubmitButton'
 
 const StyledForm = styled.form`
@@ -37,6 +38,9 @@ const Form: FC<PropsWithChildren<Props>> = ({
   const methods = useForm({
     defaultValues: initialValues,
     resolver: zodResolver(validationSchema),
+    context: {
+      schema: validationSchema,
+    },
   })
 
   useEffect(() => {
@@ -49,37 +53,42 @@ const Form: FC<PropsWithChildren<Props>> = ({
 
   return (
     <FormProvider {...methods}>
-      <StyledForm
-        className={className}
-        onSubmit={(e) => {
-          if (!validate) {
-            return methods.handleSubmit((values) =>
-              onSubmit(values, methods.setError)
-            )(e)
-          }
+      <SchemaContext.Provider value={validationSchema}>
+        <StyledForm
+          className={className}
+          onSubmit={(e) => {
+            if (!validate) {
+              return methods.handleSubmit((values) =>
+                onSubmit(values, methods.setError)
+              )(e)
+            }
 
-          const validation = validate(methods.getValues())
+            const validation = validate(methods.getValues())
 
-          if (typeof validation === 'boolean') {
-            return methods.handleSubmit((values) =>
-              onSubmit(values, methods.setError)
-            )(e)
-          }
+            if (typeof validation === 'boolean') {
+              return methods.handleSubmit((values) =>
+                onSubmit(values, methods.setError)
+              )(e)
+            }
 
-          e.preventDefault()
+            e.preventDefault()
 
-          console.log(validation, 'validation')
+            console.log(validation, 'validation')
 
-          onError && onError(validation as any)
+            onError && onError(validation as any)
 
-          Object.keys(validation).forEach((key) => {
-            methods.setError(key, { message: validation[key], type: 'custom' })
-          })
-        }}
-      >
-        {children}
-        {submitButton && <SubmitButton>{submitText}</SubmitButton>}
-      </StyledForm>
+            Object.keys(validation).forEach((key) => {
+              methods.setError(key, {
+                message: validation[key],
+                type: 'custom',
+              })
+            })
+          }}
+        >
+          {children}
+          {submitButton && <SubmitButton>{submitText}</SubmitButton>}
+        </StyledForm>
+      </SchemaContext.Provider>
     </FormProvider>
   )
 }
@@ -87,7 +96,7 @@ const Form: FC<PropsWithChildren<Props>> = ({
 export default Form
 
 interface Props {
-  validationSchema?: ZodSchema
+  validationSchema?: ZodObject<any, any>
   initialValues: Record<string, any>
   onSubmit: (
     data: Record<string, any>,

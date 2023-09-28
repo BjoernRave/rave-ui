@@ -8,7 +8,7 @@ import {
   DialogTitle,
   IconButton,
 } from '@mui/material'
-import { styled } from '@mui/material/styles'
+import { Breakpoint, styled } from '@mui/material/styles'
 import { FC, PropsWithChildren, ReactNode, useId } from 'react'
 import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form'
 import Form from './FormItems/Basic/Form'
@@ -23,14 +23,6 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
     padding: theme.spacing(1),
   },
 }))
-
-const StyledDialogContent = styled(DialogContent)`
-  width: 100%;
-
-  @media (min-width: 767px) {
-    min-width: 767px;
-  }
-`
 
 const StyledButton = styled(Button)`
   width: 100%;
@@ -86,10 +78,10 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
   onSubmit,
   disabled,
   children,
-  edit,
   onError,
   submitText,
   validate,
+  maxWidth = 'lg',
 }) => {
   const id = useId()
 
@@ -98,13 +90,13 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
     <BootstrapDialog
       scroll="paper"
       disableEnforceFocus
-      maxWidth="lg"
+      maxWidth={maxWidth}
       fullWidth
       open={isOpen}
-      onClose={() => onClose()}
+      onClose={onClose ? () => onClose() : undefined}
       aria-labelledby={id}
     >
-      <BootstrapDialogTitle onClose={onClose} id={id}>
+      <BootstrapDialogTitle onClose={onClose ? onClose : undefined} id={id}>
         {title}
       </BootstrapDialogTitle>
       <Form
@@ -114,20 +106,22 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
         onSubmit={onSubmit}
         onError={onError}
       >
-        <StyledDialogContent dividers id={`${id}-content`}>
+        <DialogContent className="w-full" id={`${id}-content`}>
           {description && <DialogContentText>{description}</DialogContentText>}
           {children}
-        </StyledDialogContent>
+        </DialogContent>
         <DialogActions>
-          <StyledButton
-            variant="text"
-            size="large"
-            type="button"
-            onClick={() => onClose()}
-            color="primary"
-          >
-            {locales.cancel}
-          </StyledButton>
+          {onClose && (
+            <StyledButton
+              variant="text"
+              size="large"
+              type="button"
+              onClick={() => onClose()}
+              color="primary"
+            >
+              {locales.cancel}
+            </StyledButton>
+          )}
           <StyledSubmit size="large" disabled={disabled}>
             {submitText ?? locales.save}
           </StyledSubmit>
@@ -141,7 +135,7 @@ export default FormModal
 
 interface Props {
   isOpen?: boolean
-  onClose: () => void
+  onClose?: () => void
   title: string
   description?: string
   initialValues: object
@@ -158,7 +152,7 @@ interface Props {
     >
   ) => void
   disabled?: boolean
-  edit?: boolean
   submitText?: ReactNode
   validate?: (data: Record<string, any>) => true | { [key: string]: string }
+  maxWidth?: Breakpoint | false
 }

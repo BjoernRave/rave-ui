@@ -3,6 +3,7 @@ import { FC } from 'react'
 import { useController } from 'react-hook-form'
 import { generateSlug } from '../../lib/misc'
 import { InputProps } from '../../lib/types'
+import { useIsRequired } from './SchemaContext'
 
 const NumberInput: FC<Props> = ({
   name,
@@ -19,6 +20,7 @@ const NumberInput: FC<Props> = ({
 }) => {
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+  const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
 
