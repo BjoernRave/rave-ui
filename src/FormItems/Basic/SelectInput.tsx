@@ -10,13 +10,13 @@ import { FC } from 'react'
 import { useController } from 'react-hook-form'
 import { generateSlug } from '../../lib/misc'
 import { InputProps, Option } from '../../lib/types'
+import { useIsRequired } from './SchemaContext'
 
 const SelectInput: FC<Props> = ({
   options,
   label,
   name,
   helperText,
-  required,
   index,
   style,
   subName,
@@ -27,6 +27,7 @@ const SelectInput: FC<Props> = ({
 }) => {
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+  const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -35,7 +36,7 @@ const SelectInput: FC<Props> = ({
       margin="dense"
       size="small"
       error={Boolean(fieldState.error)}
-      required={required}
+      required={isRequired}
       id={generateSlug(formName)}
       style={style ?? { width: '100%' }}
     >

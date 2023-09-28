@@ -1,13 +1,14 @@
 import { Autocomplete, Checkbox, CircularProgress } from '@mui/material'
 import TextField from '@mui/material/TextField'
 import {
-  createFilterOptions,
   FilterOptionsState,
+  createFilterOptions,
 } from '@mui/material/useAutocomplete'
 import { darken, lighten, styled } from '@mui/system'
 import { CSSProperties, FC } from 'react'
 import { useController } from 'react-hook-form'
 import { InputProps } from '../../lib/types'
+import { useIsRequired } from './SchemaContext'
 
 const GroupHeader = styled('div')(({ theme }) => ({
   position: 'sticky',
@@ -31,7 +32,7 @@ const ComboBox: FC<Props> = ({
   options,
   label,
   helperText,
-  required,
+
   freeSolo,
   name,
   getOptionLabel = (option) => option,
@@ -53,7 +54,7 @@ const ComboBox: FC<Props> = ({
 }) => {
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
-
+  const isRequired = useIsRequired(formName)
   const { field, fieldState } = useController({ name: formName })
   const isLoading = !disabled && (loading || !Array.isArray(options))
 
@@ -131,12 +132,12 @@ const ComboBox: FC<Props> = ({
           {...params}
           autoFocus={autoFocus}
           margin="dense"
+          required={isRequired}
           size="small"
           label={label}
           disabled={disabled}
           helperText={fieldState.error ? fieldState.error?.message : helperText}
           fullWidth
-          required={required}
           error={Boolean(fieldState.error)}
           InputProps={{
             ...params.InputProps,

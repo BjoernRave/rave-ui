@@ -14,13 +14,27 @@ export const useIsRequired = (name: string) => {
 
     const checks = valueField?._def?.checks
 
-    if (!checks) return false
-
-    if (type === 'ZodString' && checks.some((c) => c.kind === 'min')) {
+    if (type === 'ZodString' && checks?.some((c) => c.kind === 'min')) {
       return true
     }
 
-    if (type === 'ZodDate' && !checks.some((c) => c.kind === 'optional')) {
+    if (
+      type === 'ZodString' &&
+      checks?.some((c) => c.kind === 'email') &&
+      !checks?.some((c) => c.kind === 'optional')
+    ) {
+      return true
+    }
+
+    if (type === 'ZodDate' && !checks?.some((c) => c.kind === 'optional')) {
+      return true
+    }
+
+    if (type === 'ZodArray' && valueField?._def?.minLength?.value > 0) {
+      return true
+    }
+
+    if (type === 'ZodEnum') {
       return true
     }
 

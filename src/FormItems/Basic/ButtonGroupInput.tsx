@@ -9,6 +9,7 @@ import { FC } from 'react'
 import { useController } from 'react-hook-form'
 import { generateSlug } from '../../lib/misc'
 import { InputProps, Option } from '../../lib/types'
+import { useIsRequired } from './SchemaContext'
 
 const ButtonGroupInput: FC<Props> = ({
   options,
@@ -17,12 +18,13 @@ const ButtonGroupInput: FC<Props> = ({
   index,
   label,
   helperText,
-  required,
+
   readOnly,
   onChange,
 }) => {
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+  const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -31,7 +33,7 @@ const ButtonGroupInput: FC<Props> = ({
   return (
     <FormControl
       error={Boolean(fieldState.error)}
-      required={required}
+      required={isRequired}
       fullWidth
       className="my-2"
     >

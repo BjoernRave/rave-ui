@@ -16,6 +16,7 @@ import { useController } from 'react-hook-form'
 import { generateSlug } from '../../lib/misc'
 import { useLocale } from '../../lib/theme'
 import { InputProps } from '../../lib/types'
+import { useIsRequired } from './SchemaContext'
 
 const StyledButton = styled(IconButton)<{ hasInput: number }>`
   ${({ hasInput }) =>
@@ -32,7 +33,6 @@ const TextListInput: FC<Props> = ({
   style,
   onChange,
   canAdd,
-  required,
   error,
   maxItems = 999,
   onlyNumbers,
@@ -44,6 +44,7 @@ const TextListInput: FC<Props> = ({
 
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+  const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -65,7 +66,7 @@ const TextListInput: FC<Props> = ({
         margin="dense"
         size="small"
         error={Boolean(fieldState.error) || error}
-        required={required}
+        required={isRequired}
         style={style ?? { width: '100%' }}
       >
         <InputLabel margin="dense" htmlFor={generateSlug(formName)}>
