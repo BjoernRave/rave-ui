@@ -52,6 +52,7 @@ const FormPage: FC<PropsWithChildren<Props>> = ({
           validationSchema={validationSchema}
           onSubmit={onSubmit}
           onError={onError}
+          validate={validate}
         >
           <>
             {children}
@@ -64,7 +65,7 @@ const FormPage: FC<PropsWithChildren<Props>> = ({
                 }}
               >
                 <StyledSubmit type="submit" size="large">
-                  Speichern
+                  {submitText ?? locales.save}
                 </StyledSubmit>
                 {withCancel && (
                   <Link href={withCancel}>
@@ -97,7 +98,7 @@ interface Props {
       }>
     >
   ) => void
-  validate?: (values: any) => void
+  validate?: (data: Record<string, any>) => true | { [key: string]: string }
   edit?: boolean
   children: any
   style?: any
