@@ -96,7 +96,7 @@ const Form: FC<PropsWithChildren<Props>> = ({
 export default Form
 
 interface Props {
-  validationSchema?: ZodObject<any, any>
+  validationSchema: ZodObject<any, any>
   initialValues: Record<string, any>
   onSubmit: (
     data: Record<string, any>,
