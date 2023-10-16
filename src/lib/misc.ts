@@ -7,7 +7,10 @@ export const isDev = process.env.NODE_ENV === 'development'
 
 export const uniquifyArray = (a: any[] | undefined) => {
   if (!a || !Array.isArray(a)) return []
-  return [...new Set(a)]
+
+  return a.filter((value, index, self) => {
+    return self.indexOf(value) === index
+  })
 }
 
 export const uniquifyObjectArray = (a: any[] | undefined, id: string) => {
