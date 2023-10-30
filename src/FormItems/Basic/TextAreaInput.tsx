@@ -27,8 +27,6 @@ const TextAreaInput: FC<Props> = ({
       {...rest}
       {...field}
       type="text"
-      margin="dense"
-      size="small"
       required={isRequired}
       style={{ width: '100%' }}
       multiline

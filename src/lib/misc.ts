@@ -5,27 +5,42 @@ export const isServer = typeof window === 'undefined'
 
 export const isDev = process.env.NODE_ENV === 'development'
 
-export const uniquifyArray = (a: any[] | undefined) => {
-  if (!a || !Array.isArray(a)) return []
+export const uniquifyArray = <T>(a: T[] | undefined) => {
+  if (!a || !Array.isArray(a)) return [] as T[]
 
   return a.filter((value, index, self) => {
     return self.indexOf(value) === index
   })
 }
 
-export const uniquifyObjectArray = (a: any[] | undefined, id: string) => {
-  if (!a || !Array.isArray(a)) return []
-  const seen = {}
-  return a.filter((item) => {
-    if (!item) return false
-    if (!item[id]) return false
-    return (seen as any).prototype.hasOwnProperty.call(item[id])
-      ? false
-      : (seen[item[id]] = true)
-  })
+export const uniquifyObjectArray = <T extends Record<string, any>>(
+  a: T[] | undefined,
+  id: keyof T
+) => {
+  // Check if the input array is null
+  if (!a || !Array.isArray(a) || a === null) return [] as T[]
+
+  // Check if the id field exists in the objects of the array
+  if (!a.every((item) => item.hasOwnProperty(id))) return [] as T[]
+
+  return a.filter(
+    (value, index, self) =>
+      self.findIndex((item) => item[id] === value[id]) === index
+  )
 }
 
 export const capitalizeString = (string: string) => {
+  // Check if the input string is not null or undefined
+  if (string === null || string === undefined) {
+    return string
+  }
+
+  // Check if the input string is actually a string type
+  if (typeof string !== 'string') {
+    throw new Error('Input must be a string')
+  }
+
+  // Capitalize the first letter of the string
   return string[0].toUpperCase() + string.slice(1, string.length)
 }
 
@@ -83,15 +98,6 @@ export const generateRandomString = ({
     result += bigChars.charAt(Math.floor(Math.random() * bigChars.length))
   }
   return result
-}
-
-export const getLanguages = (t: any) => {
-  return [
-    { value: 'es', label: t('common:spanish') },
-    { value: 'en', label: t('common:english') },
-    { value: 'pt', label: t('common:portuguese') },
-    { value: 'de', label: t('common:german') },
-  ]
 }
 
 export const roundTo = (

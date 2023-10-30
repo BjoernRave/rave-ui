@@ -54,7 +54,7 @@ const MultiCheckbox: FC<Props> = ({
           />
         ))}
       </FormGroup>
-      <FormHelperText margin="dense">
+      <FormHelperText>
         {fieldState.error ? fieldState.error.message : helperText}
       </FormHelperText>
     </FormControl>

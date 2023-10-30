@@ -6,6 +6,7 @@ import { useController } from 'react-hook-form'
 import { generateSlug } from '../lib/misc'
 import { useLocale } from '../lib/theme'
 import { InputProps } from '../lib/types'
+import { useIsRequired } from './Basic/SchemaContext'
 
 const PhoneWrapper = styled.div`
   display: inline-flex !important;
@@ -17,7 +18,6 @@ const PhoneInput: FC<Props> = ({
   name,
   helperText,
   label,
-  required,
   index,
   subName,
   prefixName,
@@ -33,6 +33,7 @@ const PhoneInput: FC<Props> = ({
       : prefixName
 
   const { field, fieldState } = useController({ name: formName })
+  const isRequired = useIsRequired(formName)
 
   const prefixField = useController({ name: prefixFormName })
 
@@ -40,7 +41,7 @@ const PhoneInput: FC<Props> = ({
     <PhoneWrapper id={`${generateSlug(formName)}-group`}>
       <TextField
         style={{ width: '170px', alignSelf: 'flex-end', marginRight: '20px' }}
-        required={required}
+        required={isRequired}
         value={prefixField.field.value}
         onChange={(e) => prefixField.field.onChange(e)}
         fullWidth
@@ -52,8 +53,6 @@ const PhoneInput: FC<Props> = ({
         error={Boolean(fieldState.error)}
         inputMode="numeric"
         type="text"
-        margin="dense"
-        size="small"
         onKeyDown={(e) => {
           //delete, tab, etc
           if ([8, 9, 37, 39].includes(e.keyCode)) {
@@ -77,8 +76,6 @@ const PhoneInput: FC<Props> = ({
         id={generateSlug(formName)}
         inputMode="numeric"
         type="text"
-        margin="dense"
-        size="small"
         onKeyDown={(e) => {
           //delete, tab, etc
           if ([8, 9, 37, 39].includes(e.keyCode)) {
@@ -105,7 +102,7 @@ const PhoneInput: FC<Props> = ({
         helperText={fieldState.error ? fieldState.error.message : helperText}
         error={Boolean(fieldState.error)}
         style={{ width: '100%' }}
-        required={required}
+        required={isRequired}
       />
     </PhoneWrapper>
   )

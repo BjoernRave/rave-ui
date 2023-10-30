@@ -30,8 +30,6 @@ const TextInput: FC<Props> = ({
       {...field}
       required={isRequired}
       type="text"
-      margin="dense"
-      size="small"
       onChange={(e) => {
         if (maxLength && e.target.value.length > maxLength) {
           return

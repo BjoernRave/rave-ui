@@ -34,7 +34,6 @@ const DateRangeInput: FC<Props> = ({
           {...props}
           slotProps={{
             textField: {
-              size: 'small',
               style: { marginTop: 0 },
               error: Boolean(fieldState.error),
             },
@@ -47,7 +46,7 @@ const DateRangeInput: FC<Props> = ({
           value={field.value ?? [null, null]}
         />
       </DateTimeProvider>
-      <FormHelperText margin="dense">
+      <FormHelperText>
         {fieldState.error ? fieldState.error.message : helperText}
       </FormHelperText>
     </FormControl>

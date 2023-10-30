@@ -13,6 +13,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { FC, useEffect, useMemo } from 'react'
 import { useController } from 'react-hook-form'
 import Infos from '../Infos'
+import Table from '../Table'
 import {
   generateSlug,
   getErrorMessage,
@@ -22,7 +23,7 @@ import {
 } from '../lib/misc'
 import { useLocale } from '../lib/theme'
 import { InputProps } from '../lib/types'
-import Table from '../Table'
+import { useIsRequired } from './Basic/SchemaContext'
 
 const SelectedWrapper = styled(Paper)`
   display: flex;
@@ -117,7 +118,6 @@ const TableInput: FC<Props> = ({
   name,
   subName,
   index,
-  required,
   label,
   helperText,
   options,
@@ -128,6 +128,7 @@ const TableInput: FC<Props> = ({
 }) => {
   const formName =
     typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+  const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
 
@@ -160,7 +161,7 @@ const TableInput: FC<Props> = ({
     <FormControl
       style={{ width: '100%', display: 'grid' }}
       error={Boolean(fieldState.error)}
-      required={required}
+      required={isRequired}
     >
       <FormLabel id={`${generateSlug(name)}-input`}>{label}</FormLabel>
       {!multiple && field.value && (

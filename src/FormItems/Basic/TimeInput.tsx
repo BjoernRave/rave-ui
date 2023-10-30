@@ -45,7 +45,6 @@ const TimeInput: FC<Props> = ({
               width: '100%',
             },
             required: isRequired,
-            size: 'small',
             error: Boolean(fieldState.error),
             helperText: fieldState.error
               ? fieldState.error.message

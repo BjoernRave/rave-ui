@@ -33,19 +33,13 @@ const SelectInput: FC<Props> = ({
 
   return (
     <FormControl
-      margin="dense"
-      size="small"
       error={Boolean(fieldState.error)}
       required={isRequired}
       id={generateSlug(formName)}
       style={style ?? { width: '100%' }}
     >
-      <InputLabel margin="dense" id={`${generateSlug(formName)}-label`}>
-        {label}
-      </InputLabel>
+      <InputLabel id={`${generateSlug(formName)}-label`}>{label}</InputLabel>
       <Select
-        margin="dense"
-        size="small"
         label={label}
         labelId={`${generateSlug(formName)}-label`}
         {...(rest as any)}
@@ -77,7 +71,7 @@ const SelectInput: FC<Props> = ({
           )
         })}
       </Select>
-      <FormHelperText margin="dense">
+      <FormHelperText>
         {fieldState.error ? fieldState.error.message : helperText}
       </FormHelperText>
     </FormControl>

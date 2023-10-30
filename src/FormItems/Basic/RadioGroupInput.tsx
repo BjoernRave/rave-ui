@@ -25,8 +25,6 @@ const RadioGroupInput: FC<Props> = ({
 
   return (
     <FormControl
-      margin="dense"
-      size="small"
       error={Boolean(fieldState.error)}
       style={style ?? { width: '100%' }}
     >
@@ -58,7 +56,7 @@ const RadioGroupInput: FC<Props> = ({
           />
         ))}
       </RadioGroup>
-      <FormHelperText margin="dense">
+      <FormHelperText>
         {fieldState.error ? fieldState.error.message : helperText}
       </FormHelperText>
     </FormControl>

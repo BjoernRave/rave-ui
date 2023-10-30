@@ -7,7 +7,6 @@ import {
   UseFormSetError,
   useForm,
 } from 'react-hook-form'
-import { ZodObject } from 'zod'
 import { SchemaContext } from './SchemaContext'
 import SubmitButton from './SubmitButton'
 
@@ -96,7 +95,7 @@ const Form: FC<PropsWithChildren<Props>> = ({
 export default Form
 
 interface Props {
-  validationSchema: ZodObject<any, any>
+  validationSchema: any
   initialValues: Record<string, any>
   onSubmit: (
     data: Record<string, any>,

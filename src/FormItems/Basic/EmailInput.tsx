@@ -22,8 +22,6 @@ const EmailInput: FC<Props> = ({
 
   return (
     <TextField
-      margin="dense"
-      size="small"
       required={isRequired}
       id={generateSlug(formName)}
       style={{ width: '100%' }}

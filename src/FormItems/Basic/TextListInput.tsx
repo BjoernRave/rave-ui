@@ -63,18 +63,12 @@ const TextListInput: FC<Props> = ({
   return (
     <>
       <FormControl
-        margin="dense"
-        size="small"
         error={Boolean(fieldState.error) || error}
         required={isRequired}
         style={style ?? { width: '100%' }}
       >
-        <InputLabel margin="dense" htmlFor={generateSlug(formName)}>
-          {label}
-        </InputLabel>
+        <InputLabel htmlFor={generateSlug(formName)}>{label}</InputLabel>
         <OutlinedInput
-          margin="dense"
-          size="small"
           label={label}
           {...rest}
           endAdornment={

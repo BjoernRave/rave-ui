@@ -74,8 +74,6 @@ const MultiCombobox: FC<Props> = ({
       getOptionLabel={(option) => option?.inputTitle ?? getOptionLabel(option)}
       renderInput={(params) => (
         <TextField
-          margin="dense"
-          size="small"
           {...params}
           autoFocus={autoFocus}
           label={label}

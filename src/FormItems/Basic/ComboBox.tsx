@@ -131,9 +131,6 @@ const ComboBox: FC<Props> = ({
         <TextField
           {...params}
           autoFocus={autoFocus}
-          margin="dense"
-          required={isRequired}
-          size="small"
           label={label}
           disabled={disabled}
           helperText={fieldState.error ? fieldState.error?.message : helperText}

@@ -26,8 +26,7 @@ const NumberInput: FC<Props> = ({
 
   return (
     <TextField
-      margin="dense"
-      size="small"
+      required={isRequired}
       id={generateSlug(formName)}
       {...rest}
       value={field.value || ''}

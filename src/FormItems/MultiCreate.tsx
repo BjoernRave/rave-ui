@@ -14,10 +14,9 @@ import {
 } from '@mui/material'
 import { FC, PropsWithChildren, useId, useMemo, useState } from 'react'
 import { useController, useFormContext, useWatch } from 'react-hook-form'
-import { ZodSchema } from 'zod'
+import Table from '../Table'
 import { generateSlug, getErrorMessage } from '../lib/misc'
 import { useLocale } from '../lib/theme'
-import Table from '../Table'
 
 import SubmitButton from './Basic/SubmitButton'
 
@@ -277,7 +276,7 @@ export interface Props {
   name: string
   formatFunction?: any
   helperText?: string
-  schema: ZodSchema<any>
+  schema: any
   onOpen?: (index: string) => void
   validate?: (values: any) => any
   label: string
