@@ -1,18 +1,18 @@
-import VisibilityIcon from '@mui/icons-material/Visibility'
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff'
+import VisibilityIcon from "@mui/icons-material/Visibility"
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff"
 import {
   BaseTextFieldProps,
   IconButton,
   InputAdornment,
   TextField,
   Tooltip,
-} from '@mui/material'
-import { FC, useState } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug } from '../../lib/misc'
-import { useLocale } from '../../lib/theme'
-import { InputProps } from '../../lib/types'
-import { useIsRequired } from './SchemaContext'
+} from "@mui/material"
+import { FC, useState } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug } from "../../lib/misc"
+import { useLocale } from "../../lib/theme"
+import { InputProps } from "../../lib/types"
+import { useIsRequired } from "./SchemaContext"
 
 const PasswordInput: FC<Props> = ({
   name,
@@ -21,7 +21,7 @@ const PasswordInput: FC<Props> = ({
   helperText,
   error,
   style,
-  variant = 'outlined',
+  variant = "outlined",
   maxLength,
   onChange,
   ...rest
@@ -29,7 +29,7 @@ const PasswordInput: FC<Props> = ({
   const { locales } = useLocale()
 
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
   const isRequired = useIsRequired(formName)
   const [showPassword, setShowPassword] = useState(false)
@@ -49,29 +49,32 @@ const PasswordInput: FC<Props> = ({
         field.onChange(e)
         onChange && onChange(e.target.value)
       }}
-      style={style ?? { width: '100%' }}
-      type={showPassword ? 'text' : 'password'}
+      style={style ?? { width: "100%" }}
+      type={showPassword ? "text" : "password"}
       variant={variant as any}
       helperText={fieldState.error ? fieldState.error.message : helperText}
       error={Boolean(fieldState.error) || error}
       InputProps={{
-        endAdornment: (
-          <InputAdornment position="end">
-            <Tooltip
-              title={showPassword ? locales.hidePassword : locales.showPassword}
-            >
-              <IconButton
-                tabIndex={-1}
-                aria-label="Toggle password visibility"
-                onClick={() => setShowPassword(!showPassword)}
-                onMouseDown={(e) => e.preventDefault()}
-                size="large"
+        endAdornment:
+          field.value.length === 0 ? null : (
+            <InputAdornment position="end">
+              <Tooltip
+                title={
+                  showPassword ? locales.hidePassword : locales.showPassword
+                }
               >
-                {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-              </IconButton>
-            </Tooltip>
-          </InputAdornment>
-        ),
+                <IconButton
+                  tabIndex={-1}
+                  aria-label="Toggle password visibility"
+                  onClick={() => setShowPassword(!showPassword)}
+                  onMouseDown={(e) => e.preventDefault()}
+                  size="large"
+                >
+                  {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                </IconButton>
+              </Tooltip>
+            </InputAdornment>
+          ),
       }}
     />
   )
@@ -81,6 +84,6 @@ export default PasswordInput
 
 export interface Props
   extends InputProps,
-    Omit<BaseTextFieldProps, 'name' | 'label'> {
+    Omit<BaseTextFieldProps, "name" | "label"> {
   maxLength?: number
 }

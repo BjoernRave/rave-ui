@@ -4,7 +4,11 @@
   "compilerOptions": {
     "strict": false,
     "jsx": "react-jsx",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "outDir": "dist"
   },
-  "include": ["src", "types"]
+  "include": [
+    "src",
+    "types"
+  ]
 }

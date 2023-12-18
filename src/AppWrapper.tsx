@@ -1,11 +1,11 @@
-import { CacheProvider, EmotionCache } from '@emotion/react'
-import { CssBaseline, ThemeProvider } from '@mui/material'
-import { LocalizationProvider } from '@mui/x-date-pickers-pro'
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns'
-import deLocale from 'date-fns/locale/de'
-import { FC, PropsWithChildren } from 'react'
-import { createEmotionCache } from './lib/misc'
-import { defaultTheme } from './lib/theme'
+import { CacheProvider, EmotionCache } from "@emotion/react"
+import { CssBaseline, ThemeProvider } from "@mui/material"
+import { LocalizationProvider } from "@mui/x-date-pickers-pro"
+import { AdapterDateFns } from "@mui/x-date-pickers-pro/AdapterDateFns"
+import deLocale from "date-fns/locale/de"
+import { FC, PropsWithChildren } from "react"
+import { createEmotionCache } from "./lib/misc"
+import { defaultTheme } from "./lib/theme"
 
 const clientSideEmotionCache = createEmotionCache()
 
@@ -14,7 +14,7 @@ const AppWrapper: FC<PropsWithChildren<Props>> = ({
   emotionCache,
   theme,
   withBaseTheme = true,
-  locale = 'en',
+  locale = "en",
 }) => {
   return (
     <CacheProvider value={emotionCache ? emotionCache : clientSideEmotionCache}>
@@ -23,7 +23,7 @@ const AppWrapper: FC<PropsWithChildren<Props>> = ({
           <ThemeProvider theme={theme}>
             <CssBaseline />
             <LocalizationProvider
-              adapterLocale={locale === 'en' ? 'en' : deLocale}
+              adapterLocale={locale === "en" ? "en" : deLocale}
               dateAdapter={AdapterDateFns}
             >
               {children}
@@ -33,7 +33,7 @@ const AppWrapper: FC<PropsWithChildren<Props>> = ({
           <>
             <CssBaseline />
             <LocalizationProvider
-              adapterLocale={locale === 'en' ? 'en' : deLocale}
+              adapterLocale={locale === "en" ? "en" : deLocale}
               dateAdapter={AdapterDateFns}
             >
               {children}
@@ -50,6 +50,6 @@ export default AppWrapper
 interface Props {
   emotionCache?: EmotionCache
   theme?: any
-  locale?: 'en' | 'de'
+  locale?: "en" | "de"
   withBaseTheme?: boolean
 }

@@ -1,6 +1,6 @@
-import styled from '@emotion/styled'
-import ClearIcon from '@mui/icons-material/Clear'
-import SearchIcon from '@mui/icons-material/Search'
+import styled from "@emotion/styled"
+import ClearIcon from "@mui/icons-material/Clear"
+import SearchIcon from "@mui/icons-material/Search"
 import {
   Box,
   IconButton,
@@ -11,32 +11,31 @@ import {
   TableSortLabel,
   TextField,
   Tooltip,
-} from '@mui/material'
-import MaUTable from '@mui/material/Table'
-import TableCell from '@mui/material/TableCell'
-import TableHead from '@mui/material/TableHead'
-import TableRow from '@mui/material/TableRow'
-import { visuallyHidden } from '@mui/utils'
+} from "@mui/material"
+import MaUTable from "@mui/material/Table"
+import TableCell from "@mui/material/TableCell"
+import TableHead from "@mui/material/TableHead"
+import TableRow from "@mui/material/TableRow"
 import {
   ColumnDef,
+  Row,
+  SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
-  Row,
-  SortingState,
   useReactTable,
-} from '@tanstack/react-table'
-import { CSSProperties, FC, useMemo, useState } from 'react'
-import { useLocale } from './lib/theme'
-import { Action } from './lib/types'
+} from "@tanstack/react-table"
+import { CSSProperties, FC, useMemo, useState } from "react"
+import { useLocale } from "./lib/theme"
+import { Action } from "./lib/types"
 
 const StyledTableBody = styled(TableBody)`
   @media (max-width: 1023px) {
     tr {
       :nth-of-type(even) {
         background-color: ${({ theme }) =>
-          theme?.['palette']?.background.default};
+          theme?.["palette"]?.background.default};
       }
     }
   }
@@ -59,7 +58,7 @@ const Table: FC<Props> = ({
 }) => {
   const { locales } = useLocale()
   const [sorting, setSorting] = useState<SortingState>([])
-  const [globalFilter, setGlobalFilter] = useState('')
+  const [globalFilter, setGlobalFilter] = useState("")
 
   const populatedColumns: ColumnDef<any>[] = useMemo(() => {
     if (!rowActions) return columns
@@ -67,7 +66,7 @@ const Table: FC<Props> = ({
     return [
       ...columns,
       {
-        id: 'actions',
+        id: "actions",
         maxSize: 1,
         size: 1,
         enableSorting: false,
@@ -106,7 +105,7 @@ const Table: FC<Props> = ({
     getFilteredRowModel: getFilteredRowModel(),
   })
 
-  const array = useMemo(() => new Array(10).fill('blah'), [])
+  const array = useMemo(() => new Array(10).fill("blah"), [])
 
   const { rows } = table.getRowModel()
 
@@ -114,7 +113,7 @@ const Table: FC<Props> = ({
     <>
       {!hideSearch && (
         <TextField
-          style={{ width: '100%', margin: '15px 0' }}
+          style={{ width: "100%", margin: "15px 0" }}
           label={locales.search}
           value={globalFilter}
           onChange={(e) => table.setGlobalFilter(e.target.value)}
@@ -125,7 +124,7 @@ const Table: FC<Props> = ({
                   <InputAdornment position="end">
                     <Tooltip title={locales.clear}>
                       <IconButton
-                        onClick={() => setGlobalFilter('')}
+                        onClick={() => setGlobalFilter("")}
                         size="large"
                       >
                         <ClearIcon />
@@ -153,11 +152,11 @@ const Table: FC<Props> = ({
                   return (
                     <TableCell
                       style={{
-                        fontWeight: 'bold',
+                        fontWeight: "bold",
                         width: header.getSize(),
                         ...(header.column.getCanSort() && {
-                          cursor: 'pointer',
-                          select: 'none',
+                          cursor: "pointer",
+                          select: "none",
                         }),
                       }}
                       key={header.id}
@@ -166,25 +165,25 @@ const Table: FC<Props> = ({
                       {header.isPlaceholder ? null : header.column.getCanSort() ? (
                         <TableSortLabel
                           active={isSorted}
-                          direction={isSorted ? (sortDir as any) : 'asc'}
+                          direction={isSorted ? (sortDir as any) : "asc"}
                           onClick={header.column.getToggleSortingHandler()}
                         >
                           {flexRender(
                             header.column.columnDef.header,
-                            header.getContext()
+                            header.getContext(),
                           )}
                           {isSorted ? (
-                            <Box component="span" sx={visuallyHidden}>
-                              {sortDir === 'desc'
-                                ? 'sorted descending'
-                                : 'sorted ascending'}
+                            <Box component="span" style={{ opacity: 0 }}>
+                              {sortDir === "desc"
+                                ? "sorted descending"
+                                : "sorted ascending"}
                             </Box>
                           ) : null}
                         </TableSortLabel>
                       ) : (
                         flexRender(
                           header.column.columnDef.header,
-                          header.getContext()
+                          header.getContext(),
                         )
                       )}
                     </TableCell>
@@ -215,7 +214,7 @@ const Table: FC<Props> = ({
                   <TableRow
                     key={row.id}
                     className={` ${
-                      onRowClick && 'cursor-pointer hover:bg-gray-300'
+                      onRowClick && "cursor-pointer hover:bg-gray-300"
                     }`}
                     onClick={() => onRowClick && onRowClick(row)}
                   >
@@ -224,7 +223,7 @@ const Table: FC<Props> = ({
                         <TableCell key={cell.id}>
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext()
+                            cell.getContext(),
                           )}
                         </TableCell>
                       )

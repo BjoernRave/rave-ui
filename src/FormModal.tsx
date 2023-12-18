@@ -1,4 +1,4 @@
-import CloseIcon from '@mui/icons-material/Close'
+import CloseIcon from "@mui/icons-material/Close"
 import {
   Button,
   Dialog,
@@ -7,19 +7,19 @@ import {
   DialogContentText,
   DialogTitle,
   IconButton,
-} from '@mui/material'
-import { Breakpoint, styled } from '@mui/material/styles'
-import { FC, PropsWithChildren, ReactNode, useId } from 'react'
-import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form'
-import Form from './FormItems/Basic/Form'
-import SubmitButton from './FormItems/Basic/SubmitButton'
-import { useLocale } from './lib/theme'
+} from "@mui/material"
+import { Breakpoint, styled } from "@mui/material/styles"
+import { FC, PropsWithChildren, ReactNode, useId } from "react"
+import { FieldErrorsImpl, UseFormSetError } from "react-hook-form"
+import Form from "./FormItems/Basic/Form"
+import SubmitButton from "./FormItems/Basic/SubmitButton"
+import { useLocale } from "./lib/theme"
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
-  '& .MuiDialogContent-root': {
+  "& .MuiDialogContent-root": {
     padding: theme.spacing(2),
   },
-  '& .MuiDialogActions-root': {
+  "& .MuiDialogActions-root": {
     padding: theme.spacing(1),
   },
 }))
@@ -44,30 +44,6 @@ export interface DialogTitleProps {
   onClose: () => void
 }
 
-function BootstrapDialogTitle(props: DialogTitleProps) {
-  const { children, onClose, ...other } = props
-
-  return (
-    <DialogTitle {...other} className={`flex justify-between w-full `}>
-      {children}
-      {onClose ? (
-        <IconButton
-          aria-label="close"
-          onClick={onClose}
-          sx={{
-            position: 'absolute',
-            right: 8,
-            top: 8,
-            color: (theme) => theme.palette.grey[500],
-          }}
-        >
-          <CloseIcon />
-        </IconButton>
-      ) : null}
-    </DialogTitle>
-  )
-}
-
 const FormModal: FC<PropsWithChildren<Props>> = ({
   isOpen = true,
   onClose,
@@ -81,7 +57,8 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
   onError,
   submitText,
   validate,
-  maxWidth = 'lg',
+  maxWidth = "lg",
+  hideActions,
 }) => {
   const id = useId()
 
@@ -96,9 +73,26 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
       onClose={onClose ? () => onClose() : undefined}
       aria-labelledby={id}
     >
-      <BootstrapDialogTitle onClose={onClose ? onClose : undefined} id={id}>
+      <DialogTitle
+        id={id}
+        className={`flex !px-3 font-bold justify-between w-full `}
+      >
         {title}
-      </BootstrapDialogTitle>
+        {onClose ? (
+          <IconButton
+            aria-label="close"
+            onClick={onClose}
+            sx={{
+              position: "absolute",
+              right: 8,
+              top: 16,
+              color: (theme) => theme.palette.grey[500],
+            }}
+          >
+            <CloseIcon />
+          </IconButton>
+        ) : null}
+      </DialogTitle>
       <Form
         validate={validate}
         initialValues={initialValues}
@@ -110,22 +104,24 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
           {description && <DialogContentText>{description}</DialogContentText>}
           {children}
         </DialogContent>
-        <DialogActions>
-          {onClose && (
-            <StyledButton
-              variant="text"
-              size="large"
-              type="button"
-              onClick={() => onClose()}
-              color="primary"
-            >
-              {locales.cancel}
-            </StyledButton>
-          )}
-          <StyledSubmit size="large" disabled={disabled}>
-            {submitText ?? locales.save}
-          </StyledSubmit>
-        </DialogActions>
+        {!hideActions && (
+          <DialogActions>
+            {onClose && (
+              <StyledButton
+                variant="text"
+                size="large"
+                type="button"
+                onClick={() => onClose()}
+                color="primary"
+              >
+                {locales.cancel}
+              </StyledButton>
+            )}
+            <StyledSubmit size="large" disabled={disabled}>
+              {submitText ?? locales.save}
+            </StyledSubmit>
+          </DialogActions>
+        )}
       </Form>
     </BootstrapDialog>
   )
@@ -142,17 +138,18 @@ interface Props {
   validationSchema: any
   onSubmit: (
     data: Record<string, any>,
-    setError: UseFormSetError<Record<string, any>>
+    setError: UseFormSetError<Record<string, any>>,
   ) => void
   onError?: (
     errors: Partial<
       FieldErrorsImpl<{
         [x: string]: any
       }>
-    >
+    >,
   ) => void
   disabled?: boolean
   submitText?: ReactNode
   validate?: (data: Record<string, any>) => true | { [key: string]: string }
   maxWidth?: Breakpoint | false
+  hideActions?: boolean
 }

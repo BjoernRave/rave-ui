@@ -1,7 +1,7 @@
-import styled from '@emotion/styled'
-import PlusIcon from '@mui/icons-material/Add'
-import DeleteIcon from '@mui/icons-material/Delete'
-import EditIcon from '@mui/icons-material/Edit'
+import styled from "@emotion/styled"
+import PlusIcon from "@mui/icons-material/Add"
+import DeleteIcon from "@mui/icons-material/Delete"
+import EditIcon from "@mui/icons-material/Edit"
 import {
   Button,
   Dialog,
@@ -11,14 +11,14 @@ import {
   FormControl,
   FormHelperText,
   FormLabel,
-} from '@mui/material'
-import { FC, PropsWithChildren, useId, useMemo, useState } from 'react'
-import { useController, useFormContext, useWatch } from 'react-hook-form'
-import Table from '../Table'
-import { generateSlug, getErrorMessage } from '../lib/misc'
-import { useLocale } from '../lib/theme'
+} from "@mui/material"
+import { FC, PropsWithChildren, useId, useMemo, useState } from "react"
+import { useController, useFormContext, useWatch } from "react-hook-form"
+import Table from "../Table"
+import { generateSlug, getErrorMessage } from "../lib/misc"
+import { useLocale } from "../lib/theme"
 
-import SubmitButton from './Basic/SubmitButton'
+import SubmitButton from "./Basic/SubmitButton"
 
 const StyledDialogContent = styled(DialogContent)`
   > *:not(label) {
@@ -39,7 +39,7 @@ const StyledDialogContent = styled(DialogContent)`
 
 const HelperText = styled.span`
   align-self: flex-start;
-  color: ${({ theme }) => theme?.['palette']?.text.secondary};
+  color: ${({ theme }) => theme?.["palette"]?.text.secondary};
 `
 
 const StyledButton = styled(Button)`
@@ -80,7 +80,7 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
 }) => {
   const { locales } = useLocale()
   const [isCreating, setIsCreating] = useState(false)
-  const [isUpdating, setIsUpdating] = useState('')
+  const [isUpdating, setIsUpdating] = useState("")
 
   const { setError } = useFormContext()
   const { field, fieldState } = useController({ name })
@@ -114,13 +114,13 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
       const result: any = schema.safeParse(value[isUpdating])
 
       if (result.success) {
-        setIsUpdating('')
+        setIsUpdating("")
       } else {
-        console.log('multi errors', result.error.issues)
+        console.log("multi errors", result.error.issues)
         for (const error of result.error.issues) {
           setError(`${name}[${isUpdating}].${error.path[0]}`, {
             message: error.message,
-            type: 'custom',
+            type: "custom",
           })
         }
       }
@@ -142,7 +142,7 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
       if (isCreating) {
         setIsCreating(false)
       } else {
-        setIsUpdating('')
+        setIsUpdating("")
       }
     } else {
       console.log(result.error.issues)
@@ -150,17 +150,17 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
         console.log(`${name}[${index}].${error.path[0]}`)
         setError(`${name}[${index}].${error.path[0]}`, {
           message: error.message,
-          type: 'custom',
+          type: "custom",
         })
       }
     }
   }
 
   return (
-    <div style={{ width: '100%' }}>
+    <div style={{ width: "100%" }}>
       <FormControl
         required={required}
-        style={{ alignSelf: 'flex-start', margin: '10px 0', width: '100%' }}
+        style={{ alignSelf: "flex-start", margin: "10px 0", width: "100%" }}
       >
         <FormLabel style={{ marginBottom: 10 }}>{label}</FormLabel>
         {tableData?.length > 0 && (
@@ -169,6 +169,7 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
               columns={fields.map((field) => ({
                 accessorKey: field.name,
                 header: field.label,
+                enableSorting: false,
               }))}
               data={formatFunction ? formatFunction(tableData) : tableData}
               rowActions={[
@@ -210,7 +211,7 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
           style={
             fieldState.error
               ? {
-                  backgroundColor: '#f44336',
+                  backgroundColor: "#f44336",
                 }
               : {}
           }
@@ -227,7 +228,7 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
             }
           }}
         >
-          <PlusIcon style={{ margin: '0 5px 0 -5px' }} />
+          <PlusIcon style={{ margin: "0 5px 0 -5px" }} />
           {title}
         </CreateButton>
 
@@ -239,7 +240,7 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
       </FormControl>
       <Dialog
         disableEnforceFocus
-        open={isCreating || isUpdating !== ''}
+        open={isCreating || isUpdating !== ""}
         onClose={handleClose}
         id={generateSlug(title)}
         aria-labelledby={id}

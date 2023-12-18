@@ -1,0 +1,16 @@
+{
+  "$schema": "https://biomejs.dev/schemas/1.4.0/schema.json",
+  "javascript": {
+    "formatter": {
+      "semicolons": "asNeeded"
+    }
+  },
+  "formatter": {
+    "formatWithErrors": true,
+    "ignore": ["**/.next/**", "**/ios/**", "**/android/**", "**/out/**"],
+    "indentStyle": "space"
+  },
+  "linter": {
+    "enabled": false
+  }
+}

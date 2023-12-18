@@ -1,28 +1,34 @@
-import { Autocomplete, Checkbox, CircularProgress } from '@mui/material'
-import TextField from '@mui/material/TextField'
+import {
+  Autocomplete,
+  Checkbox,
+  CircularProgress,
+  darken,
+  lighten,
+  styled,
+} from "@mui/material"
+import TextField from "@mui/material/TextField"
 import {
   FilterOptionsState,
   createFilterOptions,
-} from '@mui/material/useAutocomplete'
-import { darken, lighten, styled } from '@mui/system'
-import { CSSProperties, FC } from 'react'
-import { useController } from 'react-hook-form'
-import { InputProps } from '../../lib/types'
-import { useIsRequired } from './SchemaContext'
+} from "@mui/material/useAutocomplete"
+import { CSSProperties, FC } from "react"
+import { useController } from "react-hook-form"
+import { InputProps } from "../../lib/types"
+import { useIsRequired } from "./SchemaContext"
 
-const GroupHeader = styled('div')(({ theme }) => ({
-  position: 'sticky',
-  top: '-8px',
-  padding: '4px 10px',
+const GroupHeader = styled("div")(({ theme }) => ({
+  position: "sticky",
+  top: "-8px",
+  padding: "4px 10px",
   color: theme.palette.primary.main,
   zIndex: 999,
   backgroundColor:
-    theme.palette.mode === 'light'
+    theme.palette.mode === "light"
       ? lighten(theme.palette.primary.light, 0.85)
       : darken(theme.palette.primary.main, 0.8),
 }))
 
-const GroupItems = styled('ul')({
+const GroupItems = styled("ul")({
   padding: 0,
 })
 
@@ -53,7 +59,7 @@ const ComboBox: FC<Props> = ({
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
   const isRequired = useIsRequired(formName)
   const { field, fieldState } = useController({ name: formName })
   const isLoading = !disabled && (loading || !Array.isArray(options))
@@ -62,7 +68,7 @@ const ComboBox: FC<Props> = ({
     <Autocomplete
       multiple={multiple}
       readOnly={readOnly}
-      style={style ?? { width: '100%' }}
+      style={style ?? { width: "100%" }}
       {...rest}
       value={field.value ? field.value : multiple ? [] : null}
       onChange={(_, value) => {
@@ -70,12 +76,12 @@ const ComboBox: FC<Props> = ({
         if (onCreate && value && value.inputValue) {
           onCreate(value.inputValue)
         } else {
-          field.onChange({ target: { value: value || '' } })
+          field.onChange({ target: { value: value || "" } })
         }
       }}
       onInputChange={(_e, value) => {
         if (freeSolo) {
-          field.onChange({ target: { value: value || '' } })
+          field.onChange({ target: { value: value || "" } })
         }
       }}
       selectOnFocus
@@ -100,7 +106,7 @@ const ComboBox: FC<Props> = ({
           ? filterOptions
           : (options, params) => {
               if (freeSolo) {
-                params.inputValue = field.value ? field.value : ''
+                params.inputValue = field.value ? field.value : ""
               }
 
               const filtered = filter(options, params)
@@ -108,7 +114,7 @@ const ComboBox: FC<Props> = ({
               if (
                 onCreate &&
                 filtered.length === 0 &&
-                params.inputValue !== ''
+                params.inputValue !== ""
               ) {
                 filtered.push({
                   inputValue: params.inputValue,
