@@ -1,6 +1,6 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react'
+import { Dispatch, ReactNode, SetStateAction } from "react"
 
-export type Language = 'es' | 'en' | 'de' | 'pt'
+export type Language = "es" | "en" | "de" | "pt"
 
 export interface Option {
   value: any
@@ -9,7 +9,7 @@ export interface Option {
   icon?: any
 }
 
-export type DateFormat = 'daytime' | 'day' | 'time' | 'apiDate' | 'apiTime'
+export type DateFormat = "daytime" | "day" | "time" | "apiDate" | "apiTime"
 
 export interface Amount {
   id: string
@@ -20,7 +20,7 @@ export interface Amount {
 
 export interface NotificationType {
   message: string
-  state: 'success' | 'info' | 'warning' | 'error'
+  state: "success" | "info" | "warning" | "error"
   duration?: number
 }
 

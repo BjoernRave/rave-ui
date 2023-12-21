@@ -1,8 +1,8 @@
-import { withRHF } from '../.storybook/withRHF'
-import { Table } from '../src'
+import { withRHF } from "../.storybook/withRHF"
+import { Table } from "../src"
 
 export default {
-  title: 'Composites',
+  title: "Composites",
   decorators: [withRHF(false)],
 }
 
@@ -10,14 +10,14 @@ export const TableStory = (props) => {
   return (
     <Table
       data={[
-        { name: 'Shoe', amount: '10' },
-        { name: 'Table', amount: '20' },
-        { name: 'Trouser', amount: '22' },
-        { name: 'Ball', amount: '19' },
+        { name: "Shoe", amount: "10" },
+        { name: "Table", amount: "20" },
+        { name: "Trouser", amount: "22" },
+        { name: "Ball", amount: "19" },
       ]}
       columns={[
-        { accessorKey: 'name', header: 'Name' },
-        { accessorKey: 'amount', header: 'Amount' },
+        { accessorKey: "name", header: "Name" },
+        { accessorKey: "amount", header: "Amount" },
       ]}
     />
   )

@@ -4,9 +4,9 @@ import {
   FormLabel,
   ToggleButton,
   ToggleButtonGroup,
-} from '@mui/material'
-import { FC, useId } from 'react'
-import { Option } from './lib/types'
+} from "@mui/material"
+import { FC, useId } from "react"
+import { Option } from "./lib/types"
 
 const ButtonGroup: FC<Props> = ({
   options,
@@ -37,7 +37,7 @@ const ButtonGroup: FC<Props> = ({
         {options.map((o) => (
           <ToggleButton
             size={size}
-            sx={{ width: '100%' }}
+            sx={{ width: "100%" }}
             key={o.value}
             value={o.value}
           >
@@ -57,7 +57,7 @@ interface Props {
   options: Option[]
   onClick?: (value: string) => void
   value?: string
-  size?: 'small' | 'medium' | 'large'
+  size?: "small" | "medium" | "large"
   label?: string
   helperText?: string
   className?: string

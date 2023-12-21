@@ -1,5 +1,5 @@
-import styled from '@emotion/styled'
-import PlusIcon from '@mui/icons-material/AddCircle'
+import styled from "@emotion/styled"
+import PlusIcon from "@mui/icons-material/AddCircle"
 import {
   Chip,
   FormControl,
@@ -10,17 +10,17 @@ import {
   InputProps as MuiInputProps,
   OutlinedInput,
   Tooltip,
-} from '@mui/material'
-import { FC, useState } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug } from '../../lib/misc'
-import { useLocale } from '../../lib/theme'
-import { InputProps } from '../../lib/types'
-import { useIsRequired } from './SchemaContext'
+} from "@mui/material"
+import { FC, useState } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug } from "../../lib/misc"
+import { useLocale } from "../../lib/theme"
+import { InputProps } from "../../lib/types"
+import { useIsRequired } from "./SchemaContext"
 
 const StyledButton = styled(IconButton)<{ hasInput: number }>`
   ${({ hasInput }) =>
-    hasInput === 1 ? 'color: #3c9f80 !important' : undefined};
+    hasInput === 1 ? "color: #3c9f80 !important" : undefined};
   padding: 0;
 `
 
@@ -40,10 +40,10 @@ const TextListInput: FC<Props> = ({
   ...rest
 }) => {
   const { locales } = useLocale()
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState("")
 
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
   const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
@@ -55,7 +55,7 @@ const TextListInput: FC<Props> = ({
 
     if (input && value.length < maxItems) {
       field.onChange({ target: { value: [...value, input] } })
-      setInput('')
+      setInput("")
       onChange && onChange([...value, input])
     }
   }
@@ -65,7 +65,7 @@ const TextListInput: FC<Props> = ({
       <FormControl
         error={Boolean(fieldState.error) || error}
         required={isRequired}
-        style={style ?? { width: '100%' }}
+        style={style ?? { width: "100%" }}
       >
         <InputLabel htmlFor={generateSlug(formName)}>{label}</InputLabel>
         <OutlinedInput
@@ -117,14 +117,14 @@ const TextListInput: FC<Props> = ({
               allowDecimals &&
               (e.keyCode === 190 || e.keyCode === 188) &&
               field?.value?.split &&
-              field?.value?.split('.')?.length < 2 &&
-              field?.value?.split(',')?.length < 2
+              field?.value?.split(".")?.length < 2 &&
+              field?.value?.split(",")?.length < 2
             ) {
               return
             }
             e.preventDefault()
           }}
-          inputMode={onlyNumbers ? 'numeric' : undefined}
+          inputMode={onlyNumbers ? "numeric" : undefined}
           value={input}
           onChange={(e) => setInput(e.target.value)}
           id={generateSlug(formName)}
@@ -133,7 +133,7 @@ const TextListInput: FC<Props> = ({
           {value.map((val, ind) => (
             <Chip
               color="primary"
-              style={{ margin: '5px' }}
+              style={{ margin: "5px" }}
               onDelete={() => {
                 const newArray = Array.from(value)
                 newArray.splice(value.indexOf(val), 1)
@@ -157,7 +157,7 @@ export default TextListInput
 
 export interface Props
   extends InputProps,
-    Omit<MuiInputProps, 'name' | 'label' | 'onChange'> {
+    Omit<MuiInputProps, "name" | "label" | "onChange"> {
   maxItems?: number
   canAdd?: (value: string) => boolean
   onlyNumbers?: boolean

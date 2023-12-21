@@ -1,14 +1,14 @@
-import styled from '@emotion/styled'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { FC, PropsWithChildren, useEffect } from 'react'
+import styled from "@emotion/styled"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { FC, PropsWithChildren, useEffect } from "react"
 import {
   FieldErrorsImpl,
   FormProvider,
   UseFormSetError,
   useForm,
-} from 'react-hook-form'
-import { SchemaContext } from './SchemaContext'
-import SubmitButton from './SubmitButton'
+} from "react-hook-form"
+import { SchemaContext } from "./SchemaContext"
+import SubmitButton from "./SubmitButton"
 
 const StyledForm = styled.form`
   > *:not(label) {
@@ -30,7 +30,7 @@ const Form: FC<PropsWithChildren<Props>> = ({
   validationSchema,
   className,
   submitButton = false,
-  submitText = 'Absenden',
+  submitText = "Absenden",
   validate,
   onError,
 }) => {
@@ -44,7 +44,7 @@ const Form: FC<PropsWithChildren<Props>> = ({
 
   useEffect(() => {
     if (methods.formState.isSubmitted && !methods.formState.isValid) {
-      console.log(methods.formState.errors, 'from Form component rave-ui')
+      console.log(methods.formState.errors, "from Form component rave-ui")
 
       onError && onError(methods.formState.errors)
     }
@@ -58,28 +58,28 @@ const Form: FC<PropsWithChildren<Props>> = ({
           onSubmit={(e) => {
             if (!validate) {
               return methods.handleSubmit((values) =>
-                onSubmit(values, methods.setError)
+                onSubmit(values, methods.setError),
               )(e)
             }
 
             const validation = validate(methods.getValues())
 
-            if (typeof validation === 'boolean') {
+            if (typeof validation === "boolean") {
               return methods.handleSubmit((values) =>
-                onSubmit(values, methods.setError)
+                onSubmit(values, methods.setError),
               )(e)
             }
 
             e.preventDefault()
 
-            console.log(validation, 'validation')
+            console.log(validation, "validation")
 
             onError && onError(validation as any)
 
             Object.keys(validation).forEach((key) => {
               methods.setError(key, {
                 message: validation[key],
-                type: 'custom',
+                type: "custom",
               })
             })
           }}
@@ -99,7 +99,7 @@ interface Props {
   initialValues: Record<string, any>
   onSubmit: (
     data: Record<string, any>,
-    setError: UseFormSetError<Record<string, any>>
+    setError: UseFormSetError<Record<string, any>>,
   ) => void
   children: any
   className?: string
@@ -111,6 +111,6 @@ interface Props {
       FieldErrorsImpl<{
         [x: string]: any
       }>
-    >
+    >,
   ) => void
 }

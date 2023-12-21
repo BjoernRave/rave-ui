@@ -1,11 +1,11 @@
-import { DateRangePickerProps } from '@mui/lab'
-import { FormControl, FormHelperText, FormLabel } from '@mui/material'
-import { DateRangePicker } from '@mui/x-date-pickers-pro'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { useLocale } from '../../lib/theme'
-import { InputProps, Language } from '../../lib/types'
-import DateTimeProvider from './DateTimeProvider'
+import { DateRangePickerProps } from "@mui/lab"
+import { FormControl, FormHelperText, FormLabel } from "@mui/material"
+import { DateRangePicker } from "@mui/x-date-pickers-pro"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { useLocale } from "../../lib/theme"
+import { InputProps, Language } from "../../lib/types"
+import DateTimeProvider from "./DateTimeProvider"
 
 const DateRangeInput: FC<Props> = ({
   subName,
@@ -18,13 +18,13 @@ const DateRangeInput: FC<Props> = ({
 }) => {
   const { lang } = useLocale()
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
   return (
     <FormControl
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       className="my-2"
       error={Boolean(fieldState.error)}
     >
@@ -57,4 +57,4 @@ export default DateRangeInput
 
 interface Props
   extends InputProps,
-    Omit<DateRangePickerProps, 'label' | 'onChange'> {}
+    Omit<DateRangePickerProps, "label" | "onChange"> {}

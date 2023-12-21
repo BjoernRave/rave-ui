@@ -166,8 +166,16 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
         {tableData?.length > 0 && (
           <>
             <Table
+              hideSearch
               columns={fields.map((field) => ({
-                accessorKey: field.name,
+                ...(field.getOptionLabel
+                  ? {
+                      id: field.name,
+                      accessorFn: (row) => field.getOptionLabel(row),
+                    }
+                  : {
+                      accessorKey: field.name,
+                    }),
                 header: field.label,
                 enableSorting: false,
               }))}
@@ -269,6 +277,7 @@ export default MultiCreate
 interface Field {
   name: string
   label: string
+  getOptionLabel?: (option: any) => string
 }
 
 export interface Props {

@@ -1,5 +1,5 @@
-import { Divider } from '@mui/material'
-import { FC, PropsWithChildren } from 'react'
+import { Divider } from "@mui/material"
+import { FC, PropsWithChildren } from "react"
 
 const FormGroup: FC<PropsWithChildren<Props>> = ({
   children,

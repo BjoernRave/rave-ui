@@ -3,11 +3,11 @@ import {
   CheckboxProps,
   FormControlLabel,
   FormHelperText,
-} from '@mui/material'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug } from '../../lib/misc'
-import { InputProps } from '../../lib/types'
+} from "@mui/material"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug } from "../../lib/misc"
+import { InputProps } from "../../lib/types"
 
 const BooleanInput: FC<Props> = ({
   name,
@@ -20,14 +20,14 @@ const BooleanInput: FC<Props> = ({
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
   return (
     <FormControlLabel
       id={generateSlug(name)}
-      style={{ alignSelf: 'start', margin: '10px 0' }}
+      style={{ alignSelf: "start", margin: "10px 0", display: "block" }}
       control={
         <MuiCheckbox
           {...rest}
@@ -43,7 +43,7 @@ const BooleanInput: FC<Props> = ({
       label={
         <>
           {label}
-          {required ? ' *' : ''}
+          {required ? " *" : ""}
           {(helperText || fieldState.error) && (
             <FormHelperText error={Boolean(fieldState.error)}>
               {fieldState.error ? fieldState.error.message : helperText}
@@ -59,4 +59,4 @@ export default BooleanInput
 
 export interface Props
   extends InputProps,
-    Omit<CheckboxProps, 'name' | 'label' | 'onChange'> {}
+    Omit<CheckboxProps, "name" | "label" | "onChange"> {}

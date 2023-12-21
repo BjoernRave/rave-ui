@@ -1,9 +1,9 @@
-import { BaseTextFieldProps, TextField } from '@mui/material'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug } from '../../lib/misc'
-import { InputProps } from '../../lib/types'
-import { useIsRequired } from './SchemaContext'
+import { BaseTextFieldProps, TextField } from "@mui/material"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug } from "../../lib/misc"
+import { InputProps } from "../../lib/types"
+import { useIsRequired } from "./SchemaContext"
 
 const TextAreaInput: FC<Props> = ({
   name,
@@ -11,12 +11,12 @@ const TextAreaInput: FC<Props> = ({
   index,
   helperText,
   error,
-  variant = 'outlined',
+  variant = "outlined",
   rows = 4,
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
   const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
@@ -28,7 +28,7 @@ const TextAreaInput: FC<Props> = ({
       {...field}
       type="text"
       required={isRequired}
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       multiline
       rows={String(rows)}
       variant={variant as any}
@@ -42,6 +42,6 @@ export default TextAreaInput
 
 export interface Props
   extends InputProps,
-    Omit<BaseTextFieldProps, 'name' | 'label'> {
+    Omit<BaseTextFieldProps, "name" | "label"> {
   rows?: number
 }

@@ -1,15 +1,15 @@
 module.exports = {
-  stories: ['../stories/*.stories.@(js|jsx|ts|tsx)'],
+  stories: ["../stories/*.stories.@(js|jsx|ts|tsx)"],
   addons: [
-    '@storybook/addon-links',
-    '@storybook/addon-essentials',
-    '@storybook/addon-interactions',
+    "@storybook/addon-links",
+    "@storybook/addon-essentials",
+    "@storybook/addon-interactions",
   ],
-  framework: '@storybook/react',
+  framework: "@storybook/react",
   reactOptions: {
     fastRefresh: true,
   },
   core: {
-    builder: '@storybook/builder-webpack5',
+    builder: "@storybook/builder-webpack5",
   },
 }

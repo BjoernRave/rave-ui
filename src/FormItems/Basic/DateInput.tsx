@@ -1,11 +1,11 @@
-import { DatePicker, DatePickerProps } from '@mui/x-date-pickers-pro'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { dateFormat } from '../../lib/date'
-import { useLocale } from '../../lib/theme'
-import { InputProps, Language } from '../../lib/types'
-import DateTimeProvider from './DateTimeProvider'
-import { useIsRequired } from './SchemaContext'
+import { DatePicker, DatePickerProps } from "@mui/x-date-pickers-pro"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { dateFormat } from "../../lib/date"
+import { useLocale } from "../../lib/theme"
+import { InputProps, Language } from "../../lib/types"
+import DateTimeProvider from "./DateTimeProvider"
+import { useIsRequired } from "./SchemaContext"
 
 const DateInput: FC<Props> = ({
   name,
@@ -21,7 +21,7 @@ const DateInput: FC<Props> = ({
   const { lang } = useLocale()
 
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
   const isRequired = useIsRequired(formName)
   const { field, fieldState } = useController({ name: formName })
 
@@ -48,7 +48,7 @@ const DateInput: FC<Props> = ({
         slotProps={{
           textField: {
             style: {
-              width: '100%',
+              width: "100%",
             },
             required: isRequired,
             error: Boolean(fieldState.error),
@@ -65,6 +65,6 @@ const DateInput: FC<Props> = ({
 export default DateInput
 export interface Props
   extends InputProps,
-    Omit<DatePickerProps<any>, 'label' | 'onChange'> {
+    Omit<DatePickerProps<any>, "label" | "onChange"> {
   disabled?: boolean
 }

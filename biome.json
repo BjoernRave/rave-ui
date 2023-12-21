@@ -7,7 +7,6 @@
   },
   "formatter": {
     "formatWithErrors": true,
-    "ignore": ["**/.next/**", "**/ios/**", "**/android/**", "**/out/**"],
     "indentStyle": "space"
   },
   "linter": {

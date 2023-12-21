@@ -1,6 +1,6 @@
-import { ComponentMeta } from '@storybook/react'
-import { useController } from 'react-hook-form'
-import { withRHF } from '../.storybook/withRHF'
+import { ComponentMeta } from "@storybook/react"
+import { useController } from "react-hook-form"
+import { withRHF } from "../.storybook/withRHF"
 
 import {
   ComboBox,
@@ -21,36 +21,36 @@ import {
   TextListInput,
   TimeInput,
   WithCreationOption,
-} from '../src'
+} from "../src"
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-export default {
+export default ({
   decorators: [withRHF(false)],
-} as ComponentMeta<typeof TextInput>
+} as ComponentMeta<typeof TextInput>)
 
 const exampleOptions2: Option[] = [
   {
-    label: 'Option 1',
-    value: 'option1',
+    label: "Option 1",
+    value: "option1",
   },
   {
-    label: 'Option 2',
-    value: 'option2',
+    label: "Option 2",
+    value: "option2",
   },
 ]
 
 const exampleOptions3: Option[] = [
   {
-    label: 'Option 1',
-    value: 'option1',
+    label: "Option 1",
+    value: "option1",
   },
   {
-    label: 'Option 2',
-    value: 'option2',
+    label: "Option 2",
+    value: "option2",
   },
   {
-    label: 'Option 3',
-    value: 'option3',
+    label: "Option 3",
+    value: "option3",
   },
 ]
 
@@ -154,7 +154,7 @@ export const DateTimeInputStory = (args) => (
 export const WithCreationOptionStory = (args) => (
   <WithCreationOption
     title="CreationOption"
-    onCreate={() => console.log('creating')}
+    onCreate={() => console.log("creating")}
     {...args}
   >
     <TextInput label="WithCreationOption" name="WithCreationOption" />
@@ -176,7 +176,7 @@ export const PhoneInputStory = (args) => (
 
 export const FileInputStory = (args) => (
   <FileInput
-    getImageUrl={(url) => 'https://test.com'}
+    getImageUrl={(url) => "https://test.com"}
     label="FileInputStory"
     onDelete={() => {}}
     onReOrder={() => {}}
@@ -210,7 +210,7 @@ export const MultiComboboxStory = (args) => (
     name="MultiComboboxStory"
     helperText="MultiComboboxHelper"
     label="MultiComboboxStory"
-    options={['tag1', 'tag2', 'tag3']}
+    options={["tag1", "tag2", "tag3"]}
     {...args}
   />
 )
@@ -225,26 +225,26 @@ export const DateRangeInputStory = (args) => (
 )
 
 const MultiCrateForm = () => {
-  const { field } = useController({ name: 'MultiCreateStory' })
+  const { field } = useController({ name: "MultiCreateStory" })
 
   return (
     <>
       <TextInput
         autoFocus
-        name={'MultiCreateStory'}
+        name={"MultiCreateStory"}
         index={field.value.length - 1}
         subName="name"
         required
-        label={'unitName'}
-        helperText={'unitNameHelper'}
+        label={"unitName"}
+        helperText={"unitNameHelper"}
       />
       <NumberInput
-        name={'MultiCreateStory'}
+        name={"MultiCreateStory"}
         index={field.value.length - 1}
         subName="baseAmount"
         required
-        label={'baseAmount'}
-        helperText={'baseAmountHelper'}
+        label={"baseAmount"}
+        helperText={"baseAmountHelper"}
       />
     </>
   )

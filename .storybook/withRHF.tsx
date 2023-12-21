@@ -1,15 +1,15 @@
-import { action } from '@storybook/addon-actions'
+import { action } from "@storybook/addon-actions"
 
-import { FC, ReactNode, VFC } from 'react'
-import { FormProvider, useForm } from 'react-hook-form'
-import { AppWrapper } from '../src'
+import { FC, ReactNode, VFC } from "react"
+import { FormProvider, useForm } from "react-hook-form"
+import { AppWrapper } from "../src"
 
 const StorybookFormProvider: VFC<{ children: ReactNode }> = ({ children }) => {
   const methods = useForm()
   return (
     <FormProvider {...methods}>
       <form
-        onSubmit={methods.handleSubmit(action('[React Hooks Form] Submit'))}
+        onSubmit={methods.handleSubmit(action("[React Hooks Form] Submit"))}
       >
         {children}
       </form>

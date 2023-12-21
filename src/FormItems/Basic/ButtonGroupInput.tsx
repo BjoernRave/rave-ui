@@ -4,12 +4,12 @@ import {
   FormLabel,
   ToggleButton,
   ToggleButtonGroup,
-} from '@mui/material'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug } from '../../lib/misc'
-import { InputProps, Option } from '../../lib/types'
-import { useIsRequired } from './SchemaContext'
+} from "@mui/material"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug } from "../../lib/misc"
+import { InputProps, Option } from "../../lib/types"
+import { useIsRequired } from "./SchemaContext"
 
 const ButtonGroupInput: FC<Props> = ({
   options,
@@ -23,7 +23,7 @@ const ButtonGroupInput: FC<Props> = ({
   onChange,
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
   const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
@@ -53,11 +53,11 @@ const ButtonGroupInput: FC<Props> = ({
         }}
       >
         {options.map((o) => {
-          const label = typeof o === 'string' ? o : o.label
-          const value = typeof o === 'string' ? o : o.value
+          const label = typeof o === "string" ? o : o.label
+          const value = typeof o === "string" ? o : o.value
 
           return (
-            <ToggleButton sx={{ width: '100%' }} key={value} value={value}>
+            <ToggleButton sx={{ width: "100%" }} key={value} value={value}>
               {label}
             </ToggleButton>
           )
@@ -79,6 +79,6 @@ interface Props extends InputProps {
   readonly options: (Option | string)[]
   onClick?: (value: string) => void
   value?: string
-  size?: 'small' | 'medium' | 'large'
+  size?: "small" | "medium" | "large"
   readOnly?: boolean
 }

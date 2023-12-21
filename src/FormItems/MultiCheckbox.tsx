@@ -5,10 +5,10 @@ import {
   FormGroup,
   FormHelperText,
   FormLabel,
-} from '@mui/material'
-import { FC, ReactNode } from 'react'
-import { useController } from 'react-hook-form'
-import { InputProps } from '../lib/types'
+} from "@mui/material"
+import { FC, ReactNode } from "react"
+import { useController } from "react-hook-form"
+import { InputProps } from "../lib/types"
 
 const MultiCheckbox: FC<Props> = ({
   label,
@@ -19,14 +19,14 @@ const MultiCheckbox: FC<Props> = ({
   subName,
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
   return (
     <FormControl
       error={Boolean(fieldState.error)}
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       component="fieldset"
       variant="standard"
       className="my-2"

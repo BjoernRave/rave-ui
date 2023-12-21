@@ -1,21 +1,21 @@
-import styled from '@emotion/styled'
-import PlusIcon from '@mui/icons-material/AddCircle'
+import styled from "@emotion/styled"
+import PlusIcon from "@mui/icons-material/AddCircle"
 import {
   Autocomplete,
   CircularProgress,
   IconButton,
   Tooltip,
-} from '@mui/material'
-import TextField from '@mui/material/TextField'
-import { FC, useState } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug, getErrorMessage } from '../../lib/misc'
-import { useLocale } from '../../lib/theme'
-import { InputProps } from '../../lib/types'
+} from "@mui/material"
+import TextField from "@mui/material/TextField"
+import { FC, useState } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug, getErrorMessage } from "../../lib/misc"
+import { useLocale } from "../../lib/theme"
+import { InputProps } from "../../lib/types"
 
 const StyledButton = styled(IconButton)<{ hasInput: number }>`
   ${({ hasInput }) =>
-    hasInput === 1 ? 'color: #3c9f80 !important' : undefined};
+    hasInput === 1 ? "color: #3c9f80 !important" : undefined};
 `
 
 const MultiCombobox: FC<Props> = ({
@@ -36,11 +36,11 @@ const MultiCombobox: FC<Props> = ({
   const { locales } = useLocale()
 
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
   const { field, fieldState } = useController({ name: formName })
 
-  const [input, setInput] = useState('')
+  const [input, setInput] = useState("")
   const isLoading = !disabled && (loading || !Array.isArray(options))
 
   const value = field.value ?? []
@@ -49,7 +49,7 @@ const MultiCombobox: FC<Props> = ({
     <Autocomplete
       multiple
       id={generateSlug(formName)}
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       {...rest}
       value={field.value || []}
       selectOnFocus
@@ -65,9 +65,10 @@ const MultiCombobox: FC<Props> = ({
               (val) =>
                 !Boolean(
                   field?.value?.find(
-                    (metaVal) => getOptionLabel(val) === getOptionLabel(metaVal)
-                  )
-                )
+                    (metaVal) =>
+                      getOptionLabel(val) === getOptionLabel(metaVal),
+                  ),
+                ),
             )
       }
       loading={isLoading}
@@ -103,7 +104,7 @@ const MultiCombobox: FC<Props> = ({
                           field.onChange({
                             target: { value: [...value, input] },
                           })
-                          setInput('')
+                          setInput("")
                         }
                       }}
                     >

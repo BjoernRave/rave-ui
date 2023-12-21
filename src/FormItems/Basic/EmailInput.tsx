@@ -1,9 +1,9 @@
-import { BaseTextFieldProps, TextField } from '@mui/material'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug } from '../../lib/misc'
-import { InputProps } from '../../lib/types'
-import { useIsRequired } from './SchemaContext'
+import { BaseTextFieldProps, TextField } from "@mui/material"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug } from "../../lib/misc"
+import { InputProps } from "../../lib/types"
+import { useIsRequired } from "./SchemaContext"
 
 const EmailInput: FC<Props> = ({
   name,
@@ -11,11 +11,11 @@ const EmailInput: FC<Props> = ({
   subName,
   helperText,
   error,
-  variant = 'outlined',
+  variant = "outlined",
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
   const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
@@ -24,7 +24,7 @@ const EmailInput: FC<Props> = ({
     <TextField
       required={isRequired}
       id={generateSlug(formName)}
-      style={{ width: '100%' }}
+      style={{ width: "100%" }}
       {...rest}
       {...field}
       type="email"
@@ -39,4 +39,4 @@ export default EmailInput
 
 export interface Props
   extends InputProps,
-    Omit<BaseTextFieldProps, 'name' | 'label'> {}
+    Omit<BaseTextFieldProps, "name" | "label"> {}

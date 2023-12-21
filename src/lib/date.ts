@@ -1,31 +1,31 @@
-import { differenceInSeconds, format, isDate, parse } from 'date-fns'
-import { DateFormat } from './types'
+import { differenceInSeconds, format, isDate, parse } from "date-fns"
+import { DateFormat } from "./types"
 
-export const dateTimeFormat = 'dd.MM.yyyy HH:mm'
+export const dateTimeFormat = "dd.MM.yyyy HH:mm"
 
-export const timeFormat = 'HH:mm'
+export const timeFormat = "HH:mm"
 
-export const dateFormat = 'dd.MM.yyyy'
+export const dateFormat = "dd.MM.yyyy"
 
-export const apiDateFormat = 'yyyy-MM-dd'
+export const apiDateFormat = "yyyy-MM-dd"
 
-export const apiTime = 'HH:mm:ss'
+export const apiTime = "HH:mm:ss"
 
 export const getDateTimeFormat = (dateString: DateFormat) => {
   switch (dateString) {
-    case 'daytime':
+    case "daytime":
       return dateTimeFormat
 
-    case 'day':
+    case "day":
       return dateFormat
 
-    case 'time':
+    case "time":
       return timeFormat
 
-    case 'apiDate':
+    case "apiDate":
       return apiDateFormat
 
-    case 'apiTime':
+    case "apiTime":
       return apiTime
   }
 }
@@ -33,9 +33,9 @@ export const getDateTimeFormat = (dateString: DateFormat) => {
 export const formatDate = (
   date: string | number | Date,
   dateString: DateFormat,
-  timezone?: string
+  timezone?: string,
 ) => {
-  if (!date || date === 'N/A') return date
+  if (!date || date === "N/A") return date
 
   const actualDate = isDate(date) ? (date as Date) : new Date(date)
 
@@ -65,7 +65,7 @@ export const formatSecondsDuration = ({
 
   if (minuteDiff <= 60) {
     return `${minuteDiff}m ${
-      withSeconds && seconds % 60 !== 0 ? `${seconds % 60}s` : ''
+      withSeconds && seconds % 60 !== 0 ? `${seconds % 60}s` : ""
     }`
   }
 
@@ -75,13 +75,13 @@ export const formatSecondsDuration = ({
 
   if (hourDiff <= 24 || !withDays) {
     return `${hourDiff}h ${
-      minuteDiff % 60 !== 0 ? `${minuteDiff % 60}m` : ''
-    } ${withSeconds && seconds % 60 !== 0 ? `${seconds % 60}s` : ''}`
+      minuteDiff % 60 !== 0 ? `${minuteDiff % 60}m` : ""
+    } ${withSeconds && seconds % 60 !== 0 ? `${seconds % 60}s` : ""}`
   }
 
   const dayDiff = Math.floor(hourDiff / 24)
 
-  return `${dayDiff}d ${hourDiff % 24 !== 0 ? `${hourDiff % 24}h` : ''}`
+  return `${dayDiff}d ${hourDiff % 24 !== 0 ? `${hourDiff % 24}h` : ""}`
 }
 
 export const formatDateRelative = ({
@@ -97,7 +97,7 @@ export const formatDateRelative = ({
   withSeconds?: boolean
   capAtHour?: boolean
 }) => {
-  if (!date || dateLeft === null) return '-'
+  if (!date || dateLeft === null) return "-"
 
   const secondDate = dateLeft ?? new Date()
 

@@ -1,12 +1,12 @@
-import styled from '@emotion/styled'
-import { InputAdornment } from '@mui/material'
-import TextField from '@mui/material/TextField'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug } from '../lib/misc'
-import { useLocale } from '../lib/theme'
-import { InputProps } from '../lib/types'
-import { useIsRequired } from './Basic/SchemaContext'
+import styled from "@emotion/styled"
+import { InputAdornment } from "@mui/material"
+import TextField from "@mui/material/TextField"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug } from "../lib/misc"
+import { useLocale } from "../lib/theme"
+import { InputProps } from "../lib/types"
+import { useIsRequired } from "./Basic/SchemaContext"
 
 const PhoneWrapper = styled.div`
   display: inline-flex !important;
@@ -25,10 +25,10 @@ const PhoneInput: FC<Props> = ({
 }) => {
   const { locales } = useLocale()
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
 
   const prefixFormName =
-    typeof index === 'number' && prefixSubName
+    typeof index === "number" && prefixSubName
       ? `${prefixName}[${index}].${prefixSubName}`
       : prefixName
 
@@ -40,7 +40,7 @@ const PhoneInput: FC<Props> = ({
   return (
     <PhoneWrapper id={`${generateSlug(formName)}-group`}>
       <TextField
-        style={{ width: '170px', alignSelf: 'flex-end', marginRight: '20px' }}
+        style={{ width: "170px", alignSelf: "flex-end", marginRight: "20px" }}
         required={isRequired}
         value={prefixField.field.value}
         onChange={(e) => prefixField.field.onChange(e)}
@@ -101,7 +101,7 @@ const PhoneInput: FC<Props> = ({
         }}
         helperText={fieldState.error ? fieldState.error.message : helperText}
         error={Boolean(fieldState.error)}
-        style={{ width: '100%' }}
+        style={{ width: "100%" }}
         required={isRequired}
       />
     </PhoneWrapper>

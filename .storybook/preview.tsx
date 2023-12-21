@@ -1,7 +1,7 @@
-import AppWrapper from '../src/AppWrapper'
+import AppWrapper from "../src/AppWrapper"
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
+  actions: { argTypesRegex: "^on[A-Z].*" },
 
   controls: {
     matchers: {

@@ -1,12 +1,12 @@
-import styled from '@emotion/styled'
-import CloudUploadIcon from '@mui/icons-material/CloudUpload'
-import { FC, useCallback } from 'react'
-import { useDropzone } from 'react-dropzone'
-import { useLocale } from '../lib/theme'
+import styled from "@emotion/styled"
+import CloudUploadIcon from "@mui/icons-material/CloudUpload"
+import { FC, useCallback } from "react"
+import { useDropzone } from "react-dropzone"
+import { useLocale } from "../lib/theme"
 
 const Dropzone = styled.div`
   border: 2px dashed;
-  background-color: ${({ theme }) => theme?.['palette']?.background.paper};
+  background-color: ${({ theme }) => theme?.["palette"]?.background.paper};
   padding: 80px;
   margin: 20px;
   cursor: pointer;

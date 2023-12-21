@@ -1,10 +1,10 @@
-import styled from '@emotion/styled'
-import ArrowBackIcon from '@mui/icons-material/ArrowBack'
-import ArrowForwardIcon from '@mui/icons-material/ArrowForward'
-import DeleteIcon from '@mui/icons-material/Delete'
-import { Backdrop, IconButton, Tooltip } from '@mui/material'
-import { FC, useState } from 'react'
-import { useLocale } from './lib/theme'
+import styled from "@emotion/styled"
+import ArrowBackIcon from "@mui/icons-material/ArrowBack"
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward"
+import DeleteIcon from "@mui/icons-material/Delete"
+import { Backdrop, IconButton, Tooltip } from "@mui/material"
+import { FC, useState } from "react"
+import { useLocale } from "./lib/theme"
 
 const PreviewsWrapper = styled.div`
   display: flex;
@@ -191,7 +191,7 @@ interface Props {
   images: { url: string; name?: string; order?: number }[]
   onDelete?: (image: any) => void
   onOrderChange?: (
-    files: { url: string; name?: string; order?: number }[]
+    files: { url: string; name?: string; order?: number }[],
   ) => void
   getImageUrl: (image: any) => string
 }

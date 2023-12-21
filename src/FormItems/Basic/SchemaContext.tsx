@@ -1,6 +1,6 @@
-import { createContext, useContext, useMemo } from 'react'
-import { ZodFirstPartyTypeKind, ZodObject } from 'zod'
-import { getObjectKeyByString } from '../../lib/misc'
+import { createContext, useContext, useMemo } from "react"
+import { ZodFirstPartyTypeKind, ZodObject } from "zod"
+import { getObjectKeyByString } from "../../lib/misc"
 
 export const SchemaContext = createContext({} as ZodObject<any, any>)
 
@@ -14,27 +14,27 @@ export const useIsRequired = (name: string) => {
 
     const checks = valueField?._def?.checks
 
-    if (type === 'ZodString' && checks?.some((c) => c.kind === 'min')) {
+    if (type === "ZodString" && checks?.some((c) => c.kind === "min")) {
       return true
     }
 
     if (
-      type === 'ZodString' &&
-      checks?.some((c) => c.kind === 'email') &&
-      !checks?.some((c) => c.kind === 'optional')
+      type === "ZodString" &&
+      checks?.some((c) => c.kind === "email") &&
+      !checks?.some((c) => c.kind === "optional")
     ) {
       return true
     }
 
-    if (type === 'ZodDate' && !checks?.some((c) => c.kind === 'optional')) {
+    if (type === "ZodDate" && !checks?.some((c) => c.kind === "optional")) {
       return true
     }
 
-    if (type === 'ZodArray' && valueField?._def?.minLength?.value > 0) {
+    if (type === "ZodArray" && valueField?._def?.minLength?.value > 0) {
       return true
     }
 
-    if (type === 'ZodEnum') {
+    if (type === "ZodEnum") {
       return true
     }
 

@@ -1,11 +1,10 @@
-import styled from '@emotion/styled'
-import { Button, Paper } from '@mui/material'
-import Link from 'next/link'
-import { FC, PropsWithChildren, ReactNode } from 'react'
-import { FieldErrorsImpl, UseFormSetError } from 'react-hook-form'
-import Form from './FormItems/Basic/Form'
-import SubmitButton from './FormItems/Basic/SubmitButton'
-import { useLocale } from './lib/theme'
+import styled from "@emotion/styled"
+import { Paper } from "@mui/material"
+import { FC, PropsWithChildren, ReactNode } from "react"
+import { FieldErrorsImpl, UseFormSetError } from "react-hook-form"
+import Form from "./FormItems/Basic/Form"
+import SubmitButton from "./FormItems/Basic/SubmitButton"
+import { useLocale } from "./lib/theme"
 
 const StyledPaper = styled(Paper)`
   padding: 10px 20px;
@@ -39,7 +38,6 @@ const FormPage: FC<PropsWithChildren<Props>> = ({
   style,
   hideSubmit,
   submitText,
-  withCancel,
 }) => {
   const { locales } = useLocale()
 
@@ -59,19 +57,14 @@ const FormPage: FC<PropsWithChildren<Props>> = ({
             {!hideSubmit && (
               <div
                 style={{
-                  display: 'flex',
-                  width: '100%',
-                  justifyContent: 'center',
+                  display: "flex",
+                  width: "100%",
+                  justifyContent: "center",
                 }}
               >
                 <StyledSubmit type="submit" size="large">
                   {submitText ?? locales.save}
                 </StyledSubmit>
-                {withCancel && (
-                  <Link href={withCancel}>
-                    <Button sx={{ ml: 5 }}>{locales.cancel}</Button>
-                  </Link>
-                )}
               </div>
             )}
           </>
@@ -89,14 +82,14 @@ interface Props {
   validationSchema: any
   onSubmit: (
     data: Record<string, any>,
-    setError: UseFormSetError<Record<string, any>>
+    setError: UseFormSetError<Record<string, any>>,
   ) => void
   onError?: (
     errors: Partial<
       FieldErrorsImpl<{
         [x: string]: any
       }>
-    >
+    >,
   ) => void
   validate?: (data: Record<string, any>) => true | { [key: string]: string }
   edit?: boolean
@@ -106,6 +99,5 @@ interface Props {
   hideSubmit?: boolean
   submitText?: ReactNode
   withRequiredNotice?: boolean
-  withCancel?: string
   title?: string
 }

@@ -1,15 +1,15 @@
-import { withRHF } from '../.storybook/withRHF'
-import { BooleanIcon, DocumentViewer } from '../src'
+import { withRHF } from "../.storybook/withRHF"
+import { BooleanIcon, DocumentViewer } from "../src"
 
 export default {
-  title: 'General',
+  title: "General",
   decorators: [withRHF(false)],
 }
 
 const exampleFiles = [
-  { url: 'https://inventhora.com', name: 'Document 1' },
-  { url: 'https://inventhora.com', name: 'Document 2' },
-  { url: 'https://inventhora.com', name: 'Document 3' },
+  { url: "https://inventhora.com", name: "Document 1" },
+  { url: "https://inventhora.com", name: "Document 2" },
+  { url: "https://inventhora.com", name: "Document 3" },
 ]
 
 export const DocumentViewerStory = (args) => (

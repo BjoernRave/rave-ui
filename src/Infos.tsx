@@ -1,6 +1,6 @@
-import styled from '@emotion/styled'
-import { Table, TableBody, TableCell, TableRow } from '@mui/material'
-import { FC, ReactNode, useMemo } from 'react'
+import styled from "@emotion/styled"
+import { Table, TableBody, TableCell, TableRow } from "@mui/material"
+import { FC, ReactNode, useMemo } from "react"
 
 const KeyWrapper = styled.span`
   font-size: 18px;
@@ -15,31 +15,31 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
       hideEmpty
         ? infos.filter(
             (info) =>
-              info.value !== '' &&
+              info.value !== "" &&
               info.value !== null &&
-              info.value !== undefined
+              info.value !== undefined,
           )
         : infos,
-    [infos]
+    [infos],
   )
 
   return (
-    <Table className={className} style={{ width: 'initial' }}>
+    <Table className={className} style={{ width: "initial" }}>
       <TableBody>
         {filteredInfos.map(({ Icon, name, value }) => (
           <TableRow key={name}>
             {Icon && (
-              <TableCell style={{ border: 'none', textAlign: 'left' }}>
-                {' '}
+              <TableCell style={{ border: "none", textAlign: "left" }}>
+                {" "}
                 <Icon />
               </TableCell>
             )}
             <TableCell
               align="left"
               style={{
-                border: 'none',
-                paddingRight: '10px',
-                textAlign: 'left',
+                border: "none",
+                paddingRight: "10px",
+                textAlign: "left",
               }}
             >
               <KeyWrapper>{name}:</KeyWrapper>
@@ -48,12 +48,12 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
               align="left"
               style={{
                 fontSize: 18,
-                textAlign: 'left',
-                border: 'none',
-                fontWeight: 'bold',
+                textAlign: "left",
+                border: "none",
+                fontWeight: "bold",
               }}
             >
-              {typeof value === 'string' && value.indexOf('http') === 0 ? (
+              {typeof value === "string" && value.indexOf("http") === 0 ? (
                 <a
                   rel="noreferrer"
                   className="text-blue-500 underline"

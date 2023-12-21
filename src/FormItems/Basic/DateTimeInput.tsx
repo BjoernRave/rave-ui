@@ -1,11 +1,11 @@
-import { DateTimePicker, DateTimePickerProps } from '@mui/x-date-pickers-pro'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { dateTimeFormat } from '../../lib/date'
-import { useLocale } from '../../lib/theme'
-import { InputProps, Language } from '../../lib/types'
-import DateTimeProvider from './DateTimeProvider'
-import { useIsRequired } from './SchemaContext'
+import { DateTimePicker, DateTimePickerProps } from "@mui/x-date-pickers-pro"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { dateTimeFormat } from "../../lib/date"
+import { useLocale } from "../../lib/theme"
+import { InputProps, Language } from "../../lib/types"
+import DateTimeProvider from "./DateTimeProvider"
+import { useIsRequired } from "./SchemaContext"
 
 const DateTimeInput: FC<Props> = ({
   name,
@@ -20,7 +20,7 @@ const DateTimeInput: FC<Props> = ({
   const { lang } = useLocale()
 
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
   const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
@@ -56,6 +56,6 @@ export default DateTimeInput
 
 export interface Props
   extends InputProps,
-    Omit<DateTimePickerProps<any>, 'label' | 'onChange'> {
+    Omit<DateTimePickerProps<any>, "label" | "onChange"> {
   disabled?: boolean
 }

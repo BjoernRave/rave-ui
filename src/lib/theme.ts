@@ -1,9 +1,9 @@
-import type {} from '@mui/lab/themeAugmentation'
-import { createTheme, useTheme } from '@mui/material/styles'
-import deLocales from '../locales/de/common.json'
-import enLocales from '../locales/en/common.json'
+import type {} from "@mui/lab/themeAugmentation"
+import { createTheme, useTheme } from "@mui/material/styles"
+import deLocales from "../locales/de/common.json"
+import enLocales from "../locales/en/common.json"
 
-declare module '@mui/material/styles' {
+declare module "@mui/material/styles" {
   interface Theme {
     locale?: typeof enLocales
     lang?: string
@@ -17,35 +17,35 @@ declare module '@mui/material/styles' {
 
 export const defaultTheme = (locale: string, withBaseTheme: boolean) =>
   createTheme({
-    locale: locale === 'de' ? deLocales : enLocales,
+    locale: locale === "de" ? deLocales : enLocales,
     lang: locale,
     ...(withBaseTheme && {
       components: {
         MuiPaper: {
           styleOverrides: {
             root: {
-              border: '1px solid rgba(0, 0, 0, 0.07)',
-              transition: 'box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms',
+              border: "1px solid rgba(0, 0, 0, 0.07)",
+              transition: "box-shadow 300ms cubic-bezier(0.4, 0, 0.2, 1) 0ms",
             },
             rounded: {
-              borderRadius: '1rem',
+              borderRadius: "1rem",
             },
             elevation1: {
-              boxShadow: 'rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem',
+              boxShadow: "rgba(0, 0, 0, 0.05) 0rem 1.25rem 1.6875rem 0rem",
             },
           },
         },
         MuiContainer: {
           styleOverrides: {
             root: {
-              paddingBottom: '10px',
+              paddingBottom: "10px",
             },
           },
         },
         MuiTableRow: {
           styleOverrides: {
             root: {
-              height: '45px',
+              height: "45px",
             },
           },
         },
@@ -53,7 +53,7 @@ export const defaultTheme = (locale: string, withBaseTheme: boolean) =>
         MuiTableFooter: {
           styleOverrides: {
             root: {
-              position: 'absolute',
+              position: "absolute",
               bottom: 0,
               right: 0,
             },
@@ -62,27 +62,27 @@ export const defaultTheme = (locale: string, withBaseTheme: boolean) =>
         MuiToolbar: {
           styleOverrides: {
             root: {
-              minHeight: '45px',
+              minHeight: "45px",
             },
           },
         },
         MuiTableCell: {
           styleOverrides: {
             head: {
-              whiteSpace: 'nowrap',
+              whiteSpace: "nowrap",
             },
             root: {
-              padding: '5px',
-              textAlign: 'center',
+              padding: "5px",
+              textAlign: "center",
             },
           },
         },
         MuiIconButton: {
           styleOverrides: {
             root: {
-              padding: '5px',
-              '&:hover': {
-                color: '#3c9f80',
+              padding: "5px",
+              "&:hover": {
+                color: "#3c9f80",
               },
             },
           },
@@ -90,39 +90,39 @@ export const defaultTheme = (locale: string, withBaseTheme: boolean) =>
         MuiDialogActions: {
           styleOverrides: {
             root: {
-              alignSelf: 'flex-end',
+              alignSelf: "flex-end",
             },
           },
         },
 
         MuiButton: {
           defaultProps: {
-            variant: 'contained',
+            variant: "contained",
           },
           styleOverrides: {
             root: {
-              borderRadius: '0.5rem',
+              borderRadius: "0.5rem",
               fontWeight: 600,
-              fontSize: '0.75rem',
+              fontSize: "0.75rem",
             },
           },
         },
         MuiLoadingButton: {
           defaultProps: {
-            variant: 'contained',
+            variant: "contained",
           },
           styleOverrides: {
             root: {
-              borderRadius: '0.5rem',
+              borderRadius: "0.5rem",
               fontWeight: 600,
-              fontSize: '0.75rem',
+              fontSize: "0.75rem",
             },
           },
         },
         MuiChip: {
           styleOverrides: {
             root: {
-              borderRadius: '1rem',
+              borderRadius: "1rem",
             },
           },
         },

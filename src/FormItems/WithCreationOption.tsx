@@ -1,7 +1,7 @@
-import styled from '@emotion/styled'
-import AddIcon from '@mui/icons-material/Add'
-import { Button, Tooltip } from '@mui/material'
-import { FC, PropsWithChildren } from 'react'
+import styled from "@emotion/styled"
+import AddIcon from "@mui/icons-material/Add"
+import { Button, Tooltip } from "@mui/material"
+import { FC, PropsWithChildren } from "react"
 
 export const Wrapper = styled.div`
   display: flex;
@@ -26,7 +26,7 @@ const WithCreationOption: FC<PropsWithChildren<Props>> = ({
         <Tooltip placement="right" title={title}>
           <Button
             aria-label={title}
-            style={{ height: '56px', marginLeft: 10 }}
+            style={{ height: "56px", marginLeft: 10 }}
             variant="contained"
             color="secondary"
             size="large"

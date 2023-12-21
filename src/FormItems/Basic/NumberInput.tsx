@@ -1,16 +1,16 @@
-import { BaseTextFieldProps, TextField } from '@mui/material'
-import { FC } from 'react'
-import { useController } from 'react-hook-form'
-import { generateSlug } from '../../lib/misc'
-import { InputProps } from '../../lib/types'
-import { useIsRequired } from './SchemaContext'
+import { BaseTextFieldProps, TextField } from "@mui/material"
+import { FC } from "react"
+import { useController } from "react-hook-form"
+import { generateSlug } from "../../lib/misc"
+import { InputProps } from "../../lib/types"
+import { useIsRequired } from "./SchemaContext"
 
 const NumberInput: FC<Props> = ({
   name,
   index,
   subName,
   helperText,
-  variant = 'outlined',
+  variant = "outlined",
   allowDecimals,
   onChange,
   style,
@@ -19,7 +19,7 @@ const NumberInput: FC<Props> = ({
   ...rest
 }) => {
   const formName =
-    typeof index === 'number' && subName ? `${name}[${index}].${subName}` : name
+    typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
   const isRequired = useIsRequired(formName)
 
   const { field, fieldState } = useController({ name: formName })
@@ -29,7 +29,7 @@ const NumberInput: FC<Props> = ({
       required={isRequired}
       id={generateSlug(formName)}
       {...rest}
-      value={field.value || ''}
+      value={field.value || ""}
       onChange={(e) => {
         onChange && onChange(e.target.value)
         if (max && Number(e.target.value) > max) {
@@ -58,8 +58,8 @@ const NumberInput: FC<Props> = ({
           allowDecimals &&
           (e.keyCode === 190 || e.keyCode === 188) &&
           field?.value?.split &&
-          field?.value?.split('.')?.length < 2 &&
-          field?.value?.split(',')?.length < 2
+          field?.value?.split(".")?.length < 2 &&
+          field?.value?.split(",")?.length < 2
         ) {
           return
         }
@@ -67,7 +67,7 @@ const NumberInput: FC<Props> = ({
       }}
       inputMode="numeric"
       type="text"
-      style={style ?? { width: '100%' }}
+      style={style ?? { width: "100%" }}
       variant={variant as any}
       helperText={fieldState.error ? fieldState.error.message : helperText}
       error={Boolean(fieldState.error) || error}
@@ -79,7 +79,7 @@ export default NumberInput
 
 export interface Props
   extends InputProps,
-    Omit<BaseTextFieldProps, 'name' | 'label'> {
+    Omit<BaseTextFieldProps, "name" | "label"> {
   InputProps?: any
   allowDecimals?: boolean
   max?: number
