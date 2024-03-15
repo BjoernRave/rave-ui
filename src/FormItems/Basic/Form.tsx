@@ -18,6 +18,7 @@ const StyledForm = styled.form`
   > button {
     margin: 20px 0;
   }
+  
   display: flex;
   flex-direction: column;
   align-items: center;

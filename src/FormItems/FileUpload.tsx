@@ -49,6 +49,7 @@ const FileUpload: FC<Props> = ({
   supportedFormats,
   multiple = false,
   id,
+  accept,
 }) => {
   const { locales } = useLocale()
 
@@ -59,6 +60,7 @@ const FileUpload: FC<Props> = ({
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     multiple,
+    accept,
   })
 
   return (
@@ -88,4 +90,5 @@ export interface Props {
   onUpload: (files: File[]) => void
   multiple?: boolean
   id?: string
+  accept?: Record<string, string[]>
 }

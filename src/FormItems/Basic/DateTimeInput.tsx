@@ -39,6 +39,7 @@ const DateTimeInput: FC<Props> = ({
         format={dateTimeFormat}
         slotProps={{
           textField: {
+            style: { width: "100%" },
             error: Boolean(fieldState.error),
             required: isRequired,
             helperText: fieldState.error

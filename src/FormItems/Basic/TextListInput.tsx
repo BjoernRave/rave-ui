@@ -37,6 +37,7 @@ const TextListInput: FC<Props> = ({
   maxItems = 999,
   onlyNumbers,
   allowDecimals,
+  suffix,
   ...rest
 }) => {
   const { locales } = useLocale()
@@ -73,6 +74,7 @@ const TextListInput: FC<Props> = ({
           {...rest}
           endAdornment={
             <InputAdornment position="end">
+              {suffix && <span className="mr-2">{suffix}</span>}
               <Tooltip
                 open={Boolean(input)}
                 placement="right"
@@ -129,7 +131,7 @@ const TextListInput: FC<Props> = ({
           onChange={(e) => setInput(e.target.value)}
           id={generateSlug(formName)}
         />
-        <div>
+        <div className="mt-2">
           {value.map((val, ind) => (
             <Chip
               color="primary"
@@ -141,7 +143,7 @@ const TextListInput: FC<Props> = ({
                 onChange && onChange(newArray)
               }}
               key={ind}
-              label={val}
+              label={suffix ? `${val} ${suffix}` : val}
             />
           ))}
         </div>
@@ -162,4 +164,5 @@ export interface Props
   canAdd?: (value: string) => boolean
   onlyNumbers?: boolean
   allowDecimals?: boolean
+  suffix?: string
 }

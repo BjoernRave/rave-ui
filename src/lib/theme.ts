@@ -81,9 +81,6 @@ export const defaultTheme = (locale: string, withBaseTheme: boolean) =>
           styleOverrides: {
             root: {
               padding: "5px",
-              "&:hover": {
-                color: "#3c9f80",
-              },
             },
           },
         },

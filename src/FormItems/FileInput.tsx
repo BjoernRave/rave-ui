@@ -24,6 +24,7 @@ const FileInput: FC<Props> = ({
   required,
   onReOrder,
   getImageUrl,
+  accept,
 }) => {
   const formName =
     typeof index === "number" && subName ? `${name}[${index}].${subName}` : name
@@ -76,6 +77,7 @@ const FileInput: FC<Props> = ({
       <FormLabel htmlFor={generateSlug(formName)}>{label}</FormLabel>
       {(multiple || !field.value) && (
         <FileUpload
+          accept={accept}
           id={generateSlug(formName)}
           multiple={multiple}
           onUpload={(files) => {
@@ -119,4 +121,5 @@ interface Props extends InputProps {
   onDelete?: (id: string) => any
   onReOrder?: (items: { order: number; id: string }[]) => any
   getImageUrl: (file: any) => string
+  accept?: Record<string, string[]>
 }
