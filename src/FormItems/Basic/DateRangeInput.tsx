@@ -1,10 +1,12 @@
-import { DateRangePickerProps } from "@mui/lab"
 import { FormControl, FormHelperText, FormLabel } from "@mui/material"
-import { DateRangePicker } from "@mui/x-date-pickers-pro"
-import { FC } from "react"
+import {
+  DateRangePicker,
+  type DateRangePickerProps,
+} from "@mui/x-date-pickers-pro"
+import type { FC } from "react"
 import { useController } from "react-hook-form"
 import { useLocale } from "../../lib/theme"
-import { InputProps, Language } from "../../lib/types"
+import type { InputProps, Language } from "../../lib/types"
 import DateTimeProvider from "./DateTimeProvider"
 
 const DateRangeInput: FC<Props> = ({
@@ -57,4 +59,4 @@ export default DateRangeInput
 
 interface Props
   extends InputProps,
-    Omit<DateRangePickerProps, "label" | "onChange"> {}
+    Omit<DateRangePickerProps<any>, "label" | "onChange"> {}

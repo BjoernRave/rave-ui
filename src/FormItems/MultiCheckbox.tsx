@@ -6,9 +6,9 @@ import {
   FormHelperText,
   FormLabel,
 } from "@mui/material"
-import { FC, ReactNode } from "react"
+import type { FC, ReactNode } from "react"
 import { useController } from "react-hook-form"
-import { InputProps } from "../lib/types"
+import type { InputProps } from "../lib/types"
 
 const MultiCheckbox: FC<Props> = ({
   label,
@@ -26,7 +26,7 @@ const MultiCheckbox: FC<Props> = ({
   return (
     <FormControl
       error={Boolean(fieldState.error)}
-      style={{ width: "100%" }}
+      style={{ width: "100%", marginLeft: 10 }}
       component="fieldset"
       variant="standard"
       className="my-2"

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
-import { FC, useCallback } from "react"
+import { useCallback, type FC } from "react"
 import { useDropzone } from "react-dropzone"
 import { useLocale } from "../lib/theme"
 
