@@ -8,9 +8,9 @@ import {
   DialogTitle,
   IconButton,
 } from "@mui/material"
-import { Breakpoint, styled } from "@mui/material/styles"
-import { FC, PropsWithChildren, ReactNode, useId } from "react"
-import { FieldErrorsImpl, UseFormSetError } from "react-hook-form"
+import { styled, type Breakpoint } from "@mui/material/styles"
+import { useId, type FC, type PropsWithChildren, type ReactNode } from "react"
+import type { FieldErrorsImpl, UseFormSetError } from "react-hook-form"
 import Form from "./FormItems/Basic/Form"
 import SubmitButton from "./FormItems/Basic/SubmitButton"
 import { useLocale } from "./lib/theme"
@@ -102,7 +102,7 @@ const FormModal: FC<PropsWithChildren<Props>> = ({
       >
         <DialogContent className="w-full" id={`${id}-content`}>
           {description && <DialogContentText>{description}</DialogContentText>}
-          {children}
+          <div className="space-y-4 w-full">{children}</div>
         </DialogContent>
         {!hideActions && (
           <DialogActions>

@@ -1,11 +1,11 @@
 import styled from "@emotion/styled"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { FC, PropsWithChildren, useEffect } from "react"
+import { useEffect, type FC, type PropsWithChildren } from "react"
 import {
-  FieldErrorsImpl,
   FormProvider,
-  UseFormSetError,
   useForm,
+  type FieldErrorsImpl,
+  type UseFormSetError,
 } from "react-hook-form"
 import { SchemaContext } from "./SchemaContext"
 import SubmitButton from "./SubmitButton"
@@ -85,7 +85,7 @@ const Form: FC<PropsWithChildren<Props>> = ({
             })
           }}
         >
-          {children}
+          <div className="space-y-4 w-full">{children}</div>
           {submitButton && <SubmitButton>{submitText}</SubmitButton>}
         </StyledForm>
       </SchemaContext.Provider>
