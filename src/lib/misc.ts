@@ -171,11 +171,11 @@ export const combineFirstLastName = (entity: {
 
 export const flatten = (arr: any[]) => {
   if (!Array.isArray(arr)) return arr
-  return arr.reduce(function (flat, toFlatten) {
-    return flat.concat(
-      Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten,
-    )
-  }, [])
+  return arr.reduce(
+    (flat, toFlatten) =>
+      flat.concat(Array.isArray(toFlatten) ? flatten(toFlatten) : toFlatten),
+    [],
+  )
 }
 
 export const enterFullscreen = () => {
@@ -257,12 +257,12 @@ export const getTimeSince = (_fromDate, _toDate, dateStringCap) => {
     _toDate === undefined ? new Date() : new Date(_toDate ?? null),
   )
   if (isNaN(fromDate) || isNaN(toDate)) throwError()
-  let formatTimeSince = new Intl.RelativeTimeFormat("en", {
+  const formatTimeSince = new Intl.RelativeTimeFormat("en", {
     localeMatcher: "best fit",
     style: "long",
     numeric: "auto",
   })
-  let diff = fromDate - toDate
+  const diff = fromDate - toDate
   if (!isNaN(dateStringCap) && Math.abs(diff) >= Number(dateStringCap)) {
     const [weekday, month, dateNumStr, year] = replaceAll(
       new Date(fromDate).toLocaleString("en-us", {
@@ -321,8 +321,8 @@ export const useScrollPosition = () => {
 }
 
 export const useIsMobile = (
-  initialWidth = Infinity,
-  initialHeight = Infinity,
+  initialWidth = Number.POSITIVE_INFINITY,
+  initialHeight = Number.POSITIVE_INFINITY,
 ) => {
   const [state, setState] = useState<{ width: number; height: number }>({
     width: !isServer ? window.innerWidth : initialWidth,

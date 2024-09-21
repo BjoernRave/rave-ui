@@ -1,11 +1,11 @@
 import styled from "@emotion/styled"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useEffect, type FC, type PropsWithChildren } from "react"
+import type { FC, PropsWithChildren } from "react"
 import {
-  FormProvider,
-  useForm,
   type FieldErrorsImpl,
+  FormProvider,
   type UseFormSetError,
+  useForm,
 } from "react-hook-form"
 import { SchemaContext } from "./SchemaContext"
 import SubmitButton from "./SubmitButton"
@@ -36,46 +36,48 @@ const Form: FC<PropsWithChildren<Props>> = ({
   onError,
 }) => {
   const methods = useForm({
-    defaultValues: initialValues,
     resolver: zodResolver(validationSchema),
+    defaultValues: initialValues,
     context: {
       schema: validationSchema,
     },
+    reValidateMode: "onChange",
   })
 
-  useEffect(() => {
-    if (methods.formState.isSubmitted && !methods.formState.isValid) {
-      console.log(methods.formState.errors, "from Form component rave-ui")
+  const handleError = (errors: any) => {
+    console.log(errors, "from Form component rave-ui")
 
-      onError && onError(methods.formState.errors)
-    }
-  }, [methods.formState.submitCount])
+    onError?.(errors)
+  }
 
   return (
     <FormProvider {...methods}>
       <SchemaContext.Provider value={validationSchema}>
         <StyledForm
+          noValidate
           className={className}
           onSubmit={(e) => {
             if (!validate) {
-              return methods.handleSubmit((values) =>
-                onSubmit(values, methods.setError),
+              return methods.handleSubmit(
+                (values) => onSubmit(values, methods.setError),
+                handleError,
               )(e)
             }
 
             const validation = validate(methods.getValues())
 
             if (typeof validation === "boolean") {
-              return methods.handleSubmit((values) =>
-                onSubmit(values, methods.setError),
+              return methods.handleSubmit(
+                (values) => onSubmit(values, methods.setError),
+                handleError,
               )(e)
             }
 
             e.preventDefault()
 
-            console.log(validation, "validation")
+            handleError(validation as any)
 
-            onError && onError(validation as any)
+            methods.clearErrors()
 
             Object.keys(validation).forEach((key) => {
               methods.setError(key, {

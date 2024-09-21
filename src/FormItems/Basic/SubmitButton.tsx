@@ -1,4 +1,4 @@
-import { Button, CircularProgress, type ButtonProps } from "@mui/material"
+import { Button, type ButtonProps, CircularProgress } from "@mui/material"
 import type { FC, PropsWithChildren } from "react"
 import { useFormContext } from "react-hook-form"
 
@@ -7,7 +7,7 @@ const SubmitButton: FC<PropsWithChildren<Props>> = ({ children, ...rest }) => {
   return (
     <Button {...rest} type={"submit"}>
       {formState.isSubmitting ? (
-        <CircularProgress size={24} />
+        <CircularProgress className="text-white" size={24} />
       ) : (
         <span>{children}</span>
       )}

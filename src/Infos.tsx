@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 import { Table, TableBody, TableCell, TableRow } from "@mui/material"
-import { FC, ReactNode, useMemo } from "react"
+import { useMemo, type FC, type ReactNode } from "react"
 
 const KeyWrapper = styled.span`
   font-size: 18px;
@@ -9,7 +9,7 @@ const KeyWrapper = styled.span`
   }
 `
 
-const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
+const Infos: FC<Props> = ({ infos, hideEmpty = true, spacing, className }) => {
   const filteredInfos = useMemo(
     () =>
       hideEmpty
@@ -29,7 +29,14 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
         {filteredInfos.map(({ Icon, name, value }) => (
           <TableRow key={name}>
             {Icon && (
-              <TableCell style={{ border: "none", textAlign: "left" }}>
+              <TableCell
+                style={{
+                  border: "none",
+                  textAlign: "left",
+                  paddingTop: spacing,
+                  paddingBottom: spacing,
+                }}
+              >
                 {" "}
                 <Icon />
               </TableCell>
@@ -40,6 +47,8 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
                 border: "none",
                 paddingRight: "10px",
                 textAlign: "left",
+                paddingTop: spacing,
+                paddingBottom: spacing,
               }}
             >
               <KeyWrapper>{name}:</KeyWrapper>
@@ -51,6 +60,8 @@ const Infos: FC<Props> = ({ infos, hideEmpty = true, className }) => {
                 textAlign: "left",
                 border: "none",
                 fontWeight: "bold",
+                paddingTop: spacing,
+                paddingBottom: spacing,
               }}
             >
               {typeof value === "string" && value.indexOf("http") === 0 ? (
@@ -79,6 +90,7 @@ interface Props {
   infos: Info[]
   hideEmpty?: boolean
   className?: string
+  spacing?: number
 }
 
 export interface Info {

@@ -1,6 +1,6 @@
 import styled from "@emotion/styled"
 import CloudUploadIcon from "@mui/icons-material/CloudUpload"
-import { useCallback, type FC } from "react"
+import { type FC, useCallback } from "react"
 import { useDropzone } from "react-dropzone"
 import { useLocale } from "../lib/theme"
 
@@ -48,6 +48,7 @@ const FileUpload: FC<Props> = ({
   onUpload,
   supportedFormats,
   multiple = false,
+  uploadText,
   id,
   accept,
 }) => {
@@ -69,7 +70,11 @@ const FileUpload: FC<Props> = ({
         <input {...getInputProps()} />
         <UploadDescription>
           <UploadText>
-            {isDragActive ? locales.importUploadDrop : locales.importUploadInfo}
+            {uploadText
+              ? uploadText
+              : isDragActive
+                ? locales.importUploadDrop
+                : locales.importUploadInfo}
           </UploadText>
           <StyledIcon />
         </UploadDescription>
@@ -87,6 +92,7 @@ export default FileUpload
 
 export interface Props {
   supportedFormats?: string
+  uploadText?: string
   onUpload: (files: File[]) => void
   multiple?: boolean
   id?: string
