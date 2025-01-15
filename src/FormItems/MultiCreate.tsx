@@ -12,12 +12,17 @@ import {
   FormHelperText,
   FormLabel,
 } from "@mui/material"
-import { FC, PropsWithChildren, useId, useMemo, useState } from "react"
+import {
+  type FC,
+  type PropsWithChildren,
+  useId,
+  useMemo,
+  useState,
+} from "react"
 import { useController, useFormContext, useWatch } from "react-hook-form"
 import Table from "../Table"
 import { generateSlug, getErrorMessage } from "../lib/misc"
 import { useLocale } from "../lib/theme"
-
 import SubmitButton from "./Basic/SubmitButton"
 
 const StyledDialogContent = styled(DialogContent)`
@@ -164,52 +169,51 @@ const MultiCreate: FC<PropsWithChildren<Props>> = ({
       >
         <FormLabel style={{ marginBottom: 10 }}>{label}</FormLabel>
         {tableData?.length > 0 && (
-          <>
-            <Table
-              hideSearch
-              columns={fields.map((field) => ({
-                ...(field.getOptionLabel
-                  ? {
-                      id: field.name,
-                      accessorFn: (row) => field.getOptionLabel(row),
-                    }
-                  : {
-                      accessorKey: field.name,
-                    }),
-                header: field.label,
-                enableSorting: false,
-              }))}
-              data={formatFunction ? formatFunction(tableData) : tableData}
-              rowActions={[
-                {
-                  label: locales.edit,
-                  onClick: (row) => {
-                    const newArray = Array.from(tableData)
+          <Table
+            error={(fieldState?.error as any)?.findIndex((er) => Boolean(er))}
+            hideSearch
+            columns={fields.map((field) => ({
+              ...(field.getOptionLabel
+                ? {
+                    id: field.name,
+                    accessorFn: (row) => field.getOptionLabel(row),
+                  }
+                : {
+                    accessorKey: field.name,
+                  }),
+              header: field.label,
+              enableSorting: false,
+            }))}
+            data={formatFunction ? formatFunction(tableData) : tableData}
+            rowActions={[
+              {
+                label: locales.edit,
+                onClick: (row) => {
+                  const newArray = Array.from(tableData)
 
-                    const item = newArray.splice(row.index, 1)
+                  const item = newArray.splice(row.index, 1)
 
-                    newArray.push(item[0])
+                  newArray.push(item[0])
 
-                    field.onChange({ target: { value: newArray } })
+                  field.onChange({ target: { value: newArray } })
 
-                    setIsUpdating(row.index)
-                  },
-                  icon: <EditIcon />,
+                  setIsUpdating(row.index)
                 },
-                {
-                  label: locales.delete,
-                  onClick: (row) => {
-                    const updatedData = Array.from(tableData)
-                    updatedData.splice(row.index, 1)
-                    field.onChange({
-                      target: { value: updatedData },
-                    })
-                  },
-                  icon: <DeleteIcon />,
+                icon: <EditIcon />,
+              },
+              {
+                label: locales.delete,
+                onClick: (row) => {
+                  const updatedData = Array.from(tableData)
+                  updatedData.splice(row.index, 1)
+                  field.onChange({
+                    target: { value: updatedData },
+                  })
                 },
-              ]}
-            />
-          </>
+                icon: <DeleteIcon />,
+              },
+            ]}
+          />
         )}
         <CreateButton
           variant="contained"

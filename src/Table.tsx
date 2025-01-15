@@ -17,18 +17,18 @@ import TableCell from "@mui/material/TableCell"
 import TableHead from "@mui/material/TableHead"
 import TableRow from "@mui/material/TableRow"
 import {
-  ColumnDef,
-  Row,
-  SortingState,
+  type ColumnDef,
+  type Row,
+  type SortingState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
   getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table"
-import { CSSProperties, FC, useMemo, useState } from "react"
+import { type CSSProperties, type FC, useMemo, useState } from "react"
 import { useLocale } from "./lib/theme"
-import { Action } from "./lib/types"
+import type { Action } from "./lib/types"
 
 const StyledTableBody = styled(TableBody)`
   @media (max-width: 1023px) {
@@ -55,6 +55,7 @@ const Table: FC<Props> = ({
   maxHeight,
   style,
   labelledBy,
+  error,
 }) => {
   const { locales } = useLocale()
   const [sorting, setSorting] = useState<SortingState>([])
@@ -192,7 +193,7 @@ const Table: FC<Props> = ({
               </TableRow>
             ))}
           </TableHead>
-          {!Boolean(data) ? (
+          {!data ? (
             <StyledTableBody>
               {array.map((row, ind) => (
                 <TableRow key={ind}>
@@ -209,18 +210,21 @@ const Table: FC<Props> = ({
             </StyledTableBody>
           ) : rows.length > 0 ? (
             <StyledTableBody>
-              {rows.map((row) => {
+              {rows.map((row, ind) => {
                 return (
                   <TableRow
                     key={row.id}
                     className={` ${
                       onRowClick && "cursor-pointer hover:bg-gray-300"
-                    }`}
-                    onClick={() => onRowClick && onRowClick(row)}
+                    } `}
+                    onClick={() => onRowClick?.(row)}
                   >
                     {row.getVisibleCells().map((cell) => {
                       return (
-                        <TableCell key={cell.id}>
+                        <TableCell
+                          className={`${error === ind ? "!text-red-500 !font-bold" : ""}`}
+                          key={cell.id}
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext(),
@@ -263,4 +267,5 @@ export interface Props {
   maxHeight?: number
   style?: CSSProperties
   labelledBy?: string
+  error?: number
 }
