@@ -1,8 +1,8 @@
-import { BaseTextFieldProps, TextField } from "@mui/material"
-import { FC } from "react"
+import { type BaseTextFieldProps, TextField } from "@mui/material"
+import type { FC } from "react"
 import { useController } from "react-hook-form"
 import { generateSlug } from "../../lib/misc"
-import { InputProps } from "../../lib/types"
+import type { InputProps } from "../../lib/types"
 import { useIsRequired } from "./SchemaContext"
 
 const NumberInput: FC<Props> = ({
@@ -16,6 +16,7 @@ const NumberInput: FC<Props> = ({
   style,
   error,
   max,
+  allowNegative,
   ...rest
 }) => {
   const formName =
@@ -41,6 +42,10 @@ const NumberInput: FC<Props> = ({
       onKeyDown={(e) => {
         //delete, tab, etc
         if ([8, 9, 37, 39].includes(e.keyCode)) {
+          return
+        }
+
+        if (allowNegative && e.keyCode === 173) {
           return
         }
 
@@ -83,4 +88,5 @@ export interface Props
   InputProps?: any
   allowDecimals?: boolean
   max?: number
+  allowNegative?: boolean
 }
